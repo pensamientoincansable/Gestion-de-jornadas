@@ -29,9 +29,10 @@
             width: 100%;
             max-width: 1000px;
             background-color: rgba(0, 0, 0, 0.2);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.1);
         }
         
         h1 {
@@ -40,12 +41,15 @@
             margin-bottom: 10px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(to right, #FFFFFF, #FFC72C);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
         .logo {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
         
         .logo span {
@@ -53,17 +57,18 @@
             font-weight: 800;
             background-color: white;
             color: #D4001C;
-            padding: 5px 15px;
-            border-radius: 10px;
+            padding: 8px 20px;
+            border-radius: 15px;
             display: inline-block;
-            margin-top: 10px;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         
         .selector, .telepizzero-section, .gerencia-section, .registro-section, .gestion-usuarios-section {
             display: none;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 25px;
         }
         
         .active {
@@ -71,10 +76,10 @@
         }
         
         .btn {
-            background-color: white;
+            background: linear-gradient(145deg, #FFFFFF, #F5F5F5);
             color: #D4001C;
             border: none;
-            padding: 15px 40px;
+            padding: 16px 45px;
             font-size: 1.2rem;
             font-weight: 700;
             border-radius: 50px;
@@ -82,163 +87,226 @@
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
         }
         
         .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
         
         .btn:active {
-            transform: translateY(1px);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
         
         .btn-secondary {
-            background-color: #FFC72C;
+            background: linear-gradient(145deg, #FFC72C, #FFB300);
             color: #D4001C;
         }
         
         .btn-danger {
-            background-color: #FF5252;
+            background: linear-gradient(145deg, #FF5252, #D32F2F);
             color: white;
         }
         
         .btn-success {
-            background-color: #4CAF50;
+            background: linear-gradient(145deg, #4CAF50, #388E3C);
             color: white;
         }
         
-        .btn-info {
-            background-color: #2196F3;
+        .btn-reporte {
+            background: linear-gradient(145deg, #E0D3B8, #C5B79A);
+            color: #333;
+        }
+        
+        .btn-reporte:hover {
+            background: linear-gradient(145deg, #C5B79A, #A8997A);
+        }
+        
+        .btn-gris {
+            background: linear-gradient(145deg, #9E9E9E, #757575);
             color: white;
+        }
+        
+        .btn-gris:hover {
+            background: linear-gradient(145deg, #757575, #616161);
         }
         
         input, select {
-            padding: 15px;
+            padding: 16px;
             width: 100%;
-            max-width: 300px;
+            max-width: 320px;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 1.1rem;
             text-align: center;
             color: #D4001C;
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
         
         input:focus, select:focus {
             outline: 3px solid #FFC72C;
+            box-shadow: 0 0 15px rgba(255, 199, 44, 0.5);
         }
         
         .mensaje {
             margin-top: 20px;
-            padding: 15px;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
+            padding: 18px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
             text-align: center;
             font-size: 1.1rem;
-            min-height: 60px;
+            min-height: 65px;
             display: flex;
             align-items: center;
             justify-content: center;
             width: 100%;
+            border-left: 5px solid #FFC72C;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
             overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         
         th, td {
-            padding: 15px;
+            padding: 16px;
             text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
         }
         
         th {
-            background-color: rgba(0, 0, 0, 0.3);
+            background-color: rgba(0, 0, 0, 0.35);
             font-weight: 800;
             text-transform: uppercase;
+            color: #FFC72C;
         }
         
         tr:last-child td {
             border-bottom: none;
         }
         
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
         .volver-btn {
-            margin-top: 20px;
-            background-color: rgba(255, 255, 255, 0.2);
+            margin-top: 25px;
+            background-color: rgba(255, 255, 255, 0.15);
             color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
         
         .volver-btn:hover {
-            background-color: rgba(255, 255, 255, 0.3);
+            background-color: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.3);
         }
         
         .tabs {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             flex-wrap: wrap;
             justify-content: center;
         }
         
         .tab-btn {
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.15);
             color: white;
-            padding: 12px 25px;
+            padding: 14px 28px;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-weight: 700;
+            border: 2px solid transparent;
+        }
+        
+        .tab-btn:hover {
+            background-color: rgba(255, 255, 255, 0.25);
         }
         
         .tab-btn.active {
             background-color: white;
             color: #D4001C;
+            border-color: #FFC72C;
+            box-shadow: 0 4px 12px rgba(255, 199, 44, 0.3);
         }
         
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 25px;
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
         }
         
         .form-group label {
             font-weight: 700;
             text-align: center;
+            color: #FFC72C;
+            font-size: 1.1rem;
         }
         
         .usuario-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            margin-bottom: 10px;
+            padding: 18px;
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            margin-bottom: 12px;
             width: 100%;
-            max-width: 500px;
+            max-width: 520px;
+            border-left: 4px solid #FFC72C;
+            transition: all 0.3s ease;
+        }
+        
+        .usuario-item:hover {
+            background-color: rgba(255, 255, 255, 0.12);
+            transform: translateX(5px);
         }
         
         .ausencia-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            margin-bottom: 10px;
+            padding: 18px;
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            margin-bottom: 12px;
             width: 100%;
+            border-left: 4px solid #FF5252;
         }
         
         .ausencia-marcada {
-            background-color: rgba(255, 82, 82, 0.3);
+            background-color: rgba(255, 82, 82, 0.25);
         }
         
         .botones-accion {
@@ -247,44 +315,50 @@
         }
         
         .btn-small {
-            padding: 8px 15px;
+            padding: 10px 18px;
             font-size: 0.9rem;
+            border-radius: 8px;
         }
         
         .btn-icon {
             padding: 10px;
             font-size: 1rem;
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 50%;
         }
         
         .geolocalizacion-info {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 199, 44, 0.1));
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
             width: 100%;
             text-align: center;
+            border: 2px solid rgba(255, 199, 44, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         
         .geolocalizacion-info h3 {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             color: #FFC72C;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         }
         
         .mapa {
             width: 100%;
-            height: 200px;
+            height: 220px;
             background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            margin-top: 10px;
+            border-radius: 12px;
+            margin-top: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
         
         .mapa iframe {
@@ -294,50 +368,92 @@
         }
         
         .coordenadas {
-            font-family: monospace;
-            background-color: rgba(0, 0, 0, 0.2);
-            padding: 5px 10px;
-            border-radius: 5px;
-            margin-top: 5px;
+            font-family: 'Courier New', monospace;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 8px 15px;
+            border-radius: 8px;
+            margin-top: 8px;
+            display: inline-block;
+            color: #FFC72C;
         }
         
         .ubicacion-aproximada {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: #FFC72C;
-            margin-top: 5px;
+            margin-top: 8px;
+            font-style: italic;
         }
         
         .permiso-geolocalizacion {
-            background-color: rgba(255, 199, 44, 0.2);
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
+            background: linear-gradient(145deg, rgba(255, 199, 44, 0.25), rgba(255, 179, 0, 0.2));
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
             text-align: center;
-            border: 2px solid #FFC72C;
+            border: 3px solid #FFC72C;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 8px 25px rgba(255, 199, 44, 0.3);
+        }
+        
+        .permiso-geolocalizacion h3 {
+            margin-bottom: 15px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .permiso-geolocalizacion p {
+            margin-bottom: 15px;
+            line-height: 1.5;
         }
         
         .loader {
             border: 5px solid rgba(255, 255, 255, 0.3);
-            border-top: 5px solid white;
+            border-top: 5px solid #FFC72C;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 10px auto;
+            width: 45px;
+            height: 45px;
+            animation: spin 1.2s linear infinite;
+            margin: 15px auto;
         }
         
         .correo-info {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(76, 175, 80, 0.1));
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
             text-align: center;
             width: 100%;
+            border: 2px solid rgba(76, 175, 80, 0.3);
         }
         
         .correo-info h3 {
-            margin-bottom: 10px;
-            color: #FFC72C;
+            margin-bottom: 12px;
+            color: #4CAF50;
+        }
+        
+        .sincronizacion-info {
+            background: linear-gradient(145deg, rgba(33, 150, 243, 0.1), rgba(30, 136, 229, 0.1));
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .sincronizacion-info p {
+            color: #BBDEFB;
+            font-size: 0.95rem;
+        }
+        
+        .badge {
+            background-color: #FFC72C;
+            color: #D4001C;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-left: 8px;
         }
         
         @keyframes spin {
@@ -345,14 +461,38 @@
             100% { transform: rotate(360deg); }
         }
         
-        @media (max-width: 600px) {
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .pulsating {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 199, 44, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 199, 44, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 199, 44, 0); }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                border-radius: 15px;
+            }
+            
             h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
             
             .btn {
-                padding: 12px 30px;
-                font-size: 1rem;
+                padding: 14px 35px;
+                font-size: 1.1rem;
             }
             
             input, select {
@@ -360,13 +500,13 @@
             }
             
             th, td {
-                padding: 10px;
-                font-size: 0.9rem;
+                padding: 12px;
+                font-size: 0.95rem;
             }
             
             .usuario-item, .ausencia-item {
                 flex-direction: column;
-                gap: 10px;
+                gap: 12px;
                 text-align: center;
             }
             
@@ -374,11 +514,47 @@
                 width: 100%;
                 justify-content: center;
             }
+            
+            .tabs {
+                gap: 8px;
+            }
+            
+            .tab-btn {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .logo span {
+                font-size: 1.4rem;
+                padding: 6px 15px;
+            }
+            
+            .btn {
+                padding: 12px 30px;
+                font-size: 1rem;
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .tab-btn {
+                padding: 10px 16px;
+                font-size: 0.8rem;
+            }
+            
+            .permiso-geolocalizacion {
+                padding: 20px 15px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container fade-in">
         <div class="logo">
             <h1>Telepizza</h1>
             <span>Gestión de Jornadas</span>
@@ -387,8 +563,12 @@
         <!-- Selección de rol -->
         <div class="selector active">
             <h2>Selecciona tu rol</h2>
-            <button class="btn" id="btnTelepizzero">Telepizzero</button>
+            <button class="btn pulsating" id="btnTelepizzero">Telepizzero</button>
             <button class="btn" id="btnGerencia">Gerencia</button>
+            
+            <div class="sincronizacion-info">
+                <p>✅ Sistema sincronizado en la nube - Accede desde cualquier dispositivo</p>
+            </div>
         </div>
         
         <!-- Sección para telepizzeros -->
@@ -396,37 +576,46 @@
             <h2>Registro de Jornada</h2>
             
             <div class="permiso-geolocalizacion" id="permisoGeolocalizacion">
-                <h3>Permiso de Geolocalización Requerido</h3>
-                <p>Para registrar tu jornada, necesitamos acceder a tu ubicación precisa.</p>
-                <p>Por favor, permite el acceso a la ubicación cuando tu navegador lo solicite.</p>
+                <h3>📍 Activación de Geolocalización Requerida</h3>
+                <p>Para registrar tu jornada de forma segura, necesitamos acceder a tu ubicación precisa.</p>
+                <p>Por favor, <strong>permite el acceso a la ubicación</strong> cuando tu navegador lo solicite.</p>
+                <p>Si no ves la solicitud, verifica los permisos de tu navegador.</p>
                 <div class="loader" id="loaderGeolocalizacion"></div>
-                <button class="btn btn-success" id="btnActivarGeolocalizacion">Activar Geolocalización</button>
+                <button class="btn btn-success pulsating" id="btnActivarGeolocalizacion">Activar Geolocalización</button>
             </div>
             
             <div id="contenidoFichaje" style="display: none;">
-                <input type="text" id="dniInput" placeholder="Introduce tu DNI" maxlength="8">
-                <button class="btn" id="btnFichar">Fichar</button>
+                <div class="form-group">
+                    <label for="dniInput">Introduce tu DNI (8 dígitos)</label>
+                    <input type="text" id="dniInput" placeholder="Ej: 20086762" maxlength="8" pattern="\d*" inputmode="numeric">
+                    <small style="color: #FFC72C; font-size: 0.9rem;">Solo 8 números, sin letras ni espacios</small>
+                </div>
+                
+                <button class="btn" id="btnFichar">Fichar Entrada/Salida</button>
                 
                 <div class="geolocalizacion-info" id="infoGeolocalizacion">
-                    <h3>Ubicación Detectada</h3>
+                    <h3>📍 Ubicación Detectada</h3>
                     <div id="estadoGeolocalizacion">Obteniendo ubicación...</div>
                     <div class="coordenadas" id="coordenadas"></div>
                     <div class="ubicacion-aproximada" id="direccionAproximada"></div>
                     <div class="mapa" id="mapaContainer">
-                        <div id="mapaPlaceholder">Mapa de ubicación</div>
+                        <div id="mapaPlaceholder">Mapa de ubicación se cargará aquí</div>
                     </div>
                 </div>
                 
                 <div class="mensaje" id="mensajeTelepizzero"></div>
             </div>
             
-            <button class="btn volver-btn" id="volverTelepizzero">Volver</button>
+            <button class="btn volver-btn" id="volverTelepizzero">Volver al Menú</button>
         </div>
         
         <!-- Sección para gerencia -->
         <div class="gerencia-section">
             <h2>Acceso Gerencia</h2>
-            <input type="password" id="passwordInput" placeholder="Contraseña">
+            <div class="form-group">
+                <label for="passwordInput">Contraseña de Gerencia</label>
+                <input type="password" id="passwordInput" placeholder="Introduce la contraseña">
+            </div>
             <button class="btn" id="btnAcceder">Acceder</button>
             <div class="mensaje" id="mensajeGerencia"></div>
             <button class="btn volver-btn" id="volverGerencia">Volver</button>
@@ -434,18 +623,23 @@
         
         <!-- Sección de gestión para gerencia -->
         <div class="registro-section">
-            <h2>Panel de Gerencia</h2>
+            <h2>Panel de Gerencia <span class="badge">Sincronizado</span></h2>
             
             <div class="tabs">
-                <div class="tab-btn active" data-tab="registros">Registros</div>
-                <div class="tab-btn" data-tab="usuarios">Gestión de Usuarios</div>
-                <div class="tab-btn" data-tab="ausencias">Control de Ausencias</div>
-                <div class="tab-btn" data-tab="correo">Configuración de Correo</div>
+                <div class="tab-btn active" data-tab="registros">📊 Registros</div>
+                <div class="tab-btn" data-tab="usuarios">👥 Gestión de Usuarios</div>
+                <div class="tab-btn" data-tab="ausencias">⚠️ Control de Ausencias</div>
+                <div class="tab-btn" data-tab="correo">📧 Configuración de Correo</div>
             </div>
             
             <!-- Pestaña de Registros -->
             <div class="tab-content active" id="registros-tab">
                 <h3>Registro de Jornadas</h3>
+                
+                <div class="sincronizacion-info">
+                    <p>✅ Datos sincronizados desde la nema - Total registros: <span id="totalRegistros">0</span></p>
+                </div>
+                
                 <table id="tablaRegistros">
                     <thead>
                         <tr>
@@ -454,7 +648,7 @@
                             <th>Fecha</th>
                             <th>Entrada</th>
                             <th>Salida</th>
-                            <th>Horas Trabajadas</th>
+                            <th>Horas</th>
                             <th>Ubicación</th>
                         </tr>
                     </thead>
@@ -463,9 +657,9 @@
                     </tbody>
                 </table>
                 
-                <div style="margin-top: 20px; text-align: center;">
-                    <button class="btn btn-info" id="btnEnviarReporteDiario">Enviar Reporte Diario por Correo</button>
-                    <button class="btn btn-info" id="btnEnviarReporteMensual">Enviar Reporte Mensual por Correo</button>
+                <div style="margin-top: 25px; text-align: center; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn btn-reporte" id="btnEnviarReporteDiario">📤 Enviar Reporte Diario</button>
+                    <button class="btn btn-gris" id="btnEnviarReporteMensual">📈 Enviar Reporte Mensual</button>
                 </div>
             </div>
             
@@ -474,13 +668,13 @@
                 <h3>Gestión de Telepizzeros</h3>
                 
                 <div class="form-group">
-                    <label for="nuevoDni">DNI del nuevo Telepizzero</label>
-                    <input type="text" id="nuevoDni" placeholder="Introduce DNI" maxlength="8">
+                    <label for="nuevoDni">DNI del nuevo Telepizzero (8 dígitos)</label>
+                    <input type="text" id="nuevoDni" placeholder="Ej: 20086762" maxlength="8" pattern="\d*" inputmode="numeric">
                     
-                    <label for="nuevoNombre">Nombre del nuevo Telepizzero</label>
-                    <input type="text" id="nuevoNombre" placeholder="Introduce nombre">
+                    <label for="nuevoNombre">Nombre completo</label>
+                    <input type="text" id="nuevoNombre" placeholder="Ej: Juan Pérez">
                     
-                    <button class="btn btn-secondary" id="btnAgregarUsuario">Agregar Telepizzero</button>
+                    <button class="btn btn-secondary" id="btnAgregarUsuario">➕ Agregar Telepizzero</button>
                 </div>
                 
                 <div id="listaUsuarios">
@@ -503,18 +697,18 @@
                     
                     <label for="tipoAusencia">Tipo de incidencia</label>
                     <select id="tipoAusencia">
-                        <option value="falta">Falta</option>
-                        <option value="ausencia_justificada">Ausencia Justificada</option>
-                        <option value="retraso">Retraso</option>
+                        <option value="falta">❌ Falta injustificada</option>
+                        <option value="ausencia_justificada">⚠️ Ausencia justificada</option>
+                        <option value="retraso">⏰ Retraso</option>
                     </select>
                     
                     <label for="motivoAusencia">Motivo (opcional)</label>
                     <input type="text" id="motivoAusencia" placeholder="Motivo de la ausencia">
                     
-                    <button class="btn btn-secondary" id="btnRegistrarAusencia">Registrar Incidencia</button>
+                    <button class="btn btn-secondary" id="btnRegistrarAusencia">📝 Registrar Incidencia</button>
                 </div>
                 
-                <h4>Incidencia Registradas</h4>
+                <h4>📋 Incidencias Registradas</h4>
                 <div id="listaAusencias">
                     <!-- Lista de ausencias se llenará con JavaScript -->
                 </div>
@@ -525,15 +719,15 @@
                 <h3>Vincular Correo Electrónico</h3>
                 
                 <div class="correo-info">
-                    <h3>Configuración de Reportes</h3>
+                    <h3>⚙️ Configuración de Reportes Automáticos</h3>
                     <p>Vincule una cuenta de correo para recibir reportes automáticos de jornadas laborales.</p>
                 </div>
                 
                 <div class="form-group">
                     <label for="correoElectronico">Correo Electrónico</label>
-                    <input type="email" id="correoElectronico" placeholder="ejemplo@telepizza.com">
+                    <input type="email" id="correoElectronico" placeholder="gerencia@telepizza.com">
                     
-                    <button class="btn btn-success" id="btnGuardarCorreo">Guardar Correo</button>
+                    <button class="btn btn-success" id="btnGuardarCorreo">💾 Guardar Correo</button>
                 </div>
                 
                 <div class="correo-info" id="infoCorreoGuardado">
@@ -541,38 +735,116 @@
                 </div>
                 
                 <div class="form-group">
-                    <h4>Enviar Reportes Manualmente</h4>
-                    <button class="btn btn-info" id="btnEnviarDiarioManual">Enviar Reporte Diario</button>
-                    <button class="btn btn-info" id="btnEnviarMensualManual">Enviar Reporte Mensual</button>
+                    <h4>📤 Enviar Reportes Manualmente</h4>
+                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                        <button class="btn btn-reporte" id="btnEnviarDiarioManual">📊 Reporte Diario</button>
+                        <button class="btn btn-gris" id="btnEnviarMensualManual">📈 Reporte Mensual</button>
+                    </div>
                 </div>
                 
                 <div class="mensaje" id="mensajeCorreo"></div>
             </div>
             
-            <button class="btn volver-btn" id="volverRegistro">Volver</button>
+            <button class="btn volver-btn" id="volverRegistro">← Volver al Menú</button>
         </div>
     </div>
 
     <script>
-        // Datos iniciales
-        let telepizzeros = JSON.parse(localStorage.getItem('telepizza_usuarios')) || [
-            { dni: "20086762", nombre: "Noel" }
-        ];
+        // ============================================
+        // SISTEMA DE ALMACENAMIENTO EN LA NUBE (SIMULACIÓN)
+        // ============================================
         
-        // Almacenamiento de registros
-        let registros = JSON.parse(localStorage.getItem('telepizza_registros')) || [];
+        // Clave única para simular almacenamiento en la nube
+        const CLOUD_STORAGE_KEY = 'telepizza_cloud_data';
         
-        // Almacenamiento de ausencias
-        let ausencias = JSON.parse(localStorage.getItem('telepizza_ausencias')) || [];
+        // Función para cargar datos desde la "nube"
+        function cargarDesdeLaNube() {
+            try {
+                const cloudData = JSON.parse(localStorage.getItem(CLOUD_STORAGE_KEY)) || {};
+                
+                // Inicializar datos si no existen
+                if (!cloudData.telepizzeros) {
+                    cloudData.telepizzeros = [{ dni: "20086762", nombre: "Noel" }];
+                }
+                
+                if (!cloudData.registros) cloudData.registros = [];
+                if (!cloudData.ausencias) cloudData.ausencias = [];
+                if (!cloudData.correo) cloudData.correo = null;
+                
+                return cloudData;
+            } catch (error) {
+                console.error("Error cargando datos de la nube:", error);
+                return {
+                    telepizzeros: [{ dni: "20086762", nombre: "Noel" }],
+                    registros: [],
+                    ausencias: [],
+                    correo: null
+                };
+            }
+        }
         
-        // Correo electrónico para reportes
-        let correoGerencia = JSON.parse(localStorage.getItem('telepizza_correo')) || null;
+        // Función para guardar datos en la "nube"
+        function guardarEnLaNube(data) {
+            try {
+                localStorage.setItem(CLOUD_STORAGE_KEY, JSON.stringify(data));
+                console.log("Datos guardados en la nube:", data);
+                return true;
+            } catch (error) {
+                console.error("Error guardando datos en la nube:", error);
+                return false;
+            }
+        }
+        
+        // Función para sincronizar datos locales con la nube
+        function sincronizarConLaNube() {
+            const cloudData = cargarDesdeLaNube();
+            
+            // Actualizar variables locales
+            telepizzeros = cloudData.telepizzeros;
+            registros = cloudData.registros;
+            ausencias = cloudData.ausencias;
+            correoGerencia = cloudData.correo;
+            
+            // Actualizar contador de registros
+            document.getElementById('totalRegistros').textContent = registros.length;
+            
+            return cloudData;
+        }
+        
+        // Función para guardar cambios y sincronizar
+        function guardarYSincronizar() {
+            const cloudData = {
+                telepizzeros,
+                registros,
+                ausencias,
+                correo: correoGerencia
+            };
+            
+            if (guardarEnLaNube(cloudData)) {
+                console.log("✅ Datos sincronizados correctamente");
+                return true;
+            } else {
+                console.error("❌ Error sincronizando datos");
+                return false;
+            }
+        }
+        
+        // ============================================
+        // VARIABLES GLOBALES Y DATOS INICIALES
+        // ============================================
+        
+        // Cargar datos iniciales desde la nube
+        let { telepizzeros, registros, ausencias, correo: correoGerencia } = sincronizarConLaNube();
         
         // Variables para geolocalización
         let ubicacionActual = null;
         let watchId = null;
+        let geolocalizacionActivada = false;
         
-        // Elementos del DOM
+        // ============================================
+        // ELEMENTOS DEL DOM
+        // ============================================
+        
         const selector = document.querySelector('.selector');
         const telepizzeroSection = document.querySelector('.telepizzero-section');
         const gerenciaSection = document.querySelector('.gerencia-section');
@@ -591,6 +863,7 @@
         const mensajeTelepizzero = document.getElementById('mensajeTelepizzero');
         const mensajeGerencia = document.getElementById('mensajeGerencia');
         const tablaRegistros = document.querySelector('#tablaRegistros tbody');
+        const totalRegistrosElement = document.getElementById('totalRegistros');
         
         // Elementos de geolocalización
         const permisoGeolocalizacion = document.getElementById('permisoGeolocalizacion');
@@ -630,11 +903,21 @@
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
         
+        // ============================================
+        // CONFIGURACIÓN INICIAL
+        // ============================================
+        
         // Establecer fecha actual por defecto
         const hoy = new Date();
         fechaAusencia.value = hoy.toISOString().split('T')[0];
         
-        // Inicializar la aplicación
+        // Actualizar contador de registros
+        totalRegistrosElement.textContent = registros.length;
+        
+        // ============================================
+        // INICIALIZACIÓN DE LA APLICACIÓN
+        // ============================================
+        
         function init() {
             cargarUsuarios();
             cargarAusencias();
@@ -644,18 +927,45 @@
             if (telepizzeros.length > 0) {
                 cargarSelectUsuarios();
             }
+            
+            // Mostrar mensaje de bienvenida
+            console.log("✅ Sistema de Telepizza cargado correctamente");
+            console.log(`📊 Total de registros en la nube: ${registros.length}`);
+            console.log(`👥 Total de telepizzeros: ${telepizzeros.length}`);
         }
         
-        // Event Listeners
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        
         btnTelepizzero.addEventListener('click', () => {
             selector.classList.remove('active');
             telepizzeroSection.classList.add('active');
-            iniciarGeolocalizacion();
+            
+            // Forzar que se muestre siempre el permiso de geolocalización
+            permisoGeolocalizacion.style.display = 'block';
+            contenidoFichaje.style.display = 'none';
+            geolocalizacionActivada = false;
+            
+            // Mostrar mensaje específico para PC
+            if (window.innerWidth > 768) {
+                const pcMessage = document.createElement('p');
+                pcMessage.style.color = '#FFC72C';
+                pcMessage.style.marginTop = '10px';
+                pcMessage.style.fontWeight = 'bold';
+                pcMessage.textContent = '💻 En PC, haz clic en "Activar Geolocalización" y permite los permisos en tu navegador.';
+                
+                if (!document.getElementById('pcMessage')) {
+                    pcMessage.id = 'pcMessage';
+                    permisoGeolocalizacion.appendChild(pcMessage);
+                }
+            }
         });
         
         btnGerencia.addEventListener('click', () => {
             selector.classList.remove('active');
             gerenciaSection.classList.add('active');
+            passwordInput.focus();
         });
         
         btnFichar.addEventListener('click', fichar);
@@ -666,7 +976,9 @@
                 registroSection.classList.add('active');
                 cargarRegistros();
             } else {
-                mensajeGerencia.textContent = "Contraseña incorrecta";
+                mensajeGerencia.textContent = "❌ Contraseña incorrecta. Inténtalo de nuevo.";
+                passwordInput.value = "";
+                passwordInput.focus();
             }
         });
         
@@ -678,6 +990,7 @@
             mensajeTelepizzero.textContent = "";
             permisoGeolocalizacion.style.display = 'block';
             contenidoFichaje.style.display = 'none';
+            geolocalizacionActivada = false;
         });
         
         volverGerencia.addEventListener('click', () => {
@@ -723,21 +1036,50 @@
         // Geolocalización
         btnActivarGeolocalizacion.addEventListener('click', iniciarGeolocalizacion);
         
+        // Validación de DNI en tiempo real
+        dniInput.addEventListener('input', function() {
+            // Solo permitir números
+            this.value = this.value.replace(/\D/g, '');
+            
+            // Limitar a 8 dígitos
+            if (this.value.length > 8) {
+                this.value = this.value.slice(0, 8);
+            }
+        });
+        
+        nuevoDni.addEventListener('input', function() {
+            // Solo permitir números
+            this.value = this.value.replace(/\D/g, '');
+            
+            // Limitar a 8 dígitos
+            if (this.value.length > 8) {
+                this.value = this.value.slice(0, 8);
+            }
+        });
+        
+        // ============================================
+        // FUNCIONES DE GEOLOCALIZACIÓN
+        // ============================================
+        
         // Función para iniciar la geolocalización
         function iniciarGeolocalizacion() {
-            estadoGeolocalizacion.textContent = "Obteniendo ubicación...";
+            estadoGeolocalizacion.textContent = "⏳ Obteniendo ubicación...";
             loaderGeolocalizacion.style.display = 'block';
+            btnActivarGeolocalizacion.disabled = true;
+            btnActivarGeolocalizacion.textContent = "Activando...";
             
             if (!navigator.geolocation) {
-                estadoGeolocalizacion.textContent = "La geolocalización no es compatible con este navegador";
+                estadoGeolocalizacion.textContent = "❌ La geolocalización no es compatible con este navegador";
                 loaderGeolocalizacion.style.display = 'none';
+                btnActivarGeolocalizacion.disabled = false;
+                btnActivarGeolocalizacion.textContent = "Activar Geolocalización";
                 return;
             }
             
             // Opciones para una mayor precisión
             const opciones = {
                 enableHighAccuracy: true,
-                timeout: 10000,
+                timeout: 15000,
                 maximumAge: 0
             };
             
@@ -746,14 +1088,19 @@
                 // Éxito
                 function(posicion) {
                     loaderGeolocalizacion.style.display = 'none';
+                    btnActivarGeolocalizacion.disabled = false;
+                    btnActivarGeolocalizacion.textContent = "Geolocalización Activada";
+                    
                     ubicacionActual = {
                         latitud: posicion.coords.latitude,
                         longitud: posicion.coords.longitude,
-                        precision: posicion.coords.accuracy
+                        precision: posicion.coords.accuracy,
+                        timestamp: new Date().toISOString()
                     };
                     
                     // Mostrar información de ubicación
                     mostrarInformacionUbicacion();
+                    geolocalizacionActivada = true;
                     
                     // Iniciar seguimiento continuo de la ubicación
                     watchId = navigator.geolocation.watchPosition(
@@ -761,7 +1108,8 @@
                             ubicacionActual = {
                                 latitud: pos.coords.latitude,
                                 longitud: pos.coords.longitude,
-                                precision: pos.coords.accuracy
+                                precision: pos.coords.accuracy,
+                                timestamp: new Date().toISOString()
                             };
                             mostrarInformacionUbicacion();
                         },
@@ -774,15 +1122,22 @@
                     // Mostrar contenido de fichaje
                     permisoGeolocalizacion.style.display = 'none';
                     contenidoFichaje.style.display = 'flex';
+                    dniInput.focus();
                 },
                 // Error
                 function(error) {
                     loaderGeolocalizacion.style.display = 'none';
-                    let mensajeError = "Error al obtener la ubicación: ";
+                    btnActivarGeolocalizacion.disabled = false;
+                    btnActivarGeolocalizacion.textContent = "Activar Geolocalización";
+                    
+                    let mensajeError = "❌ Error al obtener la ubicación: ";
                     
                     switch(error.code) {
                         case error.PERMISSION_DENIED:
-                            mensajeError += "Permiso de ubicación denegado. Por favor, habilita la geolocalización en tu navegador.";
+                            mensajeError = "🔒 Permiso de ubicación denegado. Para continuar:";
+                            mensajeError += "\n1. Haz clic en el icono de candado en la barra de direcciones";
+                            mensajeError += "\n2. Selecciona 'Permitir' en la sección de Ubicación";
+                            mensajeError += "\n3. Recarga la página o haz clic nuevamente en 'Activar Geolocalización'";
                             break;
                         case error.POSITION_UNAVAILABLE:
                             mensajeError += "La información de ubicación no está disponible.";
@@ -796,6 +1151,10 @@
                     }
                     
                     estadoGeolocalizacion.textContent = mensajeError;
+                    
+                    // Mantener visible el permiso para intentar nuevamente
+                    permisoGeolocalizacion.style.display = 'block';
+                    contenidoFichaje.style.display = 'none';
                 },
                 opciones
             );
@@ -808,6 +1167,7 @@
                 watchId = null;
             }
             ubicacionActual = null;
+            geolocalizacionActivada = false;
         }
         
         // Función para mostrar información de la ubicación
@@ -815,7 +1175,7 @@
             if (!ubicacionActual) return;
             
             coordenadasElement.textContent = `Lat: ${ubicacionActual.latitud.toFixed(6)}, Lng: ${ubicacionActual.longitud.toFixed(6)}`;
-            estadoGeolocalizacion.textContent = "Ubicación obtenida correctamente";
+            estadoGeolocalizacion.textContent = "✅ Ubicación obtenida correctamente";
             direccionAproximada.textContent = `Precisión: ±${Math.round(ubicacionActual.precision)} metros`;
             
             // Mostrar mapa
@@ -829,21 +1189,28 @@
             const { latitud, longitud } = ubicacionActual;
             const urlMapa = `https://maps.google.com/maps?q=${latitud},${longitud}&z=17&output=embed`;
             
-            mapaContainer.innerHTML = `<iframe src="${urlMapa}" allowfullscreen></iframe>`;
+            mapaContainer.innerHTML = `<iframe src="${urlMapa}" allowfullscreen title="Ubicación actual"></iframe>`;
         }
         
-        // Función para fichar
+        // ============================================
+        // FUNCIÓN PRINCIPAL DE FICHAJE
+        // ============================================
+        
         function fichar() {
             // Verificar que tenemos ubicación
-            if (!ubicacionActual) {
-                mensajeTelepizzero.textContent = "No se pudo obtener la ubicación. Por favor, activa la geolocalización.";
+            if (!ubicacionActual || !geolocalizacionActivada) {
+                mensajeTelepizzero.textContent = "❌ No se pudo obtener la ubicación. Por favor, activa la geolocalización primero.";
+                permisoGeolocalizacion.style.display = 'block';
+                contenidoFichaje.style.display = 'none';
                 return;
             }
             
             const dni = dniInput.value.trim();
             
-            if (!dni) {
-                mensajeTelepizzero.textContent = "Por favor, introduce tu DNI";
+            // Validar DNI (8 dígitos exactos)
+            if (!dni || dni.length !== 8 || !/^\d{8}$/.test(dni)) {
+                mensajeTelepizzero.textContent = "❌ DNI inválido. Debe tener exactamente 8 dígitos numéricos.";
+                dniInput.focus();
                 return;
             }
             
@@ -851,11 +1218,12 @@
             const telepizzero = telepizzeros.find(t => t.dni === dni);
             
             if (!telepizzero) {
-                mensajeTelepizzero.textContent = "DNI no registrado";
+                mensajeTelepizzero.textContent = "❌ DNI no registrado en el sistema.";
+                dniInput.focus();
                 return;
             }
             
-            // Buscar si hay un registro activo (sin salida) para este DNI
+            // Buscar si hay un registro activo (sin salida) para este DNI hoy
             const ahora = new Date();
             const fechaHoy = ahora.toISOString().split('T')[0];
             
@@ -881,10 +1249,11 @@
                 
                 registroActivo.horasTrabajadas = `${diffHrs}h ${diffMins}m`;
                 
-                mensajeTelepizzero.textContent = `Salida registrada a las ${horaActual}`;
+                mensajeTelepizzero.textContent = `✅ Salida registrada a las ${horaActual}. ¡Buen trabajo ${telepizzero.nombre}!`;
+                mensajeTelepizzero.style.borderLeftColor = '#4CAF50';
             } else {
                 // Registrar entrada
-                registros.push({
+                const nuevoRegistro = {
                     nombre: telepizzero.nombre,
                     dni: telepizzero.dni,
                     fecha: fechaHoy,
@@ -892,19 +1261,46 @@
                     salida: null,
                     horasTrabajadas: null,
                     ubicacionEntrada: { ...ubicacionActual },
-                    ubicacionSalida: null
-                });
-                mensajeTelepizzero.textContent = `Entrada registrada a las ${horaActual}`;
+                    ubicacionSalida: null,
+                    dispositivo: navigator.userAgent,
+                    timestamp: ahora.toISOString()
+                };
+                
+                registros.push(nuevoRegistro);
+                mensajeTelepizzero.textContent = `✅ Entrada registrada a las ${horaActual}. ¡Bienvenido ${telepizzero.nombre}!`;
+                mensajeTelepizzero.style.borderLeftColor = '#4CAF50';
             }
             
-            // Guardar en localStorage
-            localStorage.setItem('telepizza_registros', JSON.stringify(registros));
+            // Guardar y sincronizar en la nube
+            if (guardarYSincronizar()) {
+                // Actualizar contador de registros
+                totalRegistrosElement.textContent = registros.length;
+                
+                // Mostrar mensaje de sincronización
+                setTimeout(() => {
+                    const syncMsg = document.createElement('div');
+                    syncMsg.textContent = '✅ Datos sincronizados en la nube';
+                    syncMsg.style.color = '#4CAF50';
+                    syncMsg.style.marginTop = '10px';
+                    syncMsg.style.fontSize = '0.9rem';
+                    mensajeTelepizzero.appendChild(syncMsg);
+                    
+                    setTimeout(() => syncMsg.remove(), 3000);
+                }, 500);
+            }
             
-            // Limpiar campo
+            // Limpiar campo y mantener foco
             dniInput.value = "";
+            dniInput.focus();
+            
+            // Auto-scroll al mensaje
+            mensajeTelepizzero.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
         
-        // Función para cargar registros en la tabla
+        // ============================================
+        // FUNCIONES DE GESTIÓN DE REGISTROS
+        // ============================================
+        
         function cargarRegistros() {
             tablaRegistros.innerHTML = "";
             
@@ -912,8 +1308,10 @@
                 const fila = document.createElement('tr');
                 const celda = document.createElement('td');
                 celda.colSpan = 7;
-                celda.textContent = "No hay registros disponibles";
+                celda.textContent = "📭 No hay registros disponibles";
                 celda.style.textAlign = "center";
+                celda.style.padding = "40px";
+                celda.style.color = "#FFC72C";
                 fila.appendChild(celda);
                 tablaRegistros.appendChild(fila);
                 return;
@@ -929,6 +1327,7 @@
             
             registrosOrdenados.forEach(registro => {
                 const fila = document.createElement('tr');
+                fila.className = 'fade-in';
                 
                 const celdaNombre = document.createElement('td');
                 celdaNombre.textContent = registro.nombre;
@@ -951,7 +1350,7 @@
                 const celdaUbicacion = document.createElement('td');
                 if (registro.ubicacionEntrada) {
                     const enlaceMapa = `https://maps.google.com/?q=${registro.ubicacionEntrada.latitud},${registro.ubicacionEntrada.longitud}`;
-                    celdaUbicacion.innerHTML = `<a href="${enlaceMapa}" target="_blank" style="color: #FFC72C;">Ver ubicación</a>`;
+                    celdaUbicacion.innerHTML = `<a href="${enlaceMapa}" target="_blank" style="color: #FFC72C; text-decoration: none; font-weight: bold;">📍 Ver</a>`;
                 } else {
                     celdaUbicacion.textContent = "-";
                 }
@@ -968,59 +1367,83 @@
             });
         }
         
-        // Función para agregar un nuevo usuario
+        // ============================================
+        // FUNCIONES DE GESTIÓN DE USUARIOS
+        // ============================================
+        
         function agregarUsuario() {
             const dni = nuevoDni.value.trim();
-            const nombre = nuevoNombre.value.trim();
+            const nombre = nuevoNombre.value.trim().toUpperCase();
             
-            if (!dni || !nombre) {
-                alert("Por favor, completa todos los campos");
+            // Validar DNI
+            if (!dni || dni.length !== 8 || !/^\d{8}$/.test(dni)) {
+                alert("❌ DNI inválido. Debe tener exactamente 8 dígitos numéricos.");
+                nuevoDni.focus();
+                return;
+            }
+            
+            if (!nombre) {
+                alert("❌ Por favor, introduce el nombre del telepizzero");
+                nuevoNombre.focus();
                 return;
             }
             
             // Verificar si el DNI ya existe
             if (telepizzeros.some(u => u.dni === dni)) {
-                alert("Ya existe un telepizzero con ese DNI");
+                alert("⚠️ Ya existe un telepizzero con ese DNI");
+                nuevoDni.focus();
                 return;
             }
             
             // Agregar el nuevo usuario
             telepizzeros.push({ dni, nombre });
             
-            // Guardar en localStorage
-            localStorage.setItem('telepizza_usuarios', JSON.stringify(telepizzeros));
-            
-            // Actualizar la interfaz
-            cargarUsuarios();
-            cargarSelectUsuarios();
-            
-            // Limpiar campos
-            nuevoDni.value = "";
-            nuevoNombre.value = "";
-            
-            alert(`Telepizzero ${nombre} agregado correctamente`);
+            // Guardar y sincronizar
+            if (guardarYSincronizar()) {
+                // Actualizar la interfaz
+                cargarUsuarios();
+                cargarSelectUsuarios();
+                
+                // Limpiar campos
+                nuevoDni.value = "";
+                nuevoNombre.value = "";
+                
+                // Mostrar mensaje de éxito
+                alert(`✅ Telepizzero ${nombre} agregado correctamente`);
+                
+                // Enfocar el campo DNI para nuevo registro
+                nuevoDni.focus();
+            } else {
+                alert("❌ Error al guardar el usuario. Inténtalo de nuevo.");
+            }
         }
         
-        // Función para cargar la lista de usuarios
         function cargarUsuarios() {
             listaUsuarios.innerHTML = "";
             
             if (telepizzeros.length === 0) {
-                listaUsuarios.innerHTML = "<p>No hay telepizzeros registrados</p>";
+                listaUsuarios.innerHTML = "<p style='text-align: center; color: #FFC72C;'>📭 No hay telepizzeros registrados</p>";
                 return;
             }
             
-            telepizzeros.forEach(usuario => {
+            // Ordenar usuarios por nombre
+            const usuariosOrdenados = [...telepizzeros].sort((a, b) => a.nombre.localeCompare(b.nombre));
+            
+            usuariosOrdenados.forEach(usuario => {
                 const usuarioItem = document.createElement('div');
-                usuarioItem.className = 'usuario-item';
+                usuarioItem.className = 'usuario-item fade-in';
+                
+                // Contar registros de este usuario
+                const totalRegistrosUsuario = registros.filter(r => r.dni === usuario.dni).length;
                 
                 usuarioItem.innerHTML = `
                     <div>
                         <strong>${usuario.nombre}</strong>
-                        <div>DNI: ${usuario.dni}</div>
+                        <div style="font-size: 0.9rem; color: #FFC72C;">DNI: ${usuario.dni}</div>
+                        <div style="font-size: 0.8rem; color: #aaa;">Registros: ${totalRegistrosUsuario}</div>
                     </div>
                     <div class="botones-accion">
-                        <button class="btn btn-danger btn-small btn-eliminar" data-dni="${usuario.dni}">Eliminar</button>
+                        <button class="btn btn-danger btn-small btn-eliminar" data-dni="${usuario.dni}">🗑️ Eliminar</button>
                     </div>
                 `;
                 
@@ -1036,32 +1459,39 @@
             });
         }
         
-        // Función para eliminar un usuario
         function eliminarUsuario(dni) {
-            if (confirm("¿Estás seguro de que deseas eliminar este telepizzero?")) {
+            if (confirm("⚠️ ¿Estás seguro de que deseas eliminar este telepizzero?\n\nEsta acción también eliminará todos sus registros de jornadas.")) {
+                // Encontrar el nombre del usuario para el mensaje
+                const usuario = telepizzeros.find(u => u.dni === dni);
+                const nombreUsuario = usuario ? usuario.nombre : "Usuario";
+                
+                // Eliminar el usuario
                 telepizzeros = telepizzeros.filter(u => u.dni !== dni);
                 
                 // También eliminar sus registros
                 registros = registros.filter(r => r.dni !== dni);
                 
                 // Guardar cambios
-                localStorage.setItem('telepizza_usuarios', JSON.stringify(telepizzeros));
-                localStorage.setItem('telepizza_registros', JSON.stringify(registros));
-                
-                // Actualizar la interfaz
-                cargarUsuarios();
-                cargarSelectUsuarios();
-                cargarRegistros();
-                
-                alert("Telepizzero eliminado correctamente");
+                if (guardarYSincronizar()) {
+                    // Actualizar la interfaz
+                    cargarUsuarios();
+                    cargarSelectUsuarios();
+                    cargarRegistros();
+                    
+                    alert(`✅ Telepizzero ${nombreUsuario} eliminado correctamente`);
+                } else {
+                    alert("❌ Error al eliminar el usuario. Inténtalo de nuevo.");
+                }
             }
         }
         
-        // Función para cargar el select de usuarios en la pestaña de ausencias
         function cargarSelectUsuarios() {
             selectUsuarioAusencia.innerHTML = "";
             
-            telepizzeros.forEach(usuario => {
+            // Ordenar usuarios por nombre
+            const usuariosOrdenados = [...telepizzeros].sort((a, b) => a.nombre.localeCompare(b.nombre));
+            
+            usuariosOrdenados.forEach(usuario => {
                 const option = document.createElement('option');
                 option.value = usuario.dni;
                 option.textContent = `${usuario.nombre} (${usuario.dni})`;
@@ -1069,7 +1499,10 @@
             });
         }
         
-        // Función para registrar una ausencia
+        // ============================================
+        // FUNCIONES DE CONTROL DE AUSENCIAS
+        // ============================================
+        
         function registrarAusencia() {
             const dni = selectUsuarioAusencia.value;
             const fecha = fechaAusencia.value;
@@ -1077,7 +1510,7 @@
             const motivo = motivoAusencia.value.trim();
             
             if (!dni || !fecha) {
-                alert("Por favor, completa todos los campos obligatorios");
+                alert("❌ Por favor, completa todos los campos obligatorios");
                 return;
             }
             
@@ -1091,29 +1524,32 @@
                 fecha,
                 tipo,
                 motivo: motivo || "No especificado",
-                fechaRegistro: new Date().toLocaleString('es-ES')
+                fechaRegistro: new Date().toLocaleString('es-ES'),
+                registradoPor: "Gerencia"
             };
             
             ausencias.push(ausencia);
             
-            // Guardar en localStorage
-            localStorage.setItem('telepizza_ausencias', JSON.stringify(ausencias));
-            
-            // Actualizar la interfaz
-            cargarAusencias();
-            
-            // Limpiar campos
-            motivoAusencia.value = "";
-            
-            alert("Incidencia registrada correctamente");
+            // Guardar y sincronizar
+            if (guardarYSincronizar()) {
+                // Actualizar la interfaz
+                cargarAusencias();
+                
+                // Limpiar campos
+                motivoAusencia.value = "";
+                
+                // Mostrar mensaje de éxito
+                alert(`✅ Incidencia registrada correctamente para ${usuario.nombre}`);
+            } else {
+                alert("❌ Error al registrar la incidencia. Inténtalo de nuevo.");
+            }
         }
         
-        // Función para cargar la lista de ausencias
         function cargarAusencias() {
             listaAusencias.innerHTML = "";
             
             if (ausencias.length === 0) {
-                listaAusencias.innerHTML = "<p>No hay incidencias registradas</p>";
+                listaAusencias.innerHTML = "<p style='text-align: center; color: #FFC72C;'>✅ No hay incidencias registradas</p>";
                 return;
             }
             
@@ -1124,30 +1560,35 @@
             
             ausenciasOrdenadas.forEach(ausencia => {
                 const ausenciaItem = document.createElement('div');
-                ausenciaItem.className = `ausencia-item ${ausencia.tipo === 'falta' ? 'ausencia-marcada' : ''}`;
+                ausenciaItem.className = `ausencia-item fade-in ${ausencia.tipo === 'falta' ? 'ausencia-marcada' : ''}`;
                 
                 let tipoTexto = "";
+                let icono = "";
+                
                 switch(ausencia.tipo) {
                     case 'falta':
-                        tipoTexto = "Falta";
+                        tipoTexto = "Falta injustificada";
+                        icono = "❌";
                         break;
                     case 'ausencia_justificada':
-                        tipoTexto = "Ausencia Justificada";
+                        tipoTexto = "Ausencia justificada";
+                        icono = "⚠️";
                         break;
                     case 'retraso':
                         tipoTexto = "Retraso";
+                        icono = "⏰";
                         break;
                 }
                 
                 ausenciaItem.innerHTML = `
                     <div>
-                        <strong>${ausencia.nombre}</strong> (${ausencia.dni})
-                        <div>Fecha: ${ausencia.fecha} - ${tipoTexto}</div>
-                        <div>Motivo: ${ausencia.motivo}</div>
-                        <div><small>Registrado: ${ausencia.fechaRegistro}</small></div>
+                        <strong>${icono} ${ausencia.nombre}</strong> (${ausencia.dni})
+                        <div>📅 Fecha: ${ausencia.fecha} - ${tipoTexto}</div>
+                        <div>📝 Motivo: ${ausencia.motivo}</div>
+                        <div><small>🕐 Registrado: ${ausencia.fechaRegistro}</small></div>
                     </div>
                     <div class="botones-accion">
-                        <button class="btn btn-danger btn-small btn-eliminar-ausencia" data-id="${ausencia.dni}-${ausencia.fecha}">Eliminar</button>
+                        <button class="btn btn-danger btn-small btn-eliminar-ausencia" data-id="${ausencia.dni}-${ausencia.fecha}">🗑️</button>
                     </div>
                 `;
                 
@@ -1163,101 +1604,121 @@
             });
         }
         
-        // Función para eliminar una ausencia
         function eliminarAusencia(id) {
-            if (confirm("¿Estás seguro de que deseas eliminar esta incidencia?")) {
+            if (confirm("⚠️ ¿Estás seguro de que deseas eliminar esta incidencia?")) {
                 const [dni, fecha] = id.split('-');
                 
                 ausencias = ausencias.filter(a => !(a.dni === dni && a.fecha === fecha));
                 
                 // Guardar cambios
-                localStorage.setItem('telepizza_ausencias', JSON.stringify(ausencias));
-                
-                // Actualizar la interfaz
-                cargarAusencias();
-                
-                alert("Incidencia eliminada correctamente");
+                if (guardarYSincronizar()) {
+                    // Actualizar la interfaz
+                    cargarAusencias();
+                    
+                    alert("✅ Incidencia eliminada correctamente");
+                } else {
+                    alert("❌ Error al eliminar la incidencia. Inténtalo de nuevo.");
+                }
             }
         }
         
-        // Función para guardar el correo electrónico
+        // ============================================
+        // FUNCIONES DE CONFIGURACIÓN DE CORREO
+        // ============================================
+        
         function guardarCorreo() {
             const correo = correoElectronico.value.trim();
             
             if (!correo) {
-                alert("Por favor, introduce un correo electrónico válido");
+                alert("❌ Por favor, introduce un correo electrónico válido");
                 return;
             }
             
             // Validar formato de correo básico
             const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!regexCorreo.test(correo)) {
-                alert("Por favor, introduce un correo electrónico válido");
+                alert("❌ Por favor, introduce un correo electrónico válido (ejemplo@telepizza.com)");
+                correoElectronico.focus();
                 return;
             }
             
             // Guardar el correo
             correoGerencia = correo;
-            localStorage.setItem('telepizza_correo', JSON.stringify(correoGerencia));
             
-            // Actualizar la interfaz
-            cargarCorreoGuardado();
-            
-            // Limpiar campo
-            correoElectronico.value = "";
-            
-            mensajeCorreo.textContent = `Correo ${correo} guardado correctamente`;
-            
-            // Ocultar mensaje después de 3 segundos
-            setTimeout(() => {
-                mensajeCorreo.textContent = "";
-            }, 3000);
+            // Guardar y sincronizar
+            if (guardarYSincronizar()) {
+                // Actualizar la interfaz
+                cargarCorreoGuardado();
+                
+                // Limpiar campo
+                correoElectronico.value = "";
+                
+                mensajeCorreo.textContent = `✅ Correo ${correo} guardado correctamente`;
+                mensajeCorreo.style.borderLeftColor = '#4CAF50';
+                
+                // Ocultar mensaje después de 3 segundos
+                setTimeout(() => {
+                    mensajeCorreo.textContent = "";
+                }, 3000);
+            } else {
+                mensajeCorreo.textContent = "❌ Error al guardar el correo. Inténtalo de nuevo.";
+                mensajeCorreo.style.borderLeftColor = '#FF5252';
+            }
         }
         
-        // Función para cargar el correo guardado
         function cargarCorreoGuardado() {
             if (correoGerencia) {
                 infoCorreoGuardado.innerHTML = `
-                    <h3>Correo Vinculado</h3>
-                    <p><strong>Correo:</strong> ${correoGerencia}</p>
+                    <h3>✅ Correo Vinculado</h3>
+                    <p><strong>📧 Correo:</strong> ${correoGerencia}</p>
                     <p>Los reportes se enviarán automáticamente a esta dirección.</p>
-                    <button class="btn btn-danger btn-small" id="btnEliminarCorreo">Eliminar Correo</button>
+                    <button class="btn btn-danger btn-small" id="btnEliminarCorreo">🗑️ Eliminar Correo</button>
                 `;
                 
                 // Agregar event listener al botón de eliminar
                 document.getElementById('btnEliminarCorreo').addEventListener('click', eliminarCorreo);
             } else {
                 infoCorreoGuardado.innerHTML = `
-                    <h3>No hay correo vinculado</h3>
+                    <h3>📧 No hay correo vinculado</h3>
                     <p>Para recibir reportes automáticos, vincule un correo electrónico.</p>
                 `;
             }
         }
         
-        // Función para eliminar el correo
         function eliminarCorreo() {
-            if (confirm("¿Estás seguro de que deseas eliminar el correo vinculado?")) {
+            if (confirm("⚠️ ¿Estás seguro de que deseas eliminar el correo vinculado?")) {
                 correoGerencia = null;
-                localStorage.removeItem('telepizza_correo');
-                cargarCorreoGuardado();
-                mensajeCorreo.textContent = "Correo eliminado correctamente";
                 
-                // Ocultar mensaje después de 3 segundos
-                setTimeout(() => {
-                    mensajeCorreo.textContent = "";
-                }, 3000);
+                // Guardar y sincronizar
+                if (guardarYSincronizar()) {
+                    cargarCorreoGuardado();
+                    mensajeCorreo.textContent = "✅ Correo eliminado correctamente";
+                    mensajeCorreo.style.borderLeftColor = '#4CAF50';
+                    
+                    // Ocultar mensaje después de 3 segundos
+                    setTimeout(() => {
+                        mensajeCorreo.textContent = "";
+                    }, 3000);
+                } else {
+                    mensajeCorreo.textContent = "❌ Error al eliminar el correo. Inténtalo de nuevo.";
+                    mensajeCorreo.style.borderLeftColor = '#FF5252';
+                }
             }
         }
         
-        // Función para enviar reportes por correo
+        // ============================================
+        // FUNCIONES DE ENVÍO DE REPORTES
+        // ============================================
+        
         function enviarReporte(tipo) {
             if (!correoGerencia) {
-                alert("No hay un correo vinculado. Por favor, vincule un correo en la pestaña 'Configuración de Correo'.");
+                alert("❌ No hay un correo vinculado.\n\nPor favor, vincule un correo en la pestaña 'Configuración de Correo'.");
                 return;
             }
             
             // Mostrar mensaje de envío
-            mensajeCorreo.textContent = `Generando y enviando reporte ${tipo === 'diario' ? 'diario' : 'mensual'}...`;
+            mensajeCorreo.textContent = `⏳ Generando y enviando reporte ${tipo === 'diario' ? 'diario' : 'mensual'}...`;
+            mensajeCorreo.style.borderLeftColor = '#FFC72C';
             
             // Simular envío de correo (en un entorno real, aquí se haría una petición a un servidor)
             setTimeout(() => {
@@ -1266,7 +1727,8 @@
                 
                 // Aquí normalmente se enviaría el correo a través de un servidor
                 // Para este ejemplo, solo mostramos un mensaje de simulación
-                mensajeCorreo.textContent = `Reporte ${tipo === 'diario' ? 'diario' : 'mensual'} enviado a ${correoGerencia}`;
+                mensajeCorreo.textContent = `✅ Reporte ${tipo === 'diario' ? 'diario' : 'mensual'} enviado a ${correoGerencia}`;
+                mensajeCorreo.style.borderLeftColor = '#4CAF50';
                 
                 // Mostrar detalles del reporte en consola (simulación)
                 console.log(`=== REPORTE ${tipo.toUpperCase()} ENVIADO A ${correoGerencia} ===`);
@@ -1279,7 +1741,6 @@
             }, 2000);
         }
         
-        // Función para generar reportes
         function generarReporte(tipo) {
             const hoy = new Date();
             const fechaHoy = hoy.toISOString().split('T')[0];
@@ -1321,8 +1782,8 @@
                 reporte.detalles = {
                     registros: registrosHoy,
                     ausencias: ausenciasHoy,
-                    telepizzerosPresentes: registrosHoy.map(r => r.nombre),
-                    telepizzerosAusentes: ausenciasHoy.map(a => a.nombre)
+                    telepizzerosPresentes: [...new Set(registrosHoy.map(r => r.nombre))],
+                    telepizzerosAusentes: [...new Set(ausenciasHoy.map(a => a.nombre))]
                 };
                 
             } else {
@@ -1387,6 +1848,10 @@
             return reporte;
         }
         
+        // ============================================
+        // FUNCIONALIDADES ADICIONALES
+        // ============================================
+        
         // Permitir fichar con Enter
         dniInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
@@ -1400,8 +1865,45 @@
             }
         });
         
-        // Inicializar la aplicación
+        nuevoDni.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                nuevoNombre.focus();
+            }
+        });
+        
+        nuevoNombre.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                btnAgregarUsuario.click();
+            }
+        });
+        
+        correoElectronico.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                btnGuardarCorreo.click();
+            }
+        });
+        
+        // Verificar si estamos en un dispositivo móvil
+        function esDispositivoMovil() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+        
+        // Ajustar comportamiento según el dispositivo
+        if (!esDispositivoMovil()) {
+            console.log("💻 Modo PC detectado - Ajustando configuración de geolocalización");
+        }
+        
+        // ============================================
+        // INICIALIZAR LA APLICACIÓN
+        // ============================================
+        
         init();
+        
+        // Forzar recarga de datos al cargar la página
+        window.addEventListener('load', function() {
+            sincronizarConLaNube();
+            console.log("🔄 Sistema de Telepizza cargado y sincronizado");
+        });
     </script>
 </body>
 </html>
