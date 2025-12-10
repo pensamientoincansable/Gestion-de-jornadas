@@ -7,7 +7,7 @@ function inicializarDatos() {
     // Datos de usuarios
     if (!localStorage.getItem('telepizza_usuarios')) {
         localStorage.setItem('telepizza_usuarios', JSON.stringify([
-            { dni: "20086762", nombre: "Noel", puesto: "repartidor" }
+            { dni: "00000000", nombre: "EJEMPLO", puesto: "encargado" }
         ]));
     }
     
@@ -137,8 +137,6 @@ function generarResumenSemanal(numeroSemana, año) {
     registrosSemana.forEach(registro => {
         if (registro.horasTrabajadas) {
             const tiempo = registro.horasTrabajadas;
-            const horas = tiempo.horas || 0;
-            const minutos = tiempo.minutos || 0;
             const totalMinutos = tiempo.totalMinutos || 0;
             
             resumen.totalHoras += totalMinutos;
