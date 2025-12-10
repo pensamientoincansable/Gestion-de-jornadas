@@ -34,7 +34,6 @@ const volverRegistro = document.getElementById('volverRegistro');
 
 // Campos de fichaje
 const dniInput = document.getElementById('dniInput');
-const puestoSelect = document.getElementById('puestoSelect');
 const passwordInput = document.getElementById('passwordInput');
 const mensajeTelepizzero = document.getElementById('mensajeTelepizzero');
 const mensajeGerencia = document.getElementById('mensajeGerencia');
@@ -208,12 +207,10 @@ function mostrarPermisoGeolocalizacion() {
     infoGeolocalizacion.style.display = 'none';
     mensajeTelepizzero.textContent = '';
     dniInput.value = '';
-    puestoSelect.value = '';
 }
 
 function resetearFichaje() {
     dniInput.value = '';
-    puestoSelect.value = '';
     mensajeTelepizzero.textContent = '';
     mostrarPermisoGeolocalizacion();
 }
@@ -335,7 +332,7 @@ function mostrarInformacionUbicacion() {
 }
 
 // ============================================
-// FUNCIÓN DE FICHAJE (MODIFICADA PARA SOPORTAR TURNOS CRUZADOS)
+// FUNCIÓN DE FICHAJE CORREGIDA (SIN SELECCIÓN DE PUESTO)
 // ============================================
 
 function fichar() {
@@ -347,21 +344,12 @@ function fichar() {
     }
     
     const dni = dniInput.value.trim();
-    const puesto = puestoSelect.value;
     
     // Validar DNI
     if (!dni || dni.length !== 8 || !/^\d{8}$/.test(dni)) {
         mensajeTelepizzero.textContent = "❌ DNI inválido (8 dígitos)";
         mensajeTelepizzero.style.borderLeftColor = '#FF5252';
         dniInput.focus();
-        return;
-    }
-    
-    // Validar puesto
-    if (!puesto) {
-        mensajeTelepizzero.textContent = "❌ Selecciona tu puesto de trabajo";
-        mensajeTelepizzero.style.borderLeftColor = '#FF5252';
-        puestoSelect.focus();
         return;
     }
     
@@ -388,7 +376,7 @@ function fichar() {
         // Registrar salida (puede ser en fecha diferente)
         const fechaSalida = ahora.toISOString().split('T')[0];
         registroActivo.salida = horaActual;
-        registroActivo.fechaSalida = fechaSalida; // Guardamos fecha de salida por separado
+        registroActivo.fechaSalida = fechaSalida;
         registroActivo.ubicacionSalida = { ...ubicacionActual };
         
         // Calcular horas trabajadas (soporta turnos cruzados)
@@ -400,7 +388,7 @@ function fichar() {
         );
         
         registroActivo.horasTrabajadas = horasTrabajadas;
-        registroActivo.horasTrabajadasTexto = convertirMinutosATexto(horasTrabajadas.totalMinutos);
+        registroActivo.horasTrabajadasTexto = convertirMinutosATexto(horasTrabajadas?.totalMinutos || 0);
         
         mensajeTelepizzero.textContent = `✅ Salida registrada a las ${horaActual}. ¡Hasta luego ${telepizzero.nombre}!`;
         mensajeTelepizzero.style.borderLeftColor = '#4CAF50';
@@ -409,7 +397,7 @@ function fichar() {
         registros.push({
             nombre: telepizzero.nombre,
             dni: telepizzero.dni,
-            puesto: puesto,
+            puesto: telepizzero.puesto, // Tomar puesto del registro del empleado
             fecha: fechaHoy,
             entrada: horaActual,
             salida: null,
@@ -429,9 +417,8 @@ function fichar() {
     // Guardar datos
     guardarDatos({ telepizzeros, registros, ausencias, correoGerencia, semanas: datos.semanas });
     
-    // Limpiar campos
+    // Limpiar campo
     dniInput.value = '';
-    puestoSelect.value = '';
     dniInput.focus();
 }
 
