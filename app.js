@@ -9,6 +9,7 @@ let telepizzeros = datos.telepizzeros;
 let registros = datos.registros;
 let ausencias = datos.ausencias;
 let correoGerencia = datos.correoGerencia || "fichajetelepizza@outlook.es";
+let correosDestinatarios = datos.correosDestinatarios || []; // Nueva variable para correos destinatarios
 
 // Variables para geolocalización
 let ubicacionActual = null;
@@ -50,7 +51,7 @@ const coordenadasElement = document.getElementById('coordenadas');
 const direccionAproximada = document.getElementById('direccionAproximada');
 const mapaContainer = document.getElementById('mapaContainer');
 
-// Elementos de gestión de usuarios (nueva organización)
+// Elementos de gestión de usuarios
 const btnAgregarUsuario = document.getElementById('btnAgregarUsuario');
 const nuevoDni = document.getElementById('nuevoDni');
 const nuevoNombre = document.getElementById('nuevoNombre');
@@ -70,13 +71,6 @@ const correoElectronico = document.getElementById('correoElectronico');
 const btnGuardarCorreo = document.getElementById('btnGuardarCorreo');
 const infoCorreoGuardado = document.getElementById('infoCorreoGuardado');
 const mensajeCorreo = document.getElementById('mensajeCorreo');
-const btnEnviarDiarioManual = document.getElementById('btnEnviarDiarioManual');
-const btnEnviarSemanalManual = document.getElementById('btnEnviarSemanalManual');
-const btnEnviarMensualManual = document.getElementById('btnEnviarMensualManual');
-const btnEnviarReporteDiario = document.getElementById('btnEnviarReporteDiario');
-const btnEnviarReporteSemanal = document.getElementById('btnEnviarReporteSemanal');
-const btnEnviarReporteMensual = document.getElementById('btnEnviarReporteMensual');
-const btnEnviarReporteSemanaSeleccionada = document.getElementById('btnEnviarReporteSemanaSeleccionada');
 
 // Elementos de filtros
 const filtroPuesto = document.getElementById('filtroPuesto');
@@ -92,12 +86,25 @@ const btnFiltrar = document.getElementById('btnFiltrar');
 const btnResetFiltros = document.getElementById('btnResetFiltros');
 const totalHoras = document.getElementById('totalHoras');
 
-// Elementos de gestión semanal
-const selectSemana = document.getElementById('selectSemana');
-const selectPuestoSemana = document.getElementById('selectPuestoSemana');
-const resumenSemanal = document.getElementById('resumenSemanal');
-const tablaSemanal = document.querySelector('#tablaSemanal tbody');
-const btnExportarSemanal = document.getElementById('btnExportarSemanal');
+// Nuevos elementos para correos destinatarios
+const nuevoCorreoDestinatario = document.getElementById('nuevoCorreoDestinatario');
+const btnAgregarDestinatario = document.getElementById('btnAgregarDestinatario');
+const listaDestinatarios = document.getElementById('listaDestinatarios');
+
+// Nuevos elementos para envío manual
+const tipoReporteEnvio = document.getElementById('tipoReporteEnvio');
+const selectorRangoEnvio = document.getElementById('selectorRangoEnvio');
+const fechaDesdeEnvio = document.getElementById('fechaDesdeEnvio');
+const fechaHastaEnvio = document.getElementById('fechaHastaEnvio');
+const btnEnviarReporteManual = document.getElementById('btnEnviarReporteManual');
+
+// Nuevos elementos para exportar
+const filtroPuestoExportar = document.getElementById('filtroPuestoExportar');
+const tipoReporteExportar = document.getElementById('tipoReporteExportar');
+const selectorRangoExportar = document.getElementById('selectorRangoExportar');
+const fechaDesdeExportar = document.getElementById('fechaDesdeExportar');
+const fechaHastaExportar = document.getElementById('fechaHastaExportar');
+const btnExportarPDF = document.getElementById('btnExportarPDF');
 
 // Nueva navegación vertical
 const navItems = document.querySelectorAll('.nav-item');
@@ -151,23 +158,18 @@ btnRegistrarAusencia.addEventListener('click', registrarAusencia);
 
 // Configuración de correo
 btnGuardarCorreo.addEventListener('click', guardarCorreo);
-btnEnviarDiarioManual.addEventListener('click', () => enviarReportePDF('diario'));
-btnEnviarSemanalManual.addEventListener('click', () => enviarReportePDF('semanal'));
-btnEnviarMensualManual.addEventListener('click', () => enviarReportePDF('mensual'));
-btnEnviarReporteDiario.addEventListener('click', () => enviarReportePDF('diario'));
-btnEnviarReporteSemanal.addEventListener('click', () => enviarReportePDF('semanal'));
-btnEnviarReporteMensual.addEventListener('click', () => enviarReportePDF('mensual'));
-btnEnviarReporteSemanaSeleccionada.addEventListener('click', () => enviarReportePDF('semana-seleccionada'));
+
+// Event listeners para nuevos elementos
+btnAgregarDestinatario.addEventListener('click', agregarCorreoDestinatario);
+tipoReporteEnvio.addEventListener('change', cambiarTipoReporteEnvio);
+btnEnviarReporteManual.addEventListener('click', enviarReporteManual);
+tipoReporteExportar.addEventListener('change', cambiarTipoReporteExportar);
+btnExportarPDF.addEventListener('click', exportarPDF);
 
 // Filtros
 btnFiltrar.addEventListener('click', aplicarFiltros);
 btnResetFiltros.addEventListener('click', resetearFiltros);
 filtroVista.addEventListener('change', cambiarVistaFiltro);
-
-// Gestión semanal
-btnExportarSemanal.addEventListener('click', exportarDatosParaGitHub);
-selectSemana.addEventListener('change', cargarDatosSemana);
-selectPuestoSemana.addEventListener('change', cargarDatosSemana);
 
 // Nueva navegación vertical
 navItems.forEach(nav => {
@@ -192,8 +194,21 @@ navItems.forEach(nav => {
             cargarSelectUsuarios();
         } else if (tabId === 'correo') {
             cargarCorreoGuardado();
-        } else if (tabId === 'semanas') {
-            cargarSemanasDisponibles();
+            cargarCorreosDestinatarios();
+            // Configurar fecha actual por defecto
+            const hoy = new Date().toISOString().split('T')[0];
+            fechaDesdeEnvio.value = hoy;
+            fechaHastaEnvio.value = hoy;
+        } else if (tabId === 'exportar') {
+            // Configurar fechas por defecto para exportar
+            const hoy = new Date();
+            const inicioSemana = new Date(hoy);
+            inicioSemana.setDate(hoy.getDate() - hoy.getDay() + 1);
+            const finSemana = new Date(inicioSemana);
+            finSemana.setDate(inicioSemana.getDate() + 6);
+            
+            fechaDesdeExportar.value = inicioSemana.toISOString().split('T')[0];
+            fechaHastaExportar.value = finSemana.toISOString().split('T')[0];
         }
     });
 });
@@ -282,7 +297,7 @@ function cambiarVistaFiltro() {
 }
 
 // ============================================
-// FUNCIONES DE GEOLOCALIZACIÓN (SIN CAMBIOS)
+// FUNCIONES DE GEOLOCALIZACIÓN
 // ============================================
 
 function iniciarGeolocalizacion() {
@@ -385,7 +400,7 @@ function mostrarInformacionUbicacion() {
 }
 
 // ============================================
-// FUNCIÓN DE FICHAJE (SIN CAMBIOS)
+// FUNCIÓN DE FICHAJE
 // ============================================
 
 function fichar() {
@@ -468,7 +483,14 @@ function fichar() {
     }
     
     // Guardar datos
-    guardarDatos({ telepizzeros, registros, ausencias, correoGerencia, semanas: datos.semanas });
+    guardarDatos({ 
+        telepizzeros, 
+        registros, 
+        ausencias, 
+        correoGerencia, 
+        correosDestinatarios, 
+        semanas: datos.semanas 
+    });
     
     // Limpiar campo
     dniInput.value = '';
@@ -488,10 +510,24 @@ function accederGerencia() {
         cargarAusencias();
         cargarSelectUsuarios();
         cargarCorreoGuardado();
-        cargarSemanasDisponibles();
+        cargarCorreosDestinatarios();
         
         // Configurar vista por defecto
         cambiarVistaFiltro();
+        
+        // Configurar fechas por defecto para exportar
+        const hoy = new Date();
+        const inicioSemana = new Date(hoy);
+        inicioSemana.setDate(hoy.getDate() - hoy.getDay() + 1);
+        const finSemana = new Date(inicioSemana);
+        finSemana.setDate(inicioSemana.getDate() + 6);
+        
+        fechaDesdeExportar.value = inicioSemana.toISOString().split('T')[0];
+        fechaHastaExportar.value = finSemana.toISOString().split('T')[0];
+        
+        // Configurar fecha actual para envío manual
+        fechaDesdeEnvio.value = hoy.toISOString().split('T')[0];
+        fechaHastaEnvio.value = hoy.toISOString().split('T')[0];
     } else {
         mensajeGerencia.textContent = "❌ Contraseña incorrecta";
         mensajeGerencia.style.borderLeftColor = '#FF5252';
@@ -634,7 +670,7 @@ function resetearFiltros() {
 }
 
 // ============================================
-// GESTIÓN DE USUARIOS - NUEVO DISEÑO HORIZONTAL
+// GESTIÓN DE USUARIOS - CON OPCIÓN PARA CAMBIAR PUESTO
 // ============================================
 
 function agregarUsuario() {
@@ -667,7 +703,14 @@ function agregarUsuario() {
     }
     
     telepizzeros.push({ dni, nombre, puesto });
-    guardarDatos({ telepizzeros, registros, ausencias, correoGerencia, semanas: datos.semanas });
+    guardarDatos({ 
+        telepizzeros, 
+        registros, 
+        ausencias, 
+        correoGerencia, 
+        correosDestinatarios, 
+        semanas: datos.semanas 
+    });
     
     cargarUsuarios();
     cargarSelectUsuarios();
@@ -719,6 +762,9 @@ function cargarUsuarios() {
             </div>
             
             <div class="usuario-acciones">
+                <button class="btn btn-warning btn-small btn-cambiar-puesto" data-dni="${usuario.dni}">
+                    <i class="fas fa-exchange-alt"></i> Cambiar Puesto
+                </button>
                 <button class="btn btn-danger btn-small btn-eliminar-usuario" data-dni="${usuario.dni}">
                     <i class="fas fa-trash"></i> Eliminar
                 </button>
@@ -735,6 +781,71 @@ function cargarUsuarios() {
             eliminarUsuario(dni);
         });
     });
+    
+    // Event listeners para cambiar puesto
+    document.querySelectorAll('.btn-cambiar-puesto').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const dni = this.getAttribute('data-dni');
+            cambiarPuestoUsuario(dni);
+        });
+    });
+}
+
+function cambiarPuestoUsuario(dni) {
+    const usuario = telepizzeros.find(u => u.dni === dni);
+    if (!usuario) return;
+    
+    const nuevoPuesto = prompt(
+        `Cambiar puesto de ${usuario.nombre} (${usuario.dni}):\n\n` +
+        `1. auxiliar - Auxiliar de Tienda\n` +
+        `2. repartidor - Repartidor\n` +
+        `3. encargado - Encargado\n` +
+        `4. limpieza - Limpieza\n\n` +
+        `Introduce el código del nuevo puesto:`,
+        usuario.puesto
+    );
+    
+    if (!nuevoPuesto) return;
+    
+    // Validar que el puesto sea válido
+    const puestosValidos = ['auxiliar', 'repartidor', 'encargado', 'limpieza'];
+    if (!puestosValidos.includes(nuevoPuesto)) {
+        alert("Puesto no válido. Opciones: auxiliar, repartidor, encargado, limpieza");
+        return;
+    }
+    
+    // Actualizar puesto del usuario
+    usuario.puesto = nuevoPuesto;
+    
+    // Actualizar también los registros existentes de este usuario
+    registros.forEach(registro => {
+        if (registro.dni === dni) {
+            registro.puesto = nuevoPuesto;
+        }
+    });
+    
+    // Actualizar también las ausencias
+    ausencias.forEach(ausencia => {
+        if (ausencia.dni === dni) {
+            ausencia.puesto = nuevoPuesto;
+        }
+    });
+    
+    guardarDatos({ 
+        telepizzeros, 
+        registros, 
+        ausencias, 
+        correoGerencia, 
+        correosDestinatarios, 
+        semanas: datos.semanas 
+    });
+    
+    cargarUsuarios();
+    cargarSelectUsuarios();
+    cargarRegistrosSemanaActual();
+    cargarAusencias();
+    
+    alert(`✅ Puesto de ${usuario.nombre} actualizado a ${obtenerNombrePuesto(nuevoPuesto)}`);
 }
 
 function eliminarUsuario(dni) {
@@ -746,7 +857,14 @@ function eliminarUsuario(dni) {
     registros = registros.filter(r => r.dni !== dni);
     ausencias = ausencias.filter(a => a.dni !== dni);
     
-    guardarDatos({ telepizzeros, registros, ausencias, correoGerencia, semanas: datos.semanas });
+    guardarDatos({ 
+        telepizzeros, 
+        registros, 
+        ausencias, 
+        correoGerencia, 
+        correosDestinatarios, 
+        semanas: datos.semanas 
+    });
     
     cargarUsuarios();
     cargarSelectUsuarios();
@@ -798,7 +916,14 @@ function registrarAusencia() {
         fechaRegistro: new Date().toLocaleString('es-ES')
     });
     
-    guardarDatos({ telepizzeros, registros, ausencias, correoGerencia, semanas: datos.semanas });
+    guardarDatos({ 
+        telepizzeros, 
+        registros, 
+        ausencias, 
+        correoGerencia, 
+        correosDestinatarios, 
+        semanas: datos.semanas 
+    });
     cargarAusencias();
     
     motivoAusencia.value = '';
@@ -868,7 +993,14 @@ function eliminarAusencia(dni, fecha) {
     if (!confirm("¿Eliminar esta incidencia?")) return;
     
     ausencias = ausencias.filter(a => !(a.dni === dni && a.fecha === fecha));
-    guardarDatos({ telepizzeros, registros, ausencias, correoGerencia, semanas: datos.semanas });
+    guardarDatos({ 
+        telepizzeros, 
+        registros, 
+        ausencias, 
+        correoGerencia, 
+        correosDestinatarios, 
+        semanas: datos.semanas 
+    });
     cargarAusencias();
     alert("✅ Incidencia eliminada");
 }
@@ -887,7 +1019,14 @@ function guardarCorreo() {
     }
     
     correoGerencia = correo;
-    guardarDatos({ telepizzeros, registros, ausencias, correoGerencia, semanas: datos.semanas });
+    guardarDatos({ 
+        telepizzeros, 
+        registros, 
+        ausencias, 
+        correoGerencia, 
+        correosDestinatarios, 
+        semanas: datos.semanas 
+    });
     cargarCorreoGuardado();
     
     mensajeCorreo.textContent = `✅ Correo ${correo} guardado`;
@@ -901,7 +1040,7 @@ function cargarCorreoGuardado() {
             <h3><i class="fas fa-check-circle" style="color: #4CAF50;"></i> Correo Configurado</h3>
             <p style="margin: 10px 0;"><strong>📧 ${correoGerencia}</strong></p>
             <p style="font-size: 0.9rem; color: #FFC72C;">
-                <i class="fas fa-info-circle"></i> Los reportes PDF se enviarán a este correo
+                <i class="fas fa-info-circle"></i> Los reportes PDF se enviarán desde este correo
             </p>
             <button class="btn btn-danger btn-small" id="btnEliminarCorreo" style="margin-top: 10px;">
                 <i class="fas fa-trash"></i> Eliminar Correo
@@ -912,7 +1051,7 @@ function cargarCorreoGuardado() {
     } else {
         infoCorreoGuardado.innerHTML = `
             <h3><i class="fas fa-envelope"></i> Sin correo configurado</h3>
-            <p style="margin: 10px 0;">Configure un correo para recibir reportes PDF</p>
+            <p style="margin: 10px 0;">Configure un correo para enviar reportes PDF</p>
             <p style="font-size: 0.9rem; color: #FFC72C;">
                 <i class="fas fa-info-circle"></i> Correo por defecto: fichajetelepizza@outlook.es
             </p>
@@ -924,7 +1063,14 @@ function eliminarCorreo() {
     if (!confirm("¿Restablecer al correo por defecto?")) return;
     
     correoGerencia = "fichajetelepizza@outlook.es";
-    guardarDatos({ telepizzeros, registros, ausencias, correoGerencia, semanas: datos.semanas });
+    guardarDatos({ 
+        telepizzeros, 
+        registros, 
+        ausencias, 
+        correoGerencia, 
+        correosDestinatarios, 
+        semanas: datos.semanas 
+    });
     cargarCorreoGuardado();
     correoElectronico.value = correoGerencia;
     mensajeCorreo.textContent = "✅ Correo restablecido al valor por defecto";
@@ -933,21 +1079,144 @@ function eliminarCorreo() {
 }
 
 // ============================================
-// FUNCIONES PARA ENVIAR REPORTES EN PDF
+// FUNCIONES NUEVAS PARA GESTIÓN DE CORREOS DESTINATARIOS
 // ============================================
 
-async function enviarReportePDF(tipo) {
-    if (!correoGerencia) {
-        alert("Primero configure un correo electrónico");
+function agregarCorreoDestinatario() {
+    const correo = nuevoCorreoDestinatario.value.trim();
+    
+    if (!correo || !correo.includes('@') || !correo.includes('.')) {
+        alert("Correo electrónico inválido");
+        nuevoCorreoDestinatario.focus();
         return;
     }
     
-    mensajeCorreo.textContent = `⏳ Generando reporte ${tipo} en PDF...`;
-    mensajeCorreo.style.borderLeftColor = '#FFC72C';
+    // Verificar si el correo ya existe
+    if (correosDestinatarios.includes(correo)) {
+        alert("Este correo ya está en la lista de destinatarios");
+        return;
+    }
+    
+    correosDestinatarios.push(correo);
+    guardarDatos({ 
+        telepizzeros, 
+        registros, 
+        ausencias, 
+        correoGerencia, 
+        correosDestinatarios, 
+        semanas: datos.semanas 
+    });
+    
+    cargarCorreosDestinatarios();
+    nuevoCorreoDestinatario.value = '';
+    nuevoCorreoDestinatario.focus();
+    
+    mensajeCorreo.textContent = `✅ Correo ${correo} agregado a destinatarios`;
+    mensajeCorreo.style.borderLeftColor = '#4CAF50';
+    setTimeout(() => mensajeCorreo.textContent = '', 3000);
+}
+
+function cargarCorreosDestinatarios() {
+    listaDestinatarios.innerHTML = '';
+    
+    if (correosDestinatarios.length === 0) {
+        listaDestinatarios.innerHTML = `
+            <div style="text-align: center; padding: 20px; color: #FFC72C;">
+                <i class="fas fa-envelope fa-2x" style="margin-bottom: 10px;"></i>
+                <p>No hay correos destinatarios configurados</p>
+                <p style="font-size: 0.9rem;">Agrega correos para enviar reportes</p>
+            </div>
+        `;
+        return;
+    }
+    
+    const lista = document.createElement('div');
+    lista.style.display = 'flex';
+    lista.style.flexDirection = 'column';
+    lista.style.gap = '10px';
+    
+    correosDestinatarios.forEach((correo, index) => {
+        const item = document.createElement('div');
+        item.style.display = 'flex';
+        item.style.justifyContent = 'space-between';
+        item.style.alignItems = 'center';
+        item.style.padding = '10px';
+        item.style.background = 'rgba(255,255,255,0.08)';
+        item.style.borderRadius = '8px';
+        
+        item.innerHTML = `
+            <div>
+                <i class="fas fa-envelope" style="color: #FFC72C; margin-right: 10px;"></i>
+                <span>${correo}</span>
+            </div>
+            <button class="btn btn-danger btn-small btn-eliminar-destinatario" data-index="${index}">
+                <i class="fas fa-trash"></i>
+            </button>
+        `;
+        
+        lista.appendChild(item);
+    });
+    
+    listaDestinatarios.appendChild(lista);
+    
+    // Event listeners para eliminar destinatarios
+    document.querySelectorAll('.btn-eliminar-destinatario').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const index = parseInt(this.getAttribute('data-index'));
+            eliminarCorreoDestinatario(index);
+        });
+    });
+}
+
+function eliminarCorreoDestinatario(index) {
+    if (!confirm("¿Eliminar este correo de la lista de destinatarios?")) return;
+    
+    correosDestinatarios.splice(index, 1);
+    guardarDatos({ 
+        telepizzeros, 
+        registros, 
+        ausencias, 
+        correoGerencia, 
+        correosDestinatarios, 
+        semanas: datos.semanas 
+    });
+    
+    cargarCorreosDestinatarios();
+}
+
+// ============================================
+// FUNCIONES NUEVAS PARA ENVÍO MANUAL
+// ============================================
+
+function cambiarTipoReporteEnvio() {
+    const tipo = tipoReporteEnvio.value;
+    if (tipo === 'rango') {
+        selectorRangoEnvio.style.display = 'flex';
+        // Configurar fechas por defecto (última semana)
+        const hoy = new Date();
+        const hace7Dias = new Date(hoy);
+        hace7Dias.setDate(hoy.getDate() - 7);
+        
+        fechaDesdeEnvio.value = hace7Dias.toISOString().split('T')[0];
+        fechaHastaEnvio.value = hoy.toISOString().split('T')[0];
+    } else {
+        selectorRangoEnvio.style.display = 'none';
+    }
+}
+
+async function enviarReporteManual() {
+    if (correosDestinatarios.length === 0) {
+        alert("No hay correos destinatarios configurados. Agrega al menos uno.");
+        return;
+    }
+    
+    const tipo = tipoReporteEnvio.value;
+    let datosReporte;
+    let titulo = '';
     
     try {
-        let datosReporte;
-        let titulo = '';
+        mensajeCorreo.textContent = `⏳ Generando reporte...`;
+        mensajeCorreo.style.borderLeftColor = '#FFC72C';
         
         if (tipo === 'diario') {
             const hoy = new Date();
@@ -965,68 +1234,62 @@ async function enviarReportePDF(tipo) {
             };
             titulo = `Reporte Diario ${fechaHoy}`;
             
-        } else if (tipo === 'semanal') {
-            const hoy = new Date();
-            const numeroSemana = obtenerNumeroSemana(hoy);
-            const año = hoy.getFullYear();
-            datosReporte = generarResumenSemanal(numeroSemana, año);
-            datosReporte.titulo = `Reporte Semanal - Semana ${numeroSemana} ${año}`;
-            titulo = `Reporte Semanal ${numeroSemana}-${año}`;
+        } else if (tipo === 'rango') {
+            const desde = fechaDesdeEnvio.value;
+            const hasta = fechaHastaEnvio.value;
             
-        } else if (tipo === 'semana-seleccionada') {
-            const semanaSeleccionada = selectSemana.value;
-            if (!semanaSeleccionada) {
-                alert("Selecciona una semana");
+            if (!desde || !hasta) {
+                alert("Selecciona ambas fechas");
                 return;
             }
             
-            const [año, semanaStr] = semanaSeleccionada.split('-');
-            const numeroSemana = parseInt(semanaStr);
-            datosReporte = generarResumenSemanal(numeroSemana, parseInt(año));
-            datosReporte.titulo = `Reporte Semanal - Semana ${numeroSemana} ${año}`;
-            titulo = `Reporte Semanal ${numeroSemana}-${año}`;
-            
-        } else if (tipo === 'mensual') {
-            const hoy = new Date();
-            const mesActual = hoy.getMonth() + 1;
-            const añoActual = hoy.getFullYear();
-            const nombreMes = hoy.toLocaleDateString('es-ES', { month: 'long' });
-            
-            const registrosMes = registros.filter(r => {
-                const fecha = new Date(r.fecha);
-                return fecha.getMonth() + 1 === mesActual && fecha.getFullYear() === añoActual;
+            const registrosRango = registros.filter(r => {
+                const fechaRegistro = new Date(r.fecha);
+                const fechaDesde = new Date(desde);
+                const fechaHasta = new Date(hasta);
+                fechaHasta.setHours(23, 59, 59, 999);
+                return fechaRegistro >= fechaDesde && fechaRegistro <= fechaHasta;
             });
             
-            const ausenciasMes = ausencias.filter(a => {
-                const fecha = new Date(a.fecha);
-                return fecha.getMonth() + 1 === mesActual && fecha.getFullYear() === añoActual;
+            const ausenciasRango = ausencias.filter(a => {
+                const fechaAusencia = new Date(a.fecha);
+                const fechaDesde = new Date(desde);
+                const fechaHasta = new Date(hasta);
+                fechaHasta.setHours(23, 59, 59, 999);
+                return fechaAusencia >= fechaDesde && fechaAusencia <= fechaHasta;
             });
             
             datosReporte = {
-                tipo: 'mensual',
-                mes: mesActual,
-                año: añoActual,
-                titulo: `Reporte Mensual - ${nombreMes} ${añoActual}`,
+                tipo: 'rango',
+                desde: desde,
+                hasta: hasta,
+                titulo: `Reporte Personalizado - ${desde} a ${hasta}`,
                 totalTelepizzeros: telepizzeros.length,
-                registros: registrosMes,
-                ausencias: ausenciasMes
+                registros: registrosRango,
+                ausencias: ausenciasRango
             };
-            titulo = `Reporte Mensual ${mesActual}-${añoActual}`;
+            titulo = `Reporte ${desde} a ${hasta}`;
         }
         
         // Generar PDF
         const pdfBlob = await generarPDF(datosReporte);
         
-        // Enviar por correo
-        const resultado = await enviarPDFPorCorreo(titulo, pdfBlob, correoGerencia);
+        // Mostrar mensaje de éxito
+        mensajeCorreo.textContent = `✅ Reporte generado. Listo para enviar a ${correosDestinatarios.length} destinatario(s)`;
+        mensajeCorreo.style.borderLeftColor = '#4CAF50';
         
-        if (resultado.success) {
-            mensajeCorreo.textContent = `✅ Reporte ${tipo} en PDF enviado a ${correoGerencia}`;
-            mensajeCorreo.style.borderLeftColor = '#4CAF50';
-        } else {
-            mensajeCorreo.textContent = `❌ Error al enviar: ${resultado.error}`;
-            mensajeCorreo.style.borderLeftColor = '#FF5252';
-        }
+        // Ofrecer descarga del PDF
+        const url = URL.createObjectURL(pdfBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${titulo}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        // Simular envío (en producción aquí se enviaría realmente)
+        console.log(`Simulando envío de reporte a: ${correosDestinatarios.join(', ')}`);
         
         setTimeout(() => mensajeCorreo.textContent = '', 5000);
         
@@ -1037,7 +1300,159 @@ async function enviarReportePDF(tipo) {
     }
 }
 
-async function generarPDF(datos) {
+// ============================================
+// FUNCIONES NUEVAS PARA EXPORTAR PDF
+// ============================================
+
+function cambiarTipoReporteExportar() {
+    const tipo = tipoReporteExportar.value;
+    if (tipo === 'rango') {
+        selectorRangoExportar.style.display = 'flex';
+    } else {
+        selectorRangoExportar.style.display = 'none';
+    }
+}
+
+async function exportarPDF() {
+    const filtroPuesto = filtroPuestoExportar.value;
+    const tipo = tipoReporteExportar.value;
+    
+    let datosReporte;
+    let titulo = '';
+    
+    try {
+        if (tipo === 'diario') {
+            const hoy = new Date();
+            const fechaHoy = hoy.toISOString().split('T')[0];
+            let registrosHoy = registros.filter(r => r.fecha === fechaHoy);
+            
+            if (filtroPuesto) {
+                registrosHoy = registrosHoy.filter(r => r.puesto === filtroPuesto);
+            }
+            
+            const ausenciasHoy = ausencias.filter(a => a.fecha === fechaHoy);
+            
+            datosReporte = {
+                tipo: 'diario',
+                fecha: fechaHoy,
+                titulo: `Reporte Diario - ${fechaHoy}${filtroPuesto ? ' - ' + obtenerNombrePuesto(filtroPuesto) : ''}`,
+                totalTelepizzeros: telepizzeros.filter(u => !filtroPuesto || u.puesto === filtroPuesto).length,
+                registros: registrosHoy,
+                ausencias: ausenciasHoy,
+                filtroPuesto: filtroPuesto
+            };
+            titulo = `Reporte Diario ${fechaHoy}`;
+            
+        } else if (tipo === 'semanal') {
+            const hoy = new Date();
+            const numeroSemana = obtenerNumeroSemana(hoy);
+            const año = hoy.getFullYear();
+            
+            datosReporte = generarResumenSemanal(numeroSemana, año);
+            datosReporte.titulo = `Reporte Semanal - Semana ${numeroSemana} ${año}${filtroPuesto ? ' - ' + obtenerNombrePuesto(filtroPuesto) : ''}`;
+            datosReporte.filtroPuesto = filtroPuesto;
+            
+            // Aplicar filtro de puesto si se seleccionó
+            if (filtroPuesto) {
+                datosReporte.registros = datosReporte.registros.filter(r => r.puesto === filtroPuesto);
+                datosReporte.totalRegistros = datosReporte.registros.length;
+            }
+            
+            titulo = `Reporte Semanal ${numeroSemana}-${año}`;
+            
+        } else if (tipo === 'mensual') {
+            const hoy = new Date();
+            const mesActual = hoy.getMonth() + 1;
+            const añoActual = hoy.getFullYear();
+            const nombreMes = hoy.toLocaleDateString('es-ES', { month: 'long' });
+            
+            let registrosMes = registros.filter(r => {
+                const fecha = new Date(r.fecha);
+                return fecha.getMonth() + 1 === mesActual && fecha.getFullYear() === añoActual;
+            });
+            
+            if (filtroPuesto) {
+                registrosMes = registrosMes.filter(r => r.puesto === filtroPuesto);
+            }
+            
+            const ausenciasMes = ausencias.filter(a => {
+                const fecha = new Date(a.fecha);
+                return fecha.getMonth() + 1 === mesActual && fecha.getFullYear() === añoActual;
+            });
+            
+            datosReporte = {
+                tipo: 'mensual',
+                mes: mesActual,
+                año: añoActual,
+                titulo: `Reporte Mensual - ${nombreMes} ${añoActual}${filtroPuesto ? ' - ' + obtenerNombrePuesto(filtroPuesto) : ''}`,
+                totalTelepizzeros: telepizzeros.filter(u => !filtroPuesto || u.puesto === filtroPuesto).length,
+                registros: registrosMes,
+                ausencias: ausenciasMes,
+                filtroPuesto: filtroPuesto
+            };
+            titulo = `Reporte Mensual ${mesActual}-${añoActual}`;
+            
+        } else if (tipo === 'rango') {
+            const desde = fechaDesdeExportar.value;
+            const hasta = fechaHastaExportar.value;
+            
+            if (!desde || !hasta) {
+                alert("Selecciona ambas fechas");
+                return;
+            }
+            
+            let registrosRango = registros.filter(r => {
+                const fechaRegistro = new Date(r.fecha);
+                const fechaDesde = new Date(desde);
+                const fechaHasta = new Date(hasta);
+                fechaHasta.setHours(23, 59, 59, 999);
+                return fechaRegistro >= fechaDesde && fechaRegistro <= fechaHasta;
+            });
+            
+            if (filtroPuesto) {
+                registrosRango = registrosRango.filter(r => r.puesto === filtroPuesto);
+            }
+            
+            const ausenciasRango = ausencias.filter(a => {
+                const fechaAusencia = new Date(a.fecha);
+                const fechaDesde = new Date(desde);
+                const fechaHasta = new Date(hasta);
+                fechaHasta.setHours(23, 59, 59, 999);
+                return fechaAusencia >= fechaDesde && fechaAusencia <= fechaHasta;
+            });
+            
+            datosReporte = {
+                tipo: 'rango',
+                desde: desde,
+                hasta: hasta,
+                titulo: `Reporte Personalizado - ${desde} a ${hasta}${filtroPuesto ? ' - ' + obtenerNombrePuesto(filtroPuesto) : ''}`,
+                totalTelepizzeros: telepizzeros.filter(u => !filtroPuesto || u.puesto === filtroPuesto).length,
+                registros: registrosRango,
+                ausencias: ausenciasRango,
+                filtroPuesto: filtroPuesto
+            };
+            titulo = `Reporte ${desde} a ${hasta}`;
+        }
+        
+        // Generar PDF
+        const pdfBlob = await generarPDFExportacion(datosReporte);
+        
+        // Descargar PDF
+        const url = URL.createObjectURL(pdfBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${titulo}${filtroPuesto ? ' - ' + obtenerNombrePuesto(filtroPuesto) : ''}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+    } catch (error) {
+        alert(`Error al generar PDF: ${error.message}`);
+    }
+}
+
+async function generarPDFExportacion(datos) {
     return new Promise((resolve) => {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
@@ -1051,12 +1466,19 @@ async function generarPDF(datos) {
         doc.setTextColor(0, 0, 0);
         doc.text(datos.titulo, 105, 35, { align: 'center' });
         
+        // Información del filtro aplicado
+        if (datos.filtroPuesto) {
+            doc.setFontSize(12);
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Filtro: ${obtenerNombrePuesto(datos.filtroPuesto)}`, 105, 45, { align: 'center' });
+        }
+        
         doc.setFontSize(10);
         doc.setTextColor(100, 100, 100);
-        doc.text(`Generado: ${new Date().toLocaleString('es-ES')}`, 105, 45, { align: 'center' });
+        doc.text(`Generado: ${new Date().toLocaleString('es-ES')}`, 105, 55, { align: 'center' });
         
         // Información general
-        let yPos = 60;
+        let yPos = 70;
         
         doc.setFontSize(12);
         doc.setTextColor(0, 0, 0);
@@ -1072,8 +1494,15 @@ async function generarPDF(datos) {
             yPos += 7;
         }
         
-        if (datos.totalHorasTexto) {
-            doc.text(`• Total horas trabajadas: ${datos.totalHorasTexto}`, 20, yPos);
+        // Calcular horas totales
+        if (datos.registros && datos.registros.length > 0) {
+            let totalMinutos = 0;
+            datos.registros.forEach(registro => {
+                if (registro.horasTrabajadas && registro.horasTrabajadas.totalMinutos) {
+                    totalMinutos += registro.horasTrabajadas.totalMinutos;
+                }
+            });
+            doc.text(`• Total horas trabajadas: ${convertirMinutosATexto(totalMinutos)}`, 20, yPos);
             yPos += 7;
         }
         
@@ -1091,10 +1520,11 @@ async function generarPDF(datos) {
             doc.text("Registros de Jornadas:", 14, yPos);
             yPos += 10;
             
-            const headers = [['Nombre', 'DNI', 'Fecha', 'Entrada', 'Salida', 'Horas']];
+            const headers = [['Nombre', 'DNI', 'Puesto', 'Fecha', 'Entrada', 'Salida', 'Horas']];
             const rows = datos.registros.map(reg => [
                 reg.nombre,
                 reg.dni,
+                obtenerNombrePuesto(reg.puesto),
                 reg.fecha,
                 reg.entrada || '-',
                 reg.salida || '-',
@@ -1148,7 +1578,7 @@ async function generarPDF(datos) {
             doc.setFontSize(8);
             doc.setTextColor(100, 100, 100);
             doc.text(`Página ${i} de ${pageCount}`, 105, 285, { align: 'center' });
-            doc.text("Sistema de Gestión de Jornadas Telepizza", 105, 290, { align: 'center' });
+            doc.text("Sistema de Gestión de Jornadas Telepizza - Informe de Registros", 105, 290, { align: 'center' });
         }
         
         // Convertir a Blob
@@ -1157,117 +1587,9 @@ async function generarPDF(datos) {
     });
 }
 
-// ============================================
-// GESTIÓN SEMANAL
-// ============================================
-
-function cargarSemanasDisponibles() {
-    const semanas = obtenerSemanasDisponibles();
-    selectSemana.innerHTML = '<option value="">Selecciona una semana</option>';
-    
-    semanas.forEach(semana => {
-        const [año, numeroSemana] = semana.split('-');
-        const option = document.createElement('option');
-        option.value = semana;
-        option.textContent = `Semana ${numeroSemana} del ${año}`;
-        selectSemana.appendChild(option);
-    });
-    
-    if (semanas.length > 0) {
-        selectSemana.value = semanas[0];
-        cargarDatosSemana();
-    }
-}
-
-function cargarDatosSemana() {
-    const semanaSeleccionada = selectSemana.value;
-    if (!semanaSeleccionada) return;
-    
-    const [año, numeroSemana] = semanaSeleccionada.split('-').map(Number);
-    const filtroPuesto = selectPuestoSemana.value;
-    const resumen = generarResumenSemanal(numeroSemana, año);
-    
-    // Mostrar resumen
-    resumenSemanal.innerHTML = `
-        <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
-            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; min-width: 150px;">
-                <h4 style="color: #FFC72C; margin-bottom: 8px;"><i class="fas fa-clock"></i> Total Horas</h4>
-                <p style="font-size: 1.5rem; color: white;">${resumen.totalHorasTexto}</p>
-            </div>
-            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; min-width: 150px;">
-                <h4 style="color: #FFC72C; margin-bottom: 8px;"><i class="fas fa-users"></i> Empleados</h4>
-                <p style="font-size: 1.5rem; color: white;">${resumen.totalEmpleados}</p>
-            </div>
-            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; min-width: 150px;">
-                <h4 style="color: #FFC72C; margin-bottom: 8px;"><i class="fas fa-clipboard-list"></i> Registros</h4>
-                <p style="font-size: 1.5rem; color: white;">${resumen.totalRegistros}</p>
-            </div>
-        </div>
-        
-        ${Object.keys(resumen.porPuesto).length > 0 ? `
-        <div style="margin-top: 25px;">
-            <h4 style="color: #FFC72C; text-align: center; margin-bottom: 15px;">
-                <i class="fas fa-chart-pie"></i> Distribución por Puesto
-            </h4>
-            <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
-                ${Object.keys(resumen.porPuesto).map(puesto => `
-                    <div style="background: rgba(255,255,255,0.15); padding: 12px 20px; border-radius: 10px; min-width: 180px;">
-                        <div style="font-weight: 700; color: white; margin-bottom: 5px;">
-                            ${obtenerNombrePuesto(puesto)}
-                        </div>
-                        <div style="color: #FFC72C; font-size: 0.9rem;">
-                            <i class="fas fa-users"></i> ${resumen.porPuesto[puesto].totalEmpleados} empleados
-                        </div>
-                        <div style="color: #4CAF50; font-weight: 600; margin-top: 5px;">
-                            ${resumen.porPuesto[puesto].totalHorasTexto}
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-        ` : ''}
-    `;
-    
-    // Mostrar tabla de empleados
-    tablaSemanal.innerHTML = '';
-    
-    let empleadosFiltrados = Object.values(resumen.empleados);
-    if (filtroPuesto) {
-        empleadosFiltrados = empleadosFiltrados.filter(e => e.puesto === filtroPuesto);
-    }
-    
-    if (empleadosFiltrados.length === 0) {
-        const fila = document.createElement('tr');
-        const celda = document.createElement('td');
-        celda.colSpan = 5;
-        celda.textContent = "No hay datos para esta semana";
-        celda.style.textAlign = "center";
-        celda.style.padding = "30px";
-        celda.style.color = "#FFC72C";
-        fila.appendChild(celda);
-        tablaSemanal.appendChild(fila);
-        return;
-    }
-    
-    empleadosFiltrados.forEach(empleado => {
-        const fila = document.createElement('tr');
-        
-        const celdas = [
-            empleado.nombre,
-            `<span class="puesto-badge ${obtenerClasePuesto(empleado.puesto)}">${obtenerNombrePuesto(empleado.puesto)}</span>`,
-            empleado.totalHorasTexto,
-            empleado.diasTrabajados,
-            empleado.promedioDiario
-        ];
-        
-        celdas.forEach(texto => {
-            const celda = document.createElement('td');
-            celda.innerHTML = texto;
-            fila.appendChild(celda);
-        });
-        
-        tablaSemanal.appendChild(fila);
-    });
+// Función para generar PDF (compatibilidad)
+async function generarPDF(datos) {
+    return generarPDFExportacion(datos);
 }
 
 // ============================================
@@ -1284,7 +1606,14 @@ function init() {
     // Configurar correo por defecto
     if (!correoGerencia) {
         correoGerencia = "fichajetelepizza@outlook.es";
-        guardarDatos({ telepizzeros, registros, ausencias, correoGerencia, semanas: datos.semanas });
+        guardarDatos({ 
+            telepizzeros, 
+            registros, 
+            ausencias, 
+            correoGerencia, 
+            correosDestinatarios, 
+            semanas: datos.semanas 
+        });
     }
     correoElectronico.value = correoGerencia;
     
