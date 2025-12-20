@@ -92,14 +92,22 @@ function obtenerRangoSemana(numeroSemana, año) {
     };
 }
 
-// Formatear fecha
+// Formatear fecha a DD/MM/YYYY (NUEVO formato)
 function formatearFecha(fecha) {
     const date = new Date(fecha);
-    return date.toLocaleDateString('es-ES', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-    });
+    const dia = String(date.getDate()).padStart(2, '0');
+    const mes = String(date.getMonth() + 1).padStart(2, '0');
+    const año = date.getFullYear();
+    return `${dia}/${mes}/${año}`;
+}
+
+// Formatear fecha a YYYY-MM-DD (para inputs)
+function formatearFechaInput(fecha) {
+    const date = new Date(fecha);
+    const año = date.getFullYear();
+    const mes = String(date.getMonth() + 1).padStart(2, '0');
+    const dia = String(date.getDate()).padStart(2, '0');
+    return `${año}-${mes}-${dia}`;
 }
 
 // Obtener nombre del puesto
@@ -303,6 +311,7 @@ function importarDatosDesdeArchivo(archivo, callback) {
 window.obtenerNumeroSemana = obtenerNumeroSemana;
 window.obtenerRangoSemana = obtenerRangoSemana;
 window.formatearFecha = formatearFecha;
+window.formatearFechaInput = formatearFechaInput;
 window.obtenerNombrePuesto = obtenerNombrePuesto;
 window.obtenerClasePuesto = obtenerClasePuesto;
 window.calcularHorasTrabajadas = calcularHorasTrabajadas;
