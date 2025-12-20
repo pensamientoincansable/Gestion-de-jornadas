@@ -207,8 +207,8 @@ navItems.forEach(nav => {
             const finSemana = new Date(inicioSemana);
             finSemana.setDate(inicioSemana.getDate() + 6);
             
-            fechaDesdeExportar.value = formatearFechaDDMMYYYY(inicioSemana);
-            fechaHastaExportar.value = formatearFechaDDMMYYYY(finSemana);
+            fechaDesdeExportar.value = formatearFechaYYYYMMDD(inicioSemana);
+            fechaHastaExportar.value = formatearFechaYYYYMMDD(finSemana);
         }
     });
 });
@@ -258,6 +258,96 @@ function validarDNI(e) {
     if (input.value.length > 8) {
         input.value = input.value.slice(0, 8);
     }
+}
+
+// ============================================
+// FUNCIONALIDAD DE TECLADO NUMÉRICO
+// ============================================
+
+function inicializarTecladoNumerico() {
+    const teclasNumeros = document.querySelectorAll('.tecla-numero[data-numero]');
+    const teclaBorrar = document.getElementById('teclaBorrar');
+    const teclaLimpiar = document.getElementById('teclaLimpiar');
+    
+    // Para cada tecla numérica
+    teclasNumeros.forEach(tecla => {
+        tecla.addEventListener('click', function() {
+            const numero = this.getAttribute('data-numero');
+            agregarNumeroDNI(numero);
+            
+            // Efecto visual de iluminación
+            this.style.background = 'linear-gradient(145deg, #D4001C, #B00016)';
+            this.style.color = 'white';
+            
+            setTimeout(() => {
+                this.style.background = '';
+                this.style.color = '';
+            }, 200);
+        });
+    });
+    
+    // Tecla borrar (elimina el último carácter)
+    if (teclaBorrar) {
+        teclaBorrar.addEventListener('click', function() {
+            borrarUltimoNumero();
+            
+            // Efecto visual
+            this.style.background = 'linear-gradient(145deg, #D32F2F, #B00016)';
+            setTimeout(() => {
+                this.style.background = '';
+            }, 200);
+        });
+    }
+    
+    // Tecla limpiar (elimina todo)
+    if (teclaLimpiar) {
+        teclaLimpiar.addEventListener('click', function() {
+            limpiarDNI();
+            
+            // Efecto visual
+            this.style.background = 'linear-gradient(145deg, #D32F2F, #B00016)';
+            setTimeout(() => {
+                this.style.background = '';
+            }, 200);
+        });
+    }
+}
+
+function agregarNumeroDNI(numero) {
+    const dniInput = document.getElementById('dniInput');
+    if (!dniInput) return;
+    
+    // Solo permitir 8 dígitos
+    if (dniInput.value.length >= 8) return;
+    
+    dniInput.value += numero;
+    
+    // Disparar evento input para que se ejecute la validación
+    dniInput.dispatchEvent(new Event('input'));
+    
+    // Si ya tiene 8 dígitos, enfocar automáticamente el botón de fichar
+    if (dniInput.value.length === 8) {
+        setTimeout(() => {
+            document.getElementById('btnFichar').focus();
+        }, 100);
+    }
+}
+
+function borrarUltimoNumero() {
+    const dniInput = document.getElementById('dniInput');
+    if (!dniInput) return;
+    
+    dniInput.value = dniInput.value.slice(0, -1);
+    dniInput.dispatchEvent(new Event('input'));
+}
+
+function limpiarDNI() {
+    const dniInput = document.getElementById('dniInput');
+    if (!dniInput) return;
+    
+    dniInput.value = '';
+    dniInput.dispatchEvent(new Event('input'));
+    dniInput.focus();
 }
 
 function cambiarVistaFiltro() {
@@ -356,6 +446,14 @@ function iniciarGeolocalizacion() {
             contenidoFichaje.style.display = 'flex';
             infoGeolocalizacion.style.display = 'block';
             dniInput.focus();
+            
+            // Enfocar automáticamente el primer botón del teclado en móviles
+            if (window.innerWidth <= 768) {
+                const primeraTecla = document.querySelector('.tecla-numero[data-numero="1"]');
+                if (primeraTecla) {
+                    primeraTecla.focus();
+                }
+            }
         },
         (error) => {
             // Error
@@ -773,10 +871,10 @@ function cargarUsuarios() {
             
             <div class="usuario-acciones">
                 <button class="btn btn-warning btn-icono-small btn-cambiar-puesto" data-dni="${usuario.dni}" title="Cambiar puesto">
-                    <i class="fas fa-exchange-alt"></i>
+                    <i class="fas fa-exchange-alt"></i> Cambiar Puesto
                 </button>
                 <button class="btn btn-danger btn-icono-small btn-eliminar-usuario" data-dni="${usuario.dni}" title="Eliminar usuario">
-                    <i class="fas fa-trash"></i>
+                    <i class="fas fa-trash"></i> Eliminar
                 </button>
             </div>
         `;
@@ -1710,6 +1808,9 @@ function init() {
     
     // Cargar correo guardado
     cargarCorreoGuardado();
+    
+    // Inicializar teclado numérico
+    inicializarTecladoNumerico();
     
     console.log("✅ Sistema inicializado correctamente");
     console.log("📧 Correo configurado:", correoGerencia);
