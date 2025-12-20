@@ -196,7 +196,7 @@ navItems.forEach(nav => {
             cargarCorreoGuardado();
             cargarCorreosDestinatarios();
             // Configurar fecha actual por defecto
-            const hoy = new Date().toISOString().split('T')[0];
+            const hoy = formatearFechaDDMMYYYY(new Date());
             fechaDesdeEnvio.value = hoy;
             fechaHastaEnvio.value = hoy;
         } else if (tabId === 'exportar') {
@@ -207,8 +207,8 @@ navItems.forEach(nav => {
             const finSemana = new Date(inicioSemana);
             finSemana.setDate(inicioSemana.getDate() + 6);
             
-            fechaDesdeExportar.value = inicioSemana.toISOString().split('T')[0];
-            fechaHastaExportar.value = finSemana.toISOString().split('T')[0];
+            fechaDesdeExportar.value = formatearFechaDDMMYYYY(inicioSemana);
+            fechaHastaExportar.value = formatearFechaDDMMYYYY(finSemana);
         }
     });
 });
@@ -279,20 +279,27 @@ function cambiarVistaFiltro() {
         filtroSemana.value = semanaFormato;
     } else if (vista === 'dia') {
         selectorDia.style.display = 'flex';
-        // Establecer día actual por defecto
-        const hoy = new Date().toISOString().split('T')[0];
-        filtroDia.value = hoy;
+        // Establecer día actual por defecto en formato YYYY-MM-DD
+        const hoy = new Date();
+        const año = hoy.getFullYear();
+        const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+        const dia = String(hoy.getDate()).padStart(2, '0');
+        filtroDia.value = `${año}-${mes}-${dia}`;
     } else if (vista === 'rango') {
         selectorRango.style.display = 'flex';
         // Establecer rango de la semana actual por defecto
         const hoy = new Date();
         const inicioSemana = new Date(hoy);
         inicioSemana.setDate(hoy.getDate() - hoy.getDay() + 1); // Lunes
+        
         const finSemana = new Date(inicioSemana);
         finSemana.setDate(inicioSemana.getDate() + 6); // Domingo
         
-        filtroDesde.value = inicioSemana.toISOString().split('T')[0];
-        filtroHasta.value = finSemana.toISOString().split('T')[0];
+        const inicioFormato = formatearFechaYYYYMMDD(inicioSemana);
+        const finFormato = formatearFechaYYYYMMDD(finSemana);
+        
+        filtroDesde.value = inicioFormato;
+        filtroHasta.value = finFormato;
     }
 }
 
@@ -431,7 +438,7 @@ function fichar() {
     }
     
     const ahora = new Date();
-    const fechaHoy = ahora.toISOString().split('T')[0];
+    const fechaHoy = formatearFechaYYYYMMDD(ahora);
     const horaActual = ahora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
     
     // Buscar registro activo (sin salida)
@@ -442,7 +449,7 @@ function fichar() {
     
     if (registroActivo) {
         // Registrar salida (puede ser en fecha diferente)
-        const fechaSalida = ahora.toISOString().split('T')[0];
+        const fechaSalida = formatearFechaYYYYMMDD(ahora);
         registroActivo.salida = horaActual;
         registroActivo.fechaSalida = fechaSalida;
         registroActivo.ubicacionSalida = { ...ubicacionActual };
@@ -522,12 +529,12 @@ function accederGerencia() {
         const finSemana = new Date(inicioSemana);
         finSemana.setDate(inicioSemana.getDate() + 6);
         
-        fechaDesdeExportar.value = inicioSemana.toISOString().split('T')[0];
-        fechaHastaExportar.value = finSemana.toISOString().split('T')[0];
+        fechaDesdeExportar.value = formatearFechaYYYYMMDD(inicioSemana);
+        fechaHastaExportar.value = formatearFechaYYYYMMDD(finSemana);
         
         // Configurar fecha actual para envío manual
-        fechaDesdeEnvio.value = hoy.toISOString().split('T')[0];
-        fechaHastaEnvio.value = hoy.toISOString().split('T')[0];
+        fechaDesdeEnvio.value = formatearFechaYYYYMMDD(hoy);
+        fechaHastaEnvio.value = formatearFechaYYYYMMDD(hoy);
     } else {
         mensajeGerencia.textContent = "❌ Contraseña incorrecta";
         mensajeGerencia.style.borderLeftColor = '#FF5252';
@@ -620,11 +627,14 @@ function cargarRegistros(filtroPuestoValue = '', filtroSemanaValue = '', filtroD
             totalMinutos += horasTrabajadas.totalMinutos || 0;
         }
         
+        // Formatear fecha a DD/MM/YYYY
+        const fechaFormateada = formatearFechaDDMMYYYY(new Date(registro.fecha));
+        
         const celdas = [
             registro.nombre,
             registro.dni,
             `<span class="puesto-badge ${obtenerClasePuesto(registro.puesto)}">${obtenerNombrePuesto(registro.puesto)}</span>`,
-            registro.fecha,
+            fechaFormateada,
             registro.entrada || "-",
             registro.salida || "-",
             registro.horasTrabajadasTexto || "-",
@@ -670,7 +680,7 @@ function resetearFiltros() {
 }
 
 // ============================================
-// GESTIÓN DE USUARIOS - CON OPCIÓN PARA CAMBIAR PUESTO
+// GESTIÓN DE USUARIOS - CON OPCIÓN PARA CAMBIAR PUESTO Y BOTONES MEJORADOS
 // ============================================
 
 function agregarUsuario() {
@@ -762,11 +772,11 @@ function cargarUsuarios() {
             </div>
             
             <div class="usuario-acciones">
-                <button class="btn btn-warning btn-small btn-cambiar-puesto" data-dni="${usuario.dni}">
-                    <i class="fas fa-exchange-alt"></i> Cambiar Puesto
+                <button class="btn btn-warning btn-icono-small btn-cambiar-puesto" data-dni="${usuario.dni}" title="Cambiar puesto">
+                    <i class="fas fa-exchange-alt"></i>
                 </button>
-                <button class="btn btn-danger btn-small btn-eliminar-usuario" data-dni="${usuario.dni}">
-                    <i class="fas fa-trash"></i> Eliminar
+                <button class="btn btn-danger btn-icono-small btn-eliminar-usuario" data-dni="${usuario.dni}" title="Eliminar usuario">
+                    <i class="fas fa-trash"></i>
                 </button>
             </div>
         `;
@@ -906,11 +916,14 @@ function registrarAusencia() {
         return;
     }
     
+    // Formatear fecha a DD/MM/YYYY para almacenamiento
+    const fechaFormateada = formatearFechaDDMMYYYY(new Date(fecha));
+    
     ausencias.push({
         dni,
         nombre: usuario.nombre,
         puesto: usuario.puesto,
-        fecha,
+        fecha: fechaFormateada,
         tipo,
         motivo: motivo || "No especificado",
         fechaRegistro: new Date().toLocaleString('es-ES')
@@ -939,7 +952,12 @@ function cargarAusencias() {
     }
     
     // Ordenar por fecha (más reciente primero)
-    const ordenadas = [...ausencias].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+    const ordenadas = [...ausencias].sort((a, b) => {
+        // Convertir fechas DD/MM/YYYY a Date para ordenar
+        const fechaA = parseFechaDDMMYYYY(a.fecha);
+        const fechaB = parseFechaDDMMYYYY(b.fecha);
+        return fechaB - fechaA;
+    });
     
     ordenadas.forEach(ausencia => {
         const item = document.createElement('div');
@@ -971,7 +989,7 @@ function cargarAusencias() {
                     <span><i class="fas fa-comment"></i> ${ausencia.motivo}</span>
                 </div>
             </div>
-            <button class="btn btn-danger btn-small btn-eliminar-ausencia" data-id="${ausencia.dni}-${ausencia.fecha}">
+            <button class="btn btn-danger btn-icono-small btn-eliminar-ausencia" data-id="${ausencia.dni}-${ausencia.fecha}" title="Eliminar incidencia">
                 <i class="fas fa-trash"></i>
             </button>
         `;
@@ -1149,7 +1167,7 @@ function cargarCorreosDestinatarios() {
                 <i class="fas fa-envelope" style="color: #FFC72C; margin-right: 10px;"></i>
                 <span>${correo}</span>
             </div>
-            <button class="btn btn-danger btn-small btn-eliminar-destinatario" data-index="${index}">
+            <button class="btn btn-danger btn-icono-small btn-eliminar-destinatario" data-index="${index}" title="Eliminar destinatario">
                 <i class="fas fa-trash"></i>
             </button>
         `;
@@ -1185,7 +1203,7 @@ function eliminarCorreoDestinatario(index) {
 }
 
 // ============================================
-// FUNCIONES NUEVAS PARA ENVÍO MANUAL
+// FUNCIONES NUEVAS PARA ENVÍO MANUAL (REAL)
 // ============================================
 
 function cambiarTipoReporteEnvio() {
@@ -1197,8 +1215,8 @@ function cambiarTipoReporteEnvio() {
         const hace7Dias = new Date(hoy);
         hace7Dias.setDate(hoy.getDate() - 7);
         
-        fechaDesdeEnvio.value = hace7Dias.toISOString().split('T')[0];
-        fechaHastaEnvio.value = hoy.toISOString().split('T')[0];
+        fechaDesdeEnvio.value = formatearFechaYYYYMMDD(hace7Dias);
+        fechaHastaEnvio.value = formatearFechaYYYYMMDD(hoy);
     } else {
         selectorRangoEnvio.style.display = 'none';
     }
@@ -1207,6 +1225,11 @@ function cambiarTipoReporteEnvio() {
 async function enviarReporteManual() {
     if (correosDestinatarios.length === 0) {
         alert("No hay correos destinatarios configurados. Agrega al menos uno.");
+        return;
+    }
+    
+    if (!correoGerencia || correoGerencia === "fichajetelepizza@outlook.es") {
+        alert("Primero configure un correo electrónico de envío en la parte superior.");
         return;
     }
     
@@ -1220,19 +1243,19 @@ async function enviarReporteManual() {
         
         if (tipo === 'diario') {
             const hoy = new Date();
-            const fechaHoy = hoy.toISOString().split('T')[0];
+            const fechaHoy = formatearFechaYYYYMMDD(hoy);
             const registrosHoy = registros.filter(r => r.fecha === fechaHoy);
-            const ausenciasHoy = ausencias.filter(a => a.fecha === fechaHoy);
+            const ausenciasHoy = ausencias.filter(a => a.fecha === formatearFechaDDMMYYYY(hoy));
             
             datosReporte = {
                 tipo: 'diario',
-                fecha: fechaHoy,
-                titulo: `Reporte Diario - ${fechaHoy}`,
+                fecha: formatearFechaDDMMYYYY(hoy),
+                titulo: `Reporte Diario - ${formatearFechaDDMMYYYY(hoy)}`,
                 totalTelepizzeros: telepizzeros.length,
                 registros: registrosHoy,
                 ausencias: ausenciasHoy
             };
-            titulo = `Reporte Diario ${fechaHoy}`;
+            titulo = `Reporte Diario ${formatearFechaDDMMYYYY(hoy)}`;
             
         } else if (tipo === 'rango') {
             const desde = fechaDesdeEnvio.value;
@@ -1240,6 +1263,14 @@ async function enviarReporteManual() {
             
             if (!desde || !hasta) {
                 alert("Selecciona ambas fechas");
+                return;
+            }
+            
+            const desdeDate = new Date(desde);
+            const hastaDate = new Date(hasta);
+            
+            if (hastaDate < desdeDate) {
+                alert("La fecha 'Hasta' no puede ser anterior a la fecha 'Desde'");
                 return;
             }
             
@@ -1252,7 +1283,7 @@ async function enviarReporteManual() {
             });
             
             const ausenciasRango = ausencias.filter(a => {
-                const fechaAusencia = new Date(a.fecha);
+                const fechaAusencia = parseFechaDDMMYYYY(a.fecha);
                 const fechaDesde = new Date(desde);
                 const fechaHasta = new Date(hasta);
                 fechaHasta.setHours(23, 59, 59, 999);
@@ -1261,22 +1292,48 @@ async function enviarReporteManual() {
             
             datosReporte = {
                 tipo: 'rango',
-                desde: desde,
-                hasta: hasta,
-                titulo: `Reporte Personalizado - ${desde} a ${hasta}`,
+                desde: formatearFechaDDMMYYYY(new Date(desde)),
+                hasta: formatearFechaDDMMYYYY(new Date(hasta)),
+                titulo: `Reporte Personalizado - ${formatearFechaDDMMYYYY(new Date(desde))} a ${formatearFechaDDMMYYYY(new Date(hasta))}`,
                 totalTelepizzeros: telepizzeros.length,
                 registros: registrosRango,
                 ausencias: ausenciasRango
             };
-            titulo = `Reporte ${desde} a ${hasta}`;
+            titulo = `Reporte ${formatearFechaDDMMYYYY(new Date(desde))} a ${formatearFechaDDMMYYYY(new Date(hasta))}`;
         }
         
         // Generar PDF
         const pdfBlob = await generarPDF(datosReporte);
         
-        // Mostrar mensaje de éxito
-        mensajeCorreo.textContent = `✅ Reporte generado. Listo para enviar a ${correosDestinatarios.length} destinatario(s)`;
-        mensajeCorreo.style.borderLeftColor = '#4CAF50';
+        // Enviar a cada destinatario
+        let enviados = 0;
+        let errores = 0;
+        
+        mensajeCorreo.textContent = `⏳ Enviando reportes a ${correosDestinatarios.length} destinatario(s)...`;
+        
+        for (const correoDestino of correosDestinatarios) {
+            try {
+                const resultado = await enviarPDFPorCorreo(titulo, pdfBlob, correoDestino, correoGerencia);
+                
+                if (resultado.success) {
+                    enviados++;
+                } else {
+                    errores++;
+                    console.error(`Error enviando a ${correoDestino}:`, resultado.error);
+                }
+            } catch (error) {
+                errores++;
+                console.error(`Error enviando a ${correoDestino}:`, error);
+            }
+        }
+        
+        if (errores === 0) {
+            mensajeCorreo.textContent = `✅ Reporte enviado exitosamente a ${enviados} destinatario(s)`;
+            mensajeCorreo.style.borderLeftColor = '#4CAF50';
+        } else {
+            mensajeCorreo.textContent = `⚠️ Reporte enviado a ${enviados} destinatario(s), ${errores} error(es)`;
+            mensajeCorreo.style.borderLeftColor = '#FF9800';
+        }
         
         // Ofrecer descarga del PDF
         const url = URL.createObjectURL(pdfBlob);
@@ -1287,9 +1344,6 @@ async function enviarReporteManual() {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        
-        // Simular envío (en producción aquí se enviaría realmente)
-        console.log(`Simulando envío de reporte a: ${correosDestinatarios.join(', ')}`);
         
         setTimeout(() => mensajeCorreo.textContent = '', 5000);
         
@@ -1323,25 +1377,25 @@ async function exportarPDF() {
     try {
         if (tipo === 'diario') {
             const hoy = new Date();
-            const fechaHoy = hoy.toISOString().split('T')[0];
+            const fechaHoy = formatearFechaYYYYMMDD(hoy);
             let registrosHoy = registros.filter(r => r.fecha === fechaHoy);
             
             if (filtroPuesto) {
                 registrosHoy = registrosHoy.filter(r => r.puesto === filtroPuesto);
             }
             
-            const ausenciasHoy = ausencias.filter(a => a.fecha === fechaHoy);
+            const ausenciasHoy = ausencias.filter(a => a.fecha === formatearFechaDDMMYYYY(hoy));
             
             datosReporte = {
                 tipo: 'diario',
-                fecha: fechaHoy,
-                titulo: `Reporte Diario - ${fechaHoy}${filtroPuesto ? ' - ' + obtenerNombrePuesto(filtroPuesto) : ''}`,
+                fecha: formatearFechaDDMMYYYY(hoy),
+                titulo: `Reporte Diario - ${formatearFechaDDMMYYYY(hoy)}${filtroPuesto ? ' - ' + obtenerNombrePuesto(filtroPuesto) : ''}`,
                 totalTelepizzeros: telepizzeros.filter(u => !filtroPuesto || u.puesto === filtroPuesto).length,
                 registros: registrosHoy,
                 ausencias: ausenciasHoy,
                 filtroPuesto: filtroPuesto
             };
-            titulo = `Reporte Diario ${fechaHoy}`;
+            titulo = `Reporte Diario ${formatearFechaDDMMYYYY(hoy)}`;
             
         } else if (tipo === 'semanal') {
             const hoy = new Date();
@@ -1376,7 +1430,7 @@ async function exportarPDF() {
             }
             
             const ausenciasMes = ausencias.filter(a => {
-                const fecha = new Date(a.fecha);
+                const fecha = parseFechaDDMMYYYY(a.fecha);
                 return fecha.getMonth() + 1 === mesActual && fecha.getFullYear() === añoActual;
             });
             
@@ -1401,6 +1455,14 @@ async function exportarPDF() {
                 return;
             }
             
+            const desdeDate = new Date(desde);
+            const hastaDate = new Date(hasta);
+            
+            if (hastaDate < desdeDate) {
+                alert("La fecha 'Hasta' no puede ser anterior a la fecha 'Desde'");
+                return;
+            }
+            
             let registrosRango = registros.filter(r => {
                 const fechaRegistro = new Date(r.fecha);
                 const fechaDesde = new Date(desde);
@@ -1414,7 +1476,7 @@ async function exportarPDF() {
             }
             
             const ausenciasRango = ausencias.filter(a => {
-                const fechaAusencia = new Date(a.fecha);
+                const fechaAusencia = parseFechaDDMMYYYY(a.fecha);
                 const fechaDesde = new Date(desde);
                 const fechaHasta = new Date(hasta);
                 fechaHasta.setHours(23, 59, 59, 999);
@@ -1423,15 +1485,15 @@ async function exportarPDF() {
             
             datosReporte = {
                 tipo: 'rango',
-                desde: desde,
-                hasta: hasta,
-                titulo: `Reporte Personalizado - ${desde} a ${hasta}${filtroPuesto ? ' - ' + obtenerNombrePuesto(filtroPuesto) : ''}`,
+                desde: formatearFechaDDMMYYYY(new Date(desde)),
+                hasta: formatearFechaDDMMYYYY(new Date(hasta)),
+                titulo: `Reporte Personalizado - ${formatearFechaDDMMYYYY(new Date(desde))} a ${formatearFechaDDMMYYYY(new Date(hasta))}${filtroPuesto ? ' - ' + obtenerNombrePuesto(filtroPuesto) : ''}`,
                 totalTelepizzeros: telepizzeros.filter(u => !filtroPuesto || u.puesto === filtroPuesto).length,
                 registros: registrosRango,
                 ausencias: ausenciasRango,
                 filtroPuesto: filtroPuesto
             };
-            titulo = `Reporte ${desde} a ${hasta}`;
+            titulo = `Reporte ${formatearFechaDDMMYYYY(new Date(desde))} a ${formatearFechaDDMMYYYY(new Date(hasta))}`;
         }
         
         // Generar PDF
@@ -1525,7 +1587,8 @@ async function generarPDFExportacion(datos) {
                 reg.nombre,
                 reg.dni,
                 obtenerNombrePuesto(reg.puesto),
-                reg.fecha,
+                // Convertir fecha de YYYY-MM-DD a DD/MM/YYYY
+                formatearFechaDDMMYYYY(new Date(reg.fecha)),
                 reg.entrada || '-',
                 reg.salida || '-',
                 reg.horasTrabajadasTexto || '-'
@@ -1554,7 +1617,7 @@ async function generarPDFExportacion(datos) {
             const headers = [['Nombre', 'Fecha', 'Tipo', 'Motivo']];
             const rows = datos.ausencias.map(aus => [
                 aus.nombre,
-                aus.fecha,
+                aus.fecha, // Ya está en formato DD/MM/YYYY
                 aus.tipo === 'falta' ? 'Falta' : 
                 aus.tipo === 'ausencia_justificada' ? 'Ausencia Justificada' : 'Retraso',
                 aus.motivo || '-'
@@ -1593,6 +1656,34 @@ async function generarPDF(datos) {
 }
 
 // ============================================
+// FUNCIONES AUXILIARES PARA FECHAS
+// ============================================
+
+// Formatear fecha a DD/MM/YYYY
+function formatearFechaDDMMYYYY(fecha) {
+    const date = new Date(fecha);
+    const dia = String(date.getDate()).padStart(2, '0');
+    const mes = String(date.getMonth() + 1).padStart(2, '0');
+    const año = date.getFullYear();
+    return `${dia}/${mes}/${año}`;
+}
+
+// Formatear fecha a YYYY-MM-DD (para inputs de tipo date)
+function formatearFechaYYYYMMDD(fecha) {
+    const date = new Date(fecha);
+    const año = date.getFullYear();
+    const mes = String(date.getMonth() + 1).padStart(2, '0');
+    const dia = String(date.getDate()).padStart(2, '0');
+    return `${año}-${mes}-${dia}`;
+}
+
+// Parsear fecha de DD/MM/YYYY a Date
+function parseFechaDDMMYYYY(fechaString) {
+    const [dia, mes, año] = fechaString.split('/').map(Number);
+    return new Date(año, mes - 1, dia);
+}
+
+// ============================================
 // INICIALIZAR APLICACIÓN
 // ============================================
 
@@ -1600,8 +1691,8 @@ function init() {
     // Establecer valores por defecto
     const hoy = new Date();
     
-    // Configurar fecha de ausencia
-    fechaAusencia.value = hoy.toISOString().split('T')[0];
+    // Configurar fecha de ausencia (formato YYYY-MM-DD para input)
+    fechaAusencia.value = formatearFechaYYYYMMDD(hoy);
     
     // Configurar correo por defecto
     if (!correoGerencia) {
