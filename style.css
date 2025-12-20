@@ -274,7 +274,7 @@ h1 {
     flex-direction: column;
     gap: 12px;
     position: relative;
-    min-height: 220px;
+    min-height: 260px; /* Aumentado para evitar colisiones */
 }
 
 .usuario-card:hover {
@@ -337,35 +337,28 @@ h1 {
 }
 
 .usuario-acciones {
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
     display: flex;
+    flex-direction: column;
     gap: 8px;
+    width: 100%;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.btn-icono {
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    display: flex;
-    align-items: center;
+.usuario-acciones button {
+    width: 100%;
     justify-content: center;
-    border-radius: 50%;
-    min-width: auto;
-    font-size: 1rem;
+    padding: 8px !important;
+    margin: 2px 0;
 }
 
-.btn-icono-small {
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    min-width: auto;
-    font-size: 0.9rem;
+.btn-cambiar-puesto {
+    order: 1;
+}
+
+.btn-eliminar-usuario {
+    order: 2;
 }
 
 .usuario-vacio {
@@ -499,6 +492,67 @@ h1 {
     padding: 20px;
     background: rgba(255, 255, 255, 0.08);
     border-radius: 12px;
+}
+
+/* Teclado numérico */
+.teclado-numerico {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 25px 0;
+    width: 100%;
+    max-width: 320px;
+    align-self: center;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.teclado-fila {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.tecla-numero {
+    flex: 1;
+    background: linear-gradient(145deg, #FFFFFF, #F5F5F5);
+    color: var(--primary-color);
+    border: none;
+    padding: 20px 15px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tecla-numero:hover {
+    background: linear-gradient(145deg, #FFC72C, #FFB300);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.tecla-numero:active {
+    background: linear-gradient(145deg, #D4001C, #B00016);
+    color: white;
+    transform: translateY(0);
+}
+
+.tecla-borrar, .tecla-limpiar {
+    background: linear-gradient(145deg, #FF5252, #D32F2F);
+    color: white;
+    font-size: 1.3rem;
+}
+
+.tecla-borrar:hover, .tecla-limpiar:hover {
+    background: linear-gradient(145deg, #D32F2F, #B00016);
 }
 
 /* Botones generales */
@@ -788,6 +842,18 @@ tr:hover {
     
     .usuario-card {
         width: 200px;
+        min-height: 240px;
+        padding: 15px;
+    }
+    
+    .usuario-acciones {
+        flex-direction: row;
+        gap: 5px;
+    }
+    
+    .usuario-acciones button {
+        flex: 1;
+        padding: 6px !important;
     }
     
     .form-ausencia {
@@ -806,15 +872,19 @@ tr:hover {
         min-width: 800px;
     }
     
-    .usuario-acciones {
-        position: static;
-        margin-top: 10px;
-        justify-content: flex-end;
+    .teclado-numerico {
+        max-width: 100%;
+        padding: 10px;
     }
     
-    .btn-icono, .btn-icono-small {
-        width: 40px;
-        height: 40px;
+    .tecla-numero {
+        min-height: 60px;
+        font-size: 1.4rem;
+        padding: 15px 10px;
+    }
+    
+    .teclado-fila {
+        gap: 8px;
     }
 }
 
@@ -839,11 +909,6 @@ tr:hover {
     
     .usuario-card {
         width: 200px;
-    }
-    
-    .usuario-acciones {
-        bottom: 10px;
-        right: 10px;
     }
 }
 
