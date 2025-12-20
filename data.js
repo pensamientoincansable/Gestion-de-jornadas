@@ -30,6 +30,11 @@ function inicializarDatos() {
     if (!localStorage.getItem('telepizza_semanas')) {
         localStorage.setItem('telepizza_semanas', JSON.stringify({}));
     }
+    
+    // Datos de correos destinatarios (nuevo)
+    if (!localStorage.getItem('telepizza_correos_destinatarios')) {
+        localStorage.setItem('telepizza_correos_destinatarios', JSON.stringify([]));
+    }
 }
 
 // Cargar datos
@@ -39,7 +44,8 @@ function cargarDatos() {
         registros: JSON.parse(localStorage.getItem('telepizza_registros')) || [],
         ausencias: JSON.parse(localStorage.getItem('telepizza_ausencias')) || [],
         correoGerencia: JSON.parse(localStorage.getItem('telepizza_correo')) || "fichajetelepizza@outlook.es",
-        semanas: JSON.parse(localStorage.getItem('telepizza_semanas')) || {}
+        semanas: JSON.parse(localStorage.getItem('telepizza_semanas')) || {},
+        correosDestinatarios: JSON.parse(localStorage.getItem('telepizza_correos_destinatarios')) || []
     };
 }
 
@@ -50,6 +56,7 @@ function guardarDatos(datos) {
     localStorage.setItem('telepizza_ausencias', JSON.stringify(datos.ausencias));
     localStorage.setItem('telepizza_correo', JSON.stringify(datos.correoGerencia));
     localStorage.setItem('telepizza_semanas', JSON.stringify(datos.semanas));
+    localStorage.setItem('telepizza_correos_destinatarios', JSON.stringify(datos.correosDestinatarios || []));
     return true;
 }
 
@@ -282,6 +289,7 @@ function importarDatosDesdeArchivo(archivo, callback) {
             if (datos.registros) localStorage.setItem('telepizza_registros', JSON.stringify(datos.registros));
             if (datos.ausencias) localStorage.setItem('telepizza_ausencias', JSON.stringify(datos.ausencias));
             if (datos.correoGerencia) localStorage.setItem('telepizza_correo', JSON.stringify(datos.correoGerencia));
+            if (datos.correosDestinatarios) localStorage.setItem('telepizza_correos_destinatarios', JSON.stringify(datos.correosDestinatarios));
             
             if (callback) callback(true, "Datos importados correctamente");
         } catch (error) {
