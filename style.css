@@ -146,8 +146,8 @@ h1, h2, h3, h4 {
 
 /* Botón de fichar estilo "hoja de orégano" */
 .btn-fichar {
-    background-color: var(--color-boton-fichar, #4CAF50) !important;
-    color: white !important;
+    background-color: var(--color-boton-fichar, ##d4001c) !important;
+    color: red !important;
     font-size: 1.4rem !important;
     padding: 25px 40px !important;
     border-radius: 15px !important;
@@ -185,7 +185,7 @@ h1, h2, h3, h4 {
 
 /* Botones volver */
 .volver-btn {
-    background-color: var(--color-boton-volver, #D4001C) !important;
+    background-color: var(--color-boton-volver, #000000) !important;
     color: var(--color-texto-boton-volver, white) !important;
     border: 2px solid var(--color-texto-boton-volver, white) !important;
 }
