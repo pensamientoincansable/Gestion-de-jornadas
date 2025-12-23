@@ -1663,3 +1663,299 @@ function init() {
 
 // Inicializar cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', init);
+
+// ============================================
+// PERSONALIZACIÓN DE LA PÁGINA
+// ============================================
+
+// Configuración de personalización por defecto
+const configPersonalizacion = {
+    colorFondo: '#D4001C',
+    colorSecundario: '#FFC72C',
+    colorBotones: '#FFFFFF',
+    colorTextoBotones: '#D4001C',
+    colorBotonFichar: '#4CAF50',
+    colorTexto: '#FFFFFF',
+    logoSize: 150,
+    logoOpacity: 15,
+    logoPositionX: 50,
+    logoPositionY: 50,
+    headerHeight: 120,
+    headerOpacity: 100
+};
+
+// Cargar personalización desde localStorage
+function cargarPersonalizacion() {
+    const guardado = localStorage.getItem('telepizza_personalizacion');
+    if (guardado) {
+        return JSON.parse(guardado);
+    }
+    return configPersonalizacion;
+}
+
+// Guardar personalización en localStorage
+function guardarPersonalizacion(config) {
+    localStorage.setItem('telepizza_personalizacion', JSON.stringify(config));
+}
+
+// Aplicar personalización a la página
+function aplicarPersonalizacion(config) {
+    // Aplicar colores a las variables CSS
+    document.documentElement.style.setProperty('--primary-color', config.colorFondo);
+    document.documentElement.style.setProperty('--secondary-color', config.colorSecundario);
+    
+    // Aplicar colores a elementos específicos
+    document.body.style.color = config.colorTexto;
+    
+    // Botón de fichar
+    const btnFichar = document.getElementById('btnFichar');
+    if (btnFichar) {
+        btnFichar.style.backgroundColor = config.colorBotonFichar;
+        btnFichar.style.color = 'white';
+    }
+    
+    // Otros botones
+    const botones = document.querySelectorAll('.btn:not(.btn-fichar):not(.volver-btn)');
+    botones.forEach(btn => {
+        btn.style.backgroundColor = config.colorBotones;
+        btn.style.color = config.colorTextoBotones;
+    });
+    
+    // Botones volver
+    const botonesVolver = document.querySelectorAll('.volver-btn');
+    botonesVolver.forEach(btn => {
+        btn.style.backgroundColor = config.colorFondo;
+        btn.style.color = 'white';
+        btn.style.borderColor = 'white';
+    });
+    
+    // Logo de fondo
+    const backgroundLogo = document.getElementById('backgroundLogo');
+    if (backgroundLogo) {
+        backgroundLogo.style.width = `${config.logoSize}px`;
+        backgroundLogo.style.height = `${config.logoSize}px`;
+        backgroundLogo.style.opacity = `${config.logoOpacity}%`;
+        backgroundLogo.style.backgroundImage = `url('https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/telepizza_logo.png')`;
+        backgroundLogo.style.backgroundSize = 'contain';
+        backgroundLogo.style.backgroundRepeat = 'no-repeat';
+        backgroundLogo.style.backgroundPosition = 'center';
+        backgroundLogo.style.left = `${config.logoPositionX}%`;
+        backgroundLogo.style.top = `${config.logoPositionY}%`;
+        backgroundLogo.style.transform = `translate(-${config.logoPositionX}%, -${config.logoPositionY}%)`;
+    }
+    
+    // Imagen de encabezado
+    const headerImage = document.getElementById('headerImage');
+    if (headerImage) {
+        headerImage.style.maxHeight = `${config.headerHeight}px`;
+        headerImage.style.opacity = `${config.headerOpacity}%`;
+    }
+    
+    // Logo del pie
+    const logoFooter = document.getElementById('logoFooter');
+    if (logoFooter) {
+        logoFooter.style.color = config.colorSecundario;
+    }
+    
+    // Guardar configuración
+    guardarPersonalizacion(config);
+}
+
+// Inicializar controles de personalización
+function inicializarControlesPersonalizacion() {
+    const config = cargarPersonalizacion();
+    
+    // Cargar valores en los controles
+    document.getElementById('colorFondo').value = config.colorFondo;
+    document.getElementById('colorFondoTexto').value = config.colorFondo;
+    document.getElementById('colorSecundario').value = config.colorSecundario;
+    document.getElementById('colorSecundarioTexto').value = config.colorSecundario;
+    document.getElementById('colorBotones').value = config.colorBotones;
+    document.getElementById('colorBotonesTexto').value = config.colorBotones;
+    document.getElementById('colorTextoBotones').value = config.colorTextoBotones;
+    document.getElementById('colorTextoBotonesTexto').value = config.colorTextoBotones;
+    document.getElementById('colorBotonFichar').value = config.colorBotonFichar;
+    document.getElementById('colorBotonFicharTexto').value = config.colorBotonFichar;
+    document.getElementById('colorTexto').value = config.colorTexto;
+    document.getElementById('colorTextoTexto').value = config.colorTexto;
+    
+    document.getElementById('logoSize').value = config.logoSize;
+    document.getElementById('logoSizeValue').textContent = `${config.logoSize}px`;
+    document.getElementById('logoOpacity').value = config.logoOpacity;
+    document.getElementById('logoOpacityValue').textContent = `${config.logoOpacity}%`;
+    document.getElementById('logoPositionX').value = config.logoPositionX;
+    document.getElementById('logoPositionXValue').textContent = `${config.logoPositionX}%`;
+    document.getElementById('logoPositionY').value = config.logoPositionY;
+    document.getElementById('logoPositionYValue').textContent = `${config.logoPositionY}%`;
+    
+    document.getElementById('headerHeight').value = config.headerHeight;
+    document.getElementById('headerHeightValue').textContent = `${config.headerHeight}px`;
+    document.getElementById('headerOpacity').value = config.headerOpacity;
+    document.getElementById('headerOpacityValue').textContent = `${config.headerOpacity}%`;
+    
+    // Event listeners para controles de color
+    document.querySelectorAll('input[type="color"]').forEach(input => {
+        input.addEventListener('input', function() {
+            const textoId = this.id + 'Texto';
+            document.getElementById(textoId).value = this.value;
+            actualizarVistaPrevia();
+        });
+    });
+    
+    document.querySelectorAll('input[type="text"][id$="Texto"]').forEach(input => {
+        input.addEventListener('input', function() {
+            const colorId = this.id.replace('Texto', '');
+            const colorInput = document.getElementById(colorId);
+            if (this.value.match(/^#[0-9A-F]{6}$/i)) {
+                colorInput.value = this.value;
+                actualizarVistaPrevia();
+            }
+        });
+    });
+    
+    // Event listeners para controles de rango
+    document.querySelectorAll('input[type="range"]').forEach(input => {
+        input.addEventListener('input', function() {
+            const valueSpan = document.getElementById(this.id + 'Value');
+            if (valueSpan) {
+                valueSpan.textContent = `${this.value}${this.id.includes('Size') || this.id.includes('Height') ? 'px' : '%'}`;
+            }
+            actualizarVistaPrevia();
+        });
+    });
+    
+    // Botón aplicar cambios
+    document.getElementById('btnAplicarPersonalizacion').addEventListener('click', function() {
+        const nuevaConfig = obtenerConfiguracionActual();
+        aplicarPersonalizacion(nuevaConfig);
+        mostrarMensajePersonalizacion('✅ Cambios aplicados correctamente', 'success');
+    });
+    
+    // Botón restablecer valores
+    document.getElementById('btnResetPersonalizacion').addEventListener('click', function() {
+        if (confirm('¿Restablecer todos los valores a los predeterminados?')) {
+            aplicarPersonalizacion(configPersonalizacion);
+            inicializarControlesPersonalizacion();
+            mostrarMensajePersonalizacion('✅ Valores restablecidos', 'success');
+        }
+    });
+    
+    // Botón guardar configuración
+    document.getElementById('btnGuardarPersonalizacion').addEventListener('click', function() {
+        const nuevaConfig = obtenerConfiguracionActual();
+        guardarPersonalizacion(nuevaConfig);
+        mostrarMensajePersonalizacion('✅ Configuración guardada', 'success');
+    });
+    
+    // Actualizar vista previa inicial
+    actualizarVistaPrevia();
+}
+
+// Obtener configuración actual de los controles
+function obtenerConfiguracionActual() {
+    return {
+        colorFondo: document.getElementById('colorFondo').value,
+        colorSecundario: document.getElementById('colorSecundario').value,
+        colorBotones: document.getElementById('colorBotones').value,
+        colorTextoBotones: document.getElementById('colorTextoBotones').value,
+        colorBotonFichar: document.getElementById('colorBotonFichar').value,
+        colorTexto: document.getElementById('colorTexto').value,
+        logoSize: parseInt(document.getElementById('logoSize').value),
+        logoOpacity: parseInt(document.getElementById('logoOpacity').value),
+        logoPositionX: parseInt(document.getElementById('logoPositionX').value),
+        logoPositionY: parseInt(document.getElementById('logoPositionY').value),
+        headerHeight: parseInt(document.getElementById('headerHeight').value),
+        headerOpacity: parseInt(document.getElementById('headerOpacity').value)
+    };
+}
+
+// Actualizar vista previa
+function actualizarVistaPrevia() {
+    const config = obtenerConfiguracionActual();
+    const preview = document.getElementById('logoPreview');
+    
+    if (preview) {
+        preview.style.backgroundImage = `url('https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/telepizza_logo.png')`;
+        preview.style.backgroundSize = 'contain';
+        preview.style.backgroundRepeat = 'no-repeat';
+        preview.style.backgroundPosition = 'center';
+        preview.style.width = `${config.logoSize}px`;
+        preview.style.height = `${config.logoSize}px`;
+        preview.style.opacity = `${config.logoOpacity}%`;
+        preview.style.margin = '0 auto';
+    }
+}
+
+// Mostrar mensaje en la pestaña de personalización
+function mostrarMensajePersonalizacion(mensaje, tipo = 'success') {
+    const mensajeDiv = document.getElementById('mensajePersonalizacion');
+    if (mensajeDiv) {
+        mensajeDiv.textContent = mensaje;
+        mensajeDiv.style.borderLeftColor = tipo === 'success' ? '#4CAF50' : '#FF5252';
+        setTimeout(() => {
+            mensajeDiv.textContent = '';
+        }, 3000);
+    }
+}
+
+// ============================================
+// INICIALIZACIÓN DE PERSONALIZACIÓN
+// ============================================
+
+// Modificar la función init para incluir personalización
+function init() {
+    // ... código existente ...
+    
+    // Cargar y aplicar personalización
+    const config = cargarPersonalizacion();
+    aplicarPersonalizacion(config);
+    
+    // Inicializar controles de personalización si estamos en esa pestaña
+    if (document.getElementById('personalizacion-tab')) {
+        inicializarControlesPersonalizacion();
+    }
+    
+    // ... resto del código existente ...
+}
+
+// Modificar el event listener de navegación vertical para incluir personalización
+navItems.forEach(nav => {
+    nav.addEventListener('click', () => {
+        const tabId = nav.getAttribute('data-tab');
+        
+        // Actualizar navegación
+        navItems.forEach(item => item.classList.remove('active'));
+        nav.classList.add('active');
+        
+        // Actualizar contenido de pestañas
+        tabContents.forEach(content => content.classList.remove('active'));
+        document.getElementById(`${tabId}-tab`).classList.add('active');
+        
+        // Acciones específicas por pestaña
+        if (tabId === 'registros') {
+            cargarRegistrosSemanaActual();
+        } else if (tabId === 'usuarios') {
+            cargarUsuarios();
+        } else if (tabId === 'ausencias') {
+            cargarAusencias();
+            cargarSelectUsuarios();
+        } else if (tabId === 'correo') {
+            cargarCorreoGuardado();
+            cargarCorreosDestinatarios();
+            const hoy = new Date();
+            fechaDesdeEnvio.value = formatearFechaYYYYMMDD(hoy);
+            fechaHastaEnvio.value = formatearFechaYYYYMMDD(hoy);
+        } else if (tabId === 'exportar') {
+            const hoy = new Date();
+            const inicioSemana = new Date(hoy);
+            inicioSemana.setDate(hoy.getDate() - hoy.getDay() + 1);
+            const finSemana = new Date(inicioSemana);
+            finSemana.setDate(inicioSemana.getDate() + 6);
+            
+            fechaDesdeExportar.value = formatearFechaYYYYMMDD(inicioSemana);
+            fechaHastaExportar.value = formatearFechaYYYYMMDD(finSemana);
+        } else if (tabId === 'personalizacion') {
+            inicializarControlesPersonalizacion();
+        }
+    });
+});
