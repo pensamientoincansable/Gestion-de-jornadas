@@ -186,7 +186,7 @@ h1, h2, h3, h4 {
 /* Botones volver */
 .volver-btn {
     background-color: var(--color-boton-volver, #000000) !important;
-    color: var(--color-texto-boton-volver, white) !important;
+    color: var(--color-texto-boton-volver, black) !important;
     border: 2px solid var(--color-texto-boton-volver, white) !important;
 }
 
