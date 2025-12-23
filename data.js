@@ -364,3 +364,60 @@ window.guardarConfiguracionPersonalizacion = guardarConfiguracionPersonalizacion
 if (!localStorage.getItem('telepizza_personalizacion')) {
     guardarConfiguracionPersonalizacion(cargarConfiguracionPersonalizacion());
 }
+
+// ============================================
+// FUNCIONES DE PERSONALIZACIÓN PARA data.js
+// ============================================
+
+// Inicializar datos de personalización
+if (!localStorage.getItem('telepizza_personalizacion')) {
+    localStorage.setItem('telepizza_personalizacion', JSON.stringify({
+        colorFondo: '#D4001C',
+        colorSecundario: '#FFC72C',
+        colorTexto: '#FFFFFF',
+        colorContenedor: '#000000',
+        colorBotonesAcceso: '#FFFFFF',
+        colorTextoBotonesAcceso: '#D4001C',
+        colorBotonFichar: '#4CAF50',
+        colorBotonVolver: '#D4001C',
+        colorTextoBotonVolver: '#FFFFFF',
+        colorBotonSecundario: '#FFC72C',
+        logoSize: 150,
+        logoOpacity: 15,
+        logoPositionX: 50,
+        logoPositionY: 50,
+        headerHeight: 120,
+        headerOpacity: 100,
+        containerPadding: 20,
+        containerWidth: 100,
+        fontFamily: 'Montserrat, sans-serif',
+        fontWeight: 400,
+        fontSize: 16
+    }));
+}
+
+// Cargar configuración de personalización
+function cargarConfiguracionPersonalizacion() {
+    try {
+        const config = localStorage.getItem('telepizza_personalizacion');
+        return config ? JSON.parse(config) : null;
+    } catch (e) {
+        console.error('Error al cargar configuración de personalización:', e);
+        return null;
+    }
+}
+
+// Guardar configuración de personalización
+function guardarConfiguracionPersonalizacion(config) {
+    try {
+        localStorage.setItem('telepizza_personalizacion', JSON.stringify(config));
+        return true;
+    } catch (e) {
+        console.error('Error al guardar configuración de personalización:', e);
+        return false;
+    }
+}
+
+// Exportar funciones
+window.cargarConfiguracionPersonalizacion = cargarConfiguracionPersonalizacion;
+window.guardarConfiguracionPersonalizacion = guardarConfiguracionPersonalizacion;
