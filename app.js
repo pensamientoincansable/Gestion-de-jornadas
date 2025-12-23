@@ -1,5 +1,3 @@
-[file name]: app.js
-[file content begin]
 // ============================================
 // INICIALIZACIÓN
 // ============================================
@@ -1665,4 +1663,3 @@ function init() {
 
 // Inicializar cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', init);
-[file content end]
