@@ -438,54 +438,130 @@ h1, h2, h3, h4 {
     border-top: 2px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Estilos responsivos */
-@media (max-width: 768px) {
-    .color-grid, .position-grid, .font-grid {
-        grid-template-columns: 1fr;
+/* ============================================
+   NUEVOS ESTILOS PARA REORGANIZACIÓN DE FICHAJE
+   ============================================ */
+
+.fichaje-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.fichaje-columna {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.fichaje-columna.izquierda {
+    order: 1;
+}
+
+.fichaje-columna.derecha {
+    order: 2;
+}
+
+/* Para tabletas y pantallas más grandes */
+@media (min-width: 768px) {
+    .fichaje-container {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 30px;
+        max-width: 1000px;
+        margin: 0 auto 30px auto;
     }
     
-    .personalizacion-acciones {
+    .fichaje-columna {
+        width: 50%;
+        align-items: stretch;
+    }
+    
+    .fichaje-columna.izquierda {
+        order: 1;
+        display: flex;
         flex-direction: column;
+        justify-content: center;
+        min-height: 350px;
     }
     
-    .btn-fichar {
-        font-size: 1.2rem !important;
-        padding: 20px 30px !important;
-        min-width: 250px !important;
-    }
-    
-    .tabs-telepizzero {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .tab-telepizzero {
-        width: 100%;
-        text-align: center;
+    .fichaje-columna.derecha {
+        order: 2;
         justify-content: center;
     }
     
-    .filtro-rango {
-        flex-direction: column;
-    }
-}
-
-/* Estilos para tablets */
-@media (min-width: 769px) and (max-width: 1024px) {
-    .color-grid, .position-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* Mejoras de accesibilidad */
-@media (prefers-reduced-motion: reduce) {
-    .btn, .nav-item, .usuario-card, .tab-telepizzero {
-        transition: none;
+    /* Ajustar el teclado para tabletas */
+    .teclado-numerico {
+        max-width: 100%;
+        margin: 0;
+        padding: 20px;
     }
     
-    .tab-content, .tab-content-telepizzero {
-        animation: none;
+    .tecla-numero {
+        min-height: 70px;
+        font-size: 1.6rem;
+        padding: 20px 15px;
     }
+    
+    /* Ajustar el input DNI para tabletas */
+    .dni-input-large {
+        font-size: 2rem !important;
+        padding: 20px 15px !important;
+        min-height: 70px !important;
+    }
+    
+    /* Ajustar el botón de fichar */
+    .btn-fichar {
+        min-width: 100% !important;
+        margin-top: 20px !important;
+        padding: 20px 30px !important;
+    }
+}
+
+/* Para pantallas más grandes (desktop) */
+@media (min-width: 1024px) {
+    .fichaje-container {
+        gap: 40px;
+    }
+    
+    .fichaje-columna.izquierda {
+        padding-right: 20px;
+        border-right: 2px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .fichaje-columna.derecha {
+        padding-left: 20px;
+    }
+    
+    .teclado-numerico {
+        padding: 25px;
+    }
+    
+    .tecla-numero {
+        min-height: 75px;
+        font-size: 1.8rem;
+    }
+}
+
+/* Para móviles (menos de 768px) */
+@media (max-width: 767px) {
+    .fichaje-columna.izquierda {
+        margin-bottom: 20px;
+    }
+    
+    .btn-fichar {
+        min-width: 100% !important;
+        margin: 20px 0 !important;
+    }
+}
+
+/* Asegurar que el mensaje ocupe todo el ancho */
+#mensajeTelepizzero {
+    width: 100%;
+    margin-top: 20px;
 }
 
 /* Resto de estilos existentes (se mantienen igual) */
@@ -1250,6 +1326,87 @@ input[type="date"], input[type="week"] {
     margin-bottom: 5px;
 }
 
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .color-grid, .position-grid, .font-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .personalizacion-acciones {
+        flex-direction: column;
+    }
+    
+    .btn-fichar {
+        font-size: 1.2rem !important;
+        padding: 20px 30px !important;
+        min-width: 250px !important;
+    }
+    
+    .tabs-telepizzero {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .tab-telepizzero {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+    
+    .filtro-rango {
+        flex-direction: column;
+    }
+}
+
+/* Estilos para tablets de 10 pulgadas */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .color-grid, .position-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Ajustes específicos para tablets de 10 pulgadas */
+    .container {
+        max-width: 95%;
+        padding: 25px;
+    }
+    
+    .fichaje-container {
+        max-width: 900px;
+    }
+    
+    .teclado-numerico {
+        padding: 15px;
+    }
+    
+    .tecla-numero {
+        min-height: 65px;
+        font-size: 1.5rem;
+        padding: 18px 12px;
+    }
+    
+    .dni-input-large {
+        font-size: 1.8rem !important;
+        padding: 18px 12px !important;
+        min-height: 65px !important;
+    }
+    
+    .btn-fichar {
+        font-size: 1.2rem !important;
+        padding: 22px 25px !important;
+    }
+}
+
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+    .btn, .nav-item, .usuario-card, .tab-telepizzero {
+        transition: none;
+    }
+    
+    .tab-content, .tab-content-telepizzero {
+        animation: none;
+    }
+}
+
 /* Ajustes responsivos para el input grande de DNI */
 @media (max-width: 768px) {
     .dni-input-large {
@@ -1366,4 +1523,4 @@ input[type="date"], input[type="week"] {
     .teclado-fila {
         gap: 8px;
     }
-}
+}m
