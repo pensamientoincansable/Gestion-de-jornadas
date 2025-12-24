@@ -62,47 +62,56 @@
                 <h2><i class="fas fa-user-clock"></i> Registro de Jornada</h2>
                 
                 <div id="contenidoFichaje">
-                    <div class="form-group">
-                        <label for="dniInput"><i class="fas fa-id-card"></i> Introduce tu DNI/NIE</label>
-                        <input type="text" id="dniInput" placeholder="Ej: 00000000 o X0000000X" inputmode="numeric" class="dni-input-large">
-                        <small style="color: var(--secondary-color); font-size: 0.9rem;">DNI (8 dígitos) o NIE (1 letra + 7 dígitos + 1 letra)</small>
+                    <!-- Contenedor principal para disposición horizontal -->
+                    <div class="fichaje-container">
+                        <!-- Columna izquierda: DNI y botón -->
+                        <div class="fichaje-columna izquierda">
+                            <div class="form-group">
+                                <label for="dniInput"><i class="fas fa-id-card"></i> Introduce tu DNI/NIE</label>
+                                <input type="text" id="dniInput" placeholder="Ej: 00000000 o X0000000X" inputmode="numeric" class="dni-input-large">
+                                <small style="color: var(--secondary-color); font-size: 0.9rem;">DNI (8 dígitos) o NIE (1 letra + 7 dígitos + 1 letra)</small>
+                            </div>
+                            
+                            <!-- Botón de fichar estilo "hoja de orégano" -->
+                            <button class="btn btn-fichar" id="btnFichar">
+                                <i class="fas fa-fingerprint"></i> Fichar Entrada/Salida
+                            </button>
+                            
+                            <div class="mensaje" id="mensajeTelepizzero"></div>
+                        </div>
+                        
+                        <!-- Columna derecha: Teclado numérico -->
+                        <div class="fichaje-columna derecha">
+                            <!-- Teclado numérico -->
+                            <div class="teclado-numerico">
+                                <div class="teclado-fila">
+                                    <button type="button" class="tecla-numero" data-numero="1">1</button>
+                                    <button type="button" class="tecla-numero" data-numero="2">2</button>
+                                    <button type="button" class="tecla-numero" data-numero="3">3</button>
+                                </div>
+                                <div class="teclado-fila">
+                                    <button type="button" class="tecla-numero" data-numero="4">4</button>
+                                    <button type="button" class="tecla-numero" data-numero="5">5</button>
+                                    <button type="button" class="tecla-numero" data-numero="6">6</button>
+                                </div>
+                                <div class="teclado-fila">
+                                    <button type="button" class="tecla-numero" data-numero="7">7</button>
+                                    <button type="button" class="tecla-numero" data-numero="8">8</button>
+                                    <button type="button" class="tecla-numero" data-numero="9">9</button>
+                                </div>
+                                <div class="teclado-fila">
+                                    <button type="button" class="tecla-numero tecla-borrar" id="teclaBorrar"><i class="fas fa-backspace"></i></button>
+                                    <button type="button" class="tecla-numero" data-numero="0">0</button>
+                                    <button type="button" class="tecla-numero tecla-limpiar" id="teclaLimpiar"><i class="fas fa-times"></i></button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
-                    <!-- Teclado numérico -->
-                    <div class="teclado-numerico">
-                        <div class="teclado-fila">
-                            <button class="tecla-numero" data-numero="1">1</button>
-                            <button class="tecla-numero" data-numero="2">2</button>
-                            <button class="tecla-numero" data-numero="3">3</button>
-                        </div>
-                        <div class="teclado-fila">
-                            <button class="tecla-numero" data-numero="4">4</button>
-                            <button class="tecla-numero" data-numero="5">5</button>
-                            <button class="tecla-numero" data-numero="6">6</button>
-                        </div>
-                        <div class="teclado-fila">
-                            <button class="tecla-numero" data-numero="7">7</button>
-                            <button class="tecla-numero" data-numero="8">8</button>
-                            <button class="tecla-numero" data-numero="9">9</button>
-                        </div>
-                        <div class="teclado-fila">
-                            <button class="tecla-numero tecla-borrar" id="teclaBorrar"><i class="fas fa-backspace"></i></button>
-                            <button class="tecla-numero" data-numero="0">0</button>
-                            <button class="tecla-numero tecla-limpiar" id="teclaLimpiar"><i class="fas fa-times"></i></button>
-                        </div>
+                    <div class="info-almacenamiento" style="margin-top: 20px;">
+                        <h3><i class="fas fa-database"></i> Almacenamiento de Datos</h3>
+                        <p>Los datos se almacenan localmente en tu dispositivo cumpliendo con la normativa vigente. Para exportar registros completos accede al panel de Gerencia.</p>
                     </div>
-                    
-                    <!-- Botón de fichar estilo "hoja de orégano" -->
-                    <button class="btn btn-fichar" id="btnFichar">
-                        <i class="fas fa-fingerprint"></i> Fichar Entrada/Salida
-                    </button>
-                    
-                    <div class="mensaje" id="mensajeTelepizzero"></div>
-                </div>
-                
-                <div class="info-almacenamiento" style="margin-top: 20px;">
-                    <h3><i class="fas fa-database"></i> Almacenamiento de Datos</h3>
-                    <p>Los datos se almacenan localmente en tu dispositivo cumpliendo con la normativa vigente. Para exportar registros completos accede al panel de Gerencia.</p>
                 </div>
             </div>
             
