@@ -307,64 +307,6 @@ function importarDatosDesdeArchivo(archivo, callback) {
     reader.readAsText(archivo);
 }
 
-// Exportar funciones para uso global
-window.obtenerNumeroSemana = obtenerNumeroSemana;
-window.obtenerRangoSemana = obtenerRangoSemana;
-window.formatearFecha = formatearFecha;
-window.formatearFechaInput = formatearFechaInput;
-window.obtenerNombrePuesto = obtenerNombrePuesto;
-window.obtenerClasePuesto = obtenerClasePuesto;
-window.calcularHorasTrabajadas = calcularHorasTrabajadas;
-window.generarResumenSemanal = generarResumenSemanal;
-window.convertirMinutosATexto = convertirMinutosATexto;
-window.obtenerSemanasDisponibles = obtenerSemanasDisponibles;
-window.inicializarDatos = inicializarDatos;
-window.cargarDatos = cargarDatos;
-window.guardarDatos = guardarDatos;
-window.exportarDatosParaGitHub = exportarDatosParaGitHub;
-window.importarDatosDesdeArchivo = importarDatosDesdeArchivo;
-
-// ============================================
-// FUNCIONES PARA PERSONALIZACIÓN
-// ============================================
-
-// Cargar configuración de personalización
-function cargarConfiguracionPersonalizacion() {
-    const guardado = localStorage.getItem('telepizza_personalizacion');
-    if (guardado) {
-        return JSON.parse(guardado);
-    }
-    // Valores por defecto
-    return {
-        colorFondo: '#D4001C',
-        colorSecundario: '#FFC72C',
-        colorBotones: '#FFFFFF',
-        colorTextoBotones: '#D4001C',
-        colorBotonFichar: '#4CAF50',
-        colorTexto: '#FFFFFF',
-        logoSize: 150,
-        logoOpacity: 15,
-        logoPositionX: 50,
-        logoPositionY: 50,
-        headerHeight: 120,
-        headerOpacity: 100
-    };
-}
-
-// Guardar configuración de personalización
-function guardarConfiguracionPersonalizacion(config) {
-    localStorage.setItem('telepizza_personalizacion', JSON.stringify(config));
-}
-
-// Exportar funciones
-window.cargarConfiguracionPersonalizacion = cargarConfiguracionPersonalizacion;
-window.guardarConfiguracionPersonalizacion = guardarConfiguracionPersonalizacion;
-
-// Asegurar que se inicialicen los datos de personalización
-if (!localStorage.getItem('telepizza_personalizacion')) {
-    guardarConfiguracionPersonalizacion(cargarConfiguracionPersonalizacion());
-}
-
 // ============================================
 // FUNCIONES DE PERSONALIZACIÓN PARA data.js
 // ============================================
@@ -419,5 +361,20 @@ function guardarConfiguracionPersonalizacion(config) {
 }
 
 // Exportar funciones
+window.cargarDatos = cargarDatos;
+window.guardarDatos = guardarDatos;
+window.obtenerNumeroSemana = obtenerNumeroSemana;
+window.obtenerRangoSemana = obtenerRangoSemana;
+window.formatearFecha = formatearFecha;
+window.formatearFechaInput = formatearFechaInput;
+window.obtenerNombrePuesto = obtenerNombrePuesto;
+window.obtenerClasePuesto = obtenerClasePuesto;
+window.calcularHorasTrabajadas = calcularHorasTrabajadas;
+window.generarResumenSemanal = generarResumenSemanal;
+window.convertirMinutosATexto = convertirMinutosATexto;
+window.obtenerSemanasDisponibles = obtenerSemanasDisponibles;
+window.inicializarDatos = inicializarDatos;
+window.exportarDatosParaGitHub = exportarDatosParaGitHub;
+window.importarDatosDesdeArchivo = importarDatosDesdeArchivo;
 window.cargarConfiguracionPersonalizacion = cargarConfiguracionPersonalizacion;
 window.guardarConfiguracionPersonalizacion = guardarConfiguracionPersonalizacion;
