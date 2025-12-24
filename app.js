@@ -279,7 +279,7 @@ function validarDNI(e) {
 }
 
 // ============================================
-// FUNCIONALIDAD DE TECLADO NUMÉRICO
+// FUNCIONALIDAD DE TECLADO NUMÉRICO - MEJORADA
 // ============================================
 
 function inicializarTecladoNumerico() {
@@ -287,23 +287,74 @@ function inicializarTecladoNumerico() {
     const teclaBorrar = document.getElementById('teclaBorrar');
     const teclaLimpiar = document.getElementById('teclaLimpiar');
     
+    // Función para manejar el clic en teclas numéricas
+    function manejarClickTecla(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const numero = this.getAttribute('data-numero');
+        agregarNumeroDNI(numero);
+        
+        // Efecto visual
+        this.style.background = 'linear-gradient(145deg, var(--primary-color), var(--dark-red))';
+        this.style.color = 'white';
+        
+        setTimeout(() => {
+            this.style.background = '';
+            this.style.color = '';
+        }, 200);
+    }
+    
+    // Función para manejar el toque en dispositivos táctiles
+    function manejarTouchTecla(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const numero = this.getAttribute('data-numero');
+        agregarNumeroDNI(numero);
+        
+        // Efecto visual
+        this.style.background = 'linear-gradient(145deg, var(--primary-color), var(--dark-red))';
+        this.style.color = 'white';
+        
+        setTimeout(() => {
+            this.style.background = '';
+            this.style.color = '';
+        }, 200);
+    }
+    
+    // Asignar eventos a todas las teclas numéricas
     teclasNumeros.forEach(tecla => {
-        tecla.addEventListener('click', function() {
-            const numero = this.getAttribute('data-numero');
-            agregarNumeroDNI(numero);
-            
-            this.style.background = 'linear-gradient(145deg, var(--primary-color), var(--dark-red))';
-            this.style.color = 'white';
-            
-            setTimeout(() => {
-                this.style.background = '';
-                this.style.color = '';
-            }, 200);
+        // Eliminar eventos previos para evitar duplicados
+        tecla.removeEventListener('click', manejarClickTecla);
+        tecla.removeEventListener('touchstart', manejarTouchTecla);
+        
+        // Asignar nuevos eventos
+        tecla.addEventListener('click', manejarClickTecla);
+        tecla.addEventListener('touchstart', manejarTouchTecla);
+        
+        // Prevenir el comportamiento por defecto en táctil
+        tecla.addEventListener('touchend', function(e) {
+            e.preventDefault();
         });
     });
     
+    // Configurar tecla borrar
     if (teclaBorrar) {
-        teclaBorrar.addEventListener('click', function() {
+        teclaBorrar.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            borrarUltimoNumero();
+            
+            this.style.background = 'linear-gradient(145deg, #D32F2F, var(--dark-red))';
+            setTimeout(() => {
+                this.style.background = '';
+            }, 200);
+        });
+        
+        teclaBorrar.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             borrarUltimoNumero();
             
             this.style.background = 'linear-gradient(145deg, #D32F2F, var(--dark-red))';
@@ -313,8 +364,22 @@ function inicializarTecladoNumerico() {
         });
     }
     
+    // Configurar tecla limpiar
     if (teclaLimpiar) {
-        teclaLimpiar.addEventListener('click', function() {
+        teclaLimpiar.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            limpiarDNI();
+            
+            this.style.background = 'linear-gradient(145deg, #D32F2F, var(--dark-red))';
+            setTimeout(() => {
+                this.style.background = '';
+            }, 200);
+        });
+        
+        teclaLimpiar.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             limpiarDNI();
             
             this.style.background = 'linear-gradient(145deg, #D32F2F, var(--dark-red))';
@@ -323,28 +388,67 @@ function inicializarTecladoNumerico() {
             }, 200);
         });
     }
+    
+    // Asegurar que el input tenga el foco al cargar la página
+    setTimeout(() => {
+        if (dniInput) {
+            dniInput.focus();
+        }
+    }, 500);
 }
 
 function agregarNumeroDNI(numero) {
     if (!dniInput) return;
     
-    dniInput.value += numero;
-    dniInput.dispatchEvent(new Event('input'));
+    // Enfocar el input primero (importante para Chrome)
+    dniInput.focus();
+    
+    // Agregar el número
+    const currentValue = dniInput.value;
+    dniInput.value = currentValue + numero;
+    
+    // Disparar eventos para validación
+    const inputEvent = new Event('input', { bubbles: true });
+    const changeEvent = new Event('change', { bubbles: true });
+    dniInput.dispatchEvent(inputEvent);
+    dniInput.dispatchEvent(changeEvent);
+    
+    // Mantener el foco en el input
+    setTimeout(() => {
+        dniInput.focus();
+    }, 10);
 }
 
 function borrarUltimoNumero() {
     if (!dniInput) return;
     
+    dniInput.focus();
     dniInput.value = dniInput.value.slice(0, -1);
-    dniInput.dispatchEvent(new Event('input'));
+    
+    const inputEvent = new Event('input', { bubbles: true });
+    const changeEvent = new Event('change', { bubbles: true });
+    dniInput.dispatchEvent(inputEvent);
+    dniInput.dispatchEvent(changeEvent);
+    
+    setTimeout(() => {
+        dniInput.focus();
+    }, 10);
 }
 
 function limpiarDNI() {
     if (!dniInput) return;
     
-    dniInput.value = '';
-    dniInput.dispatchEvent(new Event('input'));
     dniInput.focus();
+    dniInput.value = '';
+    
+    const inputEvent = new Event('input', { bubbles: true });
+    const changeEvent = new Event('change', { bubbles: true });
+    dniInput.dispatchEvent(inputEvent);
+    dniInput.dispatchEvent(changeEvent);
+    
+    setTimeout(() => {
+        dniInput.focus();
+    }, 10);
 }
 
 function cambiarVistaFiltro() {
@@ -2033,8 +2137,10 @@ function init() {
     const config = cargarPersonalizacion();
     aplicarPersonalizacion(config);
     
-    // Inicializar teclado numérico
-    inicializarTecladoNumerico();
+    // Inicializar teclado numérico - CON RETRASO PARA ASEGURAR QUE EL DOM ESTÉ LISTO
+    setTimeout(() => {
+        inicializarTecladoNumerico();
+    }, 100);
     
     console.log("✅ Sistema inicializado correctamente");
     console.log("📧 Correo configurado:", correoGerencia);
