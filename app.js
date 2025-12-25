@@ -1883,6 +1883,11 @@ function aplicarPersonalizacion(config) {
 // Inicializar controles de personalización
 function inicializarControlesPersonalizacion() {
     const config = cargarPersonalizacion();
+
+      // Cargar valores en los controles de imágenes
+    document.getElementById('logoFondoURL').value = config.logoFondoURL;
+    document.getElementById('headerImageURL').value = config.headerImageURL;
+    document.getElementById('footerLogoURL').value = config.footerLogoURL;
     
     // Cargar valores en los controles
     document.getElementById('colorFondo').value = config.colorFondo;
@@ -1930,6 +1935,15 @@ function inicializarControlesPersonalizacion() {
     document.getElementById('fontSize').value = config.fontSize;
     document.getElementById('fontSizeValue').textContent = `${config.fontSize}px`;
     
+     // Event listeners para inputs de imágenes
+    document.querySelectorAll('#logoFondoURL, #headerImageURL, #footerLogoURL').forEach(input => {
+        input.addEventListener('input', function() {
+            const previewId = 'preview' + this.id.replace('URL', '').charAt(0).toUpperCase() + 
+                             this.id.replace('URL', '').slice(1);
+            probarImagen(this.id, previewId);
+        });
+    });
+}
     // Event listeners para controles de color
     document.querySelectorAll('input[type="color"]').forEach(input => {
         input.addEventListener('input', function() {
@@ -2017,9 +2031,16 @@ function obtenerConfiguracionActual() {
         fontFamily: document.getElementById('fontFamily').value,
         fontWeight: parseInt(document.getElementById('fontWeight').value),
         fontSize: parseInt(document.getElementById('fontSize').value)
+        logoFondoURL: document.getElementById('logoFondoURL').value,
+        headerImageURL: document.getElementById('headerImageURL').value,
+        footerLogoURL: document.getElementById('footerLogoURL').value
     };
 }
-
+// Aplicar Personalizacion
+function aplicarPersonalizacion(config) {
+    // Aplicar cambios de imágenes
+    aplicarCambiosImagenes(config);
+    
 // Actualizar vista previa
 function actualizarVistaPreviaPersonalizacion() {
     const config = obtenerConfiguracionActual();
