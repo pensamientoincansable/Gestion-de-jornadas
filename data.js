@@ -378,3 +378,116 @@ window.exportarDatosParaGitHub = exportarDatosParaGitHub;
 window.importarDatosDesdeArchivo = importarDatosDesdeArchivo;
 window.cargarConfiguracionPersonalizacion = cargarConfiguracionPersonalizacion;
 window.guardarConfiguracionPersonalizacion = guardarConfiguracionPersonalizacion;
+
+// ============================================
+// FUNCIONES DE PERSONALIZACIÓN DE IMÁGENES
+// ============================================
+
+// Función para probar una imagen antes de aplicarla
+function probarImagen(inputId, previewId) {
+    const input = document.getElementById(inputId);
+    const preview = document.getElementById(previewId);
+    const img = preview.querySelector('img');
+    
+    if (!input.value.trim()) {
+        mostrarMensajeImagen("❌ Por favor, introduce una URL de imagen", 'error');
+        return;
+    }
+    
+    // Crear una nueva imagen para probar la carga
+    const testImg = new Image();
+    testImg.onload = function() {
+        img.src = input.value;
+        img.style.opacity = '1';
+        mostrarMensajeImagen("✅ Imagen cargada correctamente", 'success');
+    };
+    
+    testImg.onerror = function() {
+        mostrarMensajeImagen("❌ Error al cargar la imagen. Verifica la URL", 'error');
+        img.style.opacity = '0.3';
+    };
+    
+    testImg.src = input.value;
+}
+
+// Función para restaurar una imagen a su valor por defecto
+function restaurarImagen(inputId, defaultUrl) {
+    const input = document.getElementById(inputId);
+    const previewId = inputId.replace('URL', '');
+    const preview = document.getElementById('preview' + previewId.charAt(0).toUpperCase() + previewId.slice(1));
+    const img = preview.querySelector('img');
+    
+    input.value = defaultUrl;
+    img.src = defaultUrl;
+    img.style.opacity = '1';
+    
+    mostrarMensajeImagen("✅ Imagen restaurada al valor por defecto", 'success');
+}
+
+// Función para mostrar mensajes de imagen
+function mostrarMensajeImagen(mensaje, tipo) {
+    const mensajeDiv = document.getElementById('mensajePersonalizacion');
+    if (mensajeDiv) {
+        mensajeDiv.textContent = mensaje;
+        mensajeDiv.style.borderLeftColor = tipo === 'success' ? '#4CAF50' : '#FF5252';
+        setTimeout(() => {
+            mensajeDiv.textContent = '';
+        }, 3000);
+    }
+}
+
+// Función para aplicar cambios de imágenes
+function aplicarCambiosImagenes(config) {
+    // Aplicar logo de fondo
+    const backgroundLogo = document.getElementById('backgroundLogo');
+    if (backgroundLogo && config.logoFondoURL) {
+        backgroundLogo.style.backgroundImage = `url('${config.logoFondoURL}')`;
+    }
+    
+    // Aplicar imagen de encabezado
+    const headerImage = document.getElementById('headerImage');
+    if (headerImage && config.headerImageURL) {
+        headerImage.src = config.headerImageURL;
+    }
+    
+    // Aplicar logo del pie
+    const footerLogo = document.getElementById('footerLogo');
+    if (footerLogo && config.footerLogoURL) {
+        footerLogo.src = config.footerLogoURL;
+    }
+}
+
+// Actualizar configuración de personalización para incluir imágenes
+const configPersonalizacion = {
+    colorFondo: '#D4001C',
+    colorSecundario: '#FFC72C',
+    colorTexto: '#FFFFFF',
+    colorContenedor: '#000000',
+    colorBotonesAcceso: '#FFFFFF',
+    colorTextoBotonesAcceso: '#D4001C',
+    colorBotonFichar: '#4CAF50',
+    colorBotonVolver: '#D4001C',
+    colorTextoBotonVolver: '#FFFFFF',
+    colorBotonSecundario: '#FFC72C',
+    logoSize: 150,
+    logoOpacity: 15,
+    logoPositionX: 50,
+    logoPositionY: 50,
+    headerHeight: 120,
+    headerOpacity: 100,
+    containerPadding: 20,
+    containerWidth: 100,
+    fontFamily: 'Montserrat, sans-serif',
+    fontWeight: 400,
+    fontSize: 16,
+    // NUEVAS PROPIEDADES PARA IMÁGENES
+    logoFondoURL: 'https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/telepizza_logo.png',
+    headerImageURL: 'https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/fichaje.png',
+    footerLogoURL: 'https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/telepizza_logo.png'
+};
+
+// Exportar nuevas funciones
+window.probarImagen = probarImagen;
+window.restaurarImagen = restaurarImagen;
+window.aplicarCambiosImagenes = aplicarCambiosImagenes;
+
