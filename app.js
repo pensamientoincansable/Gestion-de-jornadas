@@ -2168,5 +2168,68 @@ function init() {
     console.log("🎨 Personalización cargada:", config);
 }
 
+    // Función para cargar imágenes desde el repositorio
+function cargarImagenesDesdeRepositorio() {
+    const repoURL = 'https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/';
+    const imagenesDisponibles = [
+        { nombre: 'telepizza_logo.png', descripcion: 'Logo principal' },
+        { nombre: 'fichaje.png', descripcion: 'Imagen de fichaje' },
+        { nombre: 'recordatorio.webp', descripcion: 'recordatorio' },
+        { nombre: 'recordatorio1.webp', descripcion: 'recordatorio1' },
+        { nombre: 'recordatorio2.webp', descripcion: 'recordatorio2' },
+        { nombre: 'recordatorio3.webp', descripcion: 'recordatorio3' },
+        { nombre: 'recordatorio4.webp', descripcion: 'recordatorio4' },
+
+        // Puedes agregar más imágenes aquí si las subes al repositorio
+    ];
+    
+    return imagenesDisponibles;
+}
+
+// Función para actualizar vista previa de imágenes
+function actualizarVistaPreviaImagenes(config) {
+    // Logo de fondo
+    const previewLogoFondo = document.getElementById('previewLogoFondo');
+    if (previewLogoFondo) {
+        const img = previewLogoFondo.querySelector('img');
+        if (img) {
+            img.src = config.logoFondoURL;
+            img.onload = () => img.style.opacity = '1';
+            img.onerror = () => img.style.opacity = '0.3';
+        }
+    }
+    
+    // Imagen de encabezado
+    const previewHeaderImage = document.getElementById('previewHeaderImage');
+    if (previewHeaderImage) {
+        const img = previewHeaderImage.querySelector('img');
+        if (img) {
+            img.src = config.headerImageURL;
+            img.onload = () => img.style.opacity = '1';
+            img.onerror = () => img.style.opacity = '0.3';
+        }
+    }
+    
+    // Logo del pie
+    const previewFooterLogo = document.getElementById('previewFooterLogo');
+    if (previewFooterLogo) {
+        const img = previewFooterLogo.querySelector('img');
+        if (img) {
+            img.src = config.footerLogoURL;
+            img.onload = () => img.style.opacity = '1';
+            img.onerror = () => img.style.opacity = '0.3';
+        }
+    }
+}
+
+// Modificar la función actualizarVistaPreviaPersonalizacion para incluir imágenes
+function actualizarVistaPreviaPersonalizacion() {
+    const config = obtenerConfiguracionActual();
+    
+    // Actualizar vista previa de imágenes
+    actualizarVistaPreviaImagenes(config);
+    
+    // ... resto del código existente ...
+}
 // Inicializar cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', init);
