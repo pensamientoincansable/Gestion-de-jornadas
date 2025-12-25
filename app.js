@@ -2095,80 +2095,7 @@ function mostrarMensajePersonalizacion(mensaje, tipo = 'success') {
     }
 }
 
-// ============================================
-// FUNCIONES AUXILIARES PARA FECHAS
-// ============================================
-
-function formatearFechaDDMMYYYY(fecha) {
-    const date = new Date(fecha);
-    const dia = String(date.getDate()).padStart(2, '0');
-    const mes = String(date.getMonth() + 1).padStart(2, '0');
-    const año = date.getFullYear();
-    return `${dia}/${mes}/${año}`;
-}
-
-function formatearFechaYYYYMMDD(fecha) {
-    const date = new Date(fecha);
-    const año = date.getFullYear();
-    const mes = String(date.getMonth() + 1).padStart(2, '0');
-    const dia = String(date.getDate()).padStart(2, '0');
-    return `${año}-${mes}-${dia}`;
-}
-
-function parseFechaDDMMYYYY(fechaString) {
-    const [dia, mes, año] = fechaString.split('/').map(Number);
-    return new Date(año, mes - 1, dia);
-}
-
-// ============================================
-// INICIALIZAR APLICACIÓN
-// ============================================
-
-function init() {
-    // Establecer valores por defecto
-    const hoy = new Date();
-    
-    // Configurar fecha de ausencia
-    fechaAusencia.value = formatearFechaYYYYMMDD(hoy);
-    
-    // Configurar fechas para consulta
-    const hace7Dias = new Date(hoy);
-    hace7Dias.setDate(hoy.getDate() - 7);
-    fechaDesdeConsulta.value = formatearFechaYYYYMMDD(hace7Dias);
-    fechaHastaConsulta.value = formatearFechaYYYYMMDD(hoy);
-    
-    // Configurar correo por defecto
-    if (!correoGerencia) {
-        correoGerencia = "fichajetelepizza@outlook.es";
-        guardarDatos({ 
-            telepizzeros, 
-            registros, 
-            ausencias, 
-            correoGerencia, 
-            correosDestinatarios, 
-            semanas: datos.semanas 
-        });
-    }
-    correoElectronico.value = correoGerencia;
-    
-    // Cargar correo guardado
-    cargarCorreoGuardado();
-    
-    // Cargar y aplicar personalización
-    const config = cargarPersonalizacion();
-    aplicarPersonalizacion(config);
-    
-    // Inicializar teclado numérico - CON RETRASO PARA ASEGURAR QUE EL DOM ESTÉ LISTO
-    setTimeout(() => {
-        inicializarTecladoNumerico();
-    }, 100);
-    
-    console.log("✅ Sistema inicializado correctamente");
-    console.log("📧 Correo configurado:", correoGerencia);
-    console.log("🎨 Personalización cargada:", config);
-}
-
-    // Función para cargar imágenes desde el repositorio
+            // Función para cargar imágenes desde el repositorio
 function cargarImagenesDesdeRepositorio() {
     const repoURL = 'https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/';
     const imagenesDisponibles = [
@@ -2230,6 +2157,82 @@ function actualizarVistaPreviaPersonalizacion() {
     actualizarVistaPreviaImagenes(config);
     
     // ... resto del código existente ...
+    
+// ============================================
+// FUNCIONES AUXILIARES PARA FECHAS
+// ============================================
+
+function formatearFechaDDMMYYYY(fecha) {
+    const date = new Date(fecha);
+    const dia = String(date.getDate()).padStart(2, '0');
+    const mes = String(date.getMonth() + 1).padStart(2, '0');
+    const año = date.getFullYear();
+    return `${dia}/${mes}/${año}`;
+}
+
+function formatearFechaYYYYMMDD(fecha) {
+    const date = new Date(fecha);
+    const año = date.getFullYear();
+    const mes = String(date.getMonth() + 1).padStart(2, '0');
+    const dia = String(date.getDate()).padStart(2, '0');
+    return `${año}-${mes}-${dia}`;
+}
+
+function parseFechaDDMMYYYY(fechaString) {
+    const [dia, mes, año] = fechaString.split('/').map(Number);
+    return new Date(año, mes - 1, dia);
+}
+
+
+    
+// ============================================
+// INICIALIZAR APLICACIÓN
+// ============================================
+
+function init() {
+    // Establecer valores por defecto
+    const hoy = new Date();
+    
+    // Configurar fecha de ausencia
+    fechaAusencia.value = formatearFechaYYYYMMDD(hoy);
+    
+    // Configurar fechas para consulta
+    const hace7Dias = new Date(hoy);
+    hace7Dias.setDate(hoy.getDate() - 7);
+    fechaDesdeConsulta.value = formatearFechaYYYYMMDD(hace7Dias);
+    fechaHastaConsulta.value = formatearFechaYYYYMMDD(hoy);
+    
+    // Configurar correo por defecto
+    if (!correoGerencia) {
+        correoGerencia = "fichajetelepizza@outlook.es";
+        guardarDatos({ 
+            telepizzeros, 
+            registros, 
+            ausencias, 
+            correoGerencia, 
+            correosDestinatarios, 
+            semanas: datos.semanas 
+        });
+    }
+    correoElectronico.value = correoGerencia;
+    
+    // Cargar correo guardado
+    cargarCorreoGuardado();
+    
+    // Cargar y aplicar personalización
+    const config = cargarPersonalizacion();
+    aplicarPersonalizacion(config);
+    
+    // Inicializar teclado numérico - CON RETRASO PARA ASEGURAR QUE EL DOM ESTÉ LISTO
+    setTimeout(() => {
+        inicializarTecladoNumerico();
+    }, 100);
+    
+    console.log("✅ Sistema inicializado correctamente");
+    console.log("📧 Correo configurado:", correoGerencia);
+    console.log("🎨 Personalización cargada:", config);
+}
+
 }
 // Inicializar cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', init);
