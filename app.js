@@ -2147,5 +2147,362 @@ function init() {
     console.log("🎨 Personalización cargada:", config);
 }
 
+// ============================================
+// GESTIÓN AVANZADA DE IMÁGENES DESDE GITHUB
+// ============================================
+
+// 🔧 LISTA DE IMÁGENES DISPONIBLES - ¡ACTUALÍZALA MANUALMENTE!
+// Añade aquí el nombre de cada nuevo archivo que subas a tu repositorio.
+// Ejemplo: Si subes "mi_nueva_imagen.jpg", añade un objeto como los de abajo.
+const imagenesConfigurables = [
+    {
+        id: 'imagen_fondo',
+        nombre: 'Logo de Fondo',
+        tipo: 'background',
+        urlBase: 'https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/',
+        archivoPorDefecto: 'telepizza_logo.png',
+        elementoDOM: 'backgroundLogo',
+        propiedades: ['archivo', 'size', 'positionX', 'positionY', 'opacity']
+    },
+    {
+        id: 'imagen_header',
+        nombre: 'Imagen del Encabezado',
+        tipo: 'header',
+        urlBase: 'https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/',
+        archivoPorDefecto: 'fichaje.png',
+        elementoDOM: 'headerImage',
+        propiedades: ['archivo', 'height', 'opacity']
+    },
+    {
+        id: 'imagen_footer',
+        nombre: 'Logo del Pie',
+        tipo: 'logo',
+        urlBase: 'https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/',
+        archivoPorDefecto: 'telepizza_logo.png',
+        elementoDOM: 'footerLogo',
+        propiedades: ['archivo', 'size']
+    }
+];
+
+// ⚙️ Configuración por defecto para cada imagen
+const configImagenesPorDefecto = {
+    imagen_fondo: { archivo: 'telepizza_logo.png', size: 150, positionX: 50, positionY: 50, opacity: 15 },
+    imagen_header: { archivo: 'recordatorio.png', height: 120, opacity: 100 },
+    imagen_footer: { archivo: 'recordatorio2', size: 120 }
+};
+
+// 📥 Cargar configuración guardada de imágenes
+function cargarConfigImagenes() {
+    const guardado = localStorage.getItem('telepizza_config_imagenes');
+    return guardado ? JSON.parse(guardado) : { ...configImagenesPorDefecto };
+}
+
+// 💾 Guardar configuración de imágenes
+function guardarConfigImagenes(config) {
+    localStorage.setItem('telepizza_config_imagenes', JSON.stringify(config));
+}
+
+// 🎨 Aplicar TODOS los cambios visuales a las imágenes
+function aplicarConfiguracionImagenes() {
+    const config = cargarConfigImagenes();
+
+    imagenesConfigurables.forEach(img => {
+        const elemento = document.getElementById(img.elementoDOM);
+        if (!elemento) return;
+
+        const conf = config[img.id] || {};
+
+        // 1. Establecer la URL de la imagen (combinando urlBase + archivo configurado o por defecto)
+        const archivoFinal = conf.archivo || img.archivoPorDefecto;
+        const urlCompleta = `${img.urlBase}${archivoFinal}`;
+
+        if (img.tipo === 'background') {
+            elemento.style.backgroundImage = `url('${urlCompleta}')`;
+        } else {
+            elemento.src = urlCompleta;
+        }
+
+        // 2. Aplicar propiedades específicas
+        img.propiedades.forEach(prop => {
+            if (prop === 'size' && conf.size !== undefined) {
+                elemento.style.width = `${conf.size}px`;
+                elemento.style.height = `${conf.size}px`;
+            }
+            if (prop === 'height' && conf.height !== undefined) {
+                elemento.style.maxHeight = `${conf.height}px`;
+            }
+            if (prop === 'positionX' && conf.positionX !== undefined) {
+                elemento.style.left = `${conf.positionX}%`;
+            }
+            if (prop === 'positionY' && conf.positionY !== undefined) {
+                elemento.style.top = `${conf.positionY}%`;
+            }
+            if (prop === 'opacity' && conf.opacity !== undefined) {
+                elemento.style.opacity = `${conf.opacity / 100}`;
+            }
+        });
+    });
+}
+
+// 🛠️ Generar la interfaz de controles para imágenes en la pestaña de personalización
+function generarInterfazControlesImagenes() {
+    const contenedor = document.getElementById('interfazControlesImagenes');
+    if (!contenedor) return;
+
+    const config = cargarConfigImagenes();
+    let html = '<div class="config-seccion">';
+    html += '<h4><i class="fas fa-images"></i> Gestión de Imágenes desde GitHub</h4>';
+    html += '<p class="info-ayuda">Selecciona las imágenes desde tu repositorio y ajusta sus propiedades. La URL base es: <code>https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/</code></p>';
+
+    imagenesConfigurables.forEach(img => {
+        const conf = config[img.id] || {};
+        html += `<div class="imagen-control-grupo">`;
+        html += `<h5>${img.nombre} <small>(ID: ${img.id})</small></h5>`;
+
+        // Selector de Archivo (Campo de texto para escribir el nombre del archivo)
+        if (img.propiedades.includes('archivo')) {
+            html += `
+            <div class="form-control-compact">
+                <label for="select_${img.id}">Nombre del archivo:</label>
+                <div class="input-with-hint">
+                    <input type="text" id="select_${img.id}" 
+                           value="${conf.archivo || img.archivoPorDefecto}" 
+                           placeholder="ejemplo.png">
+                    <span class="input-hint">.png, .jpg, .svg</span>
+                </div>
+                <p class="url-preview"><small>URL completa: <span id="url_preview_${img.id}">${img.urlBase}${conf.archivo || img.archivoPorDefecto}</span></small></p>
+            </div>`;
+        }
+
+        // Controles de Propiedades (Size, Height, Position, Opacity)
+        html += `<div class="controles-propiedades">`;
+        
+        if (img.propiedades.includes('size')) {
+            html += `
+            <div class="control-range">
+                <label for="size_${img.id}">Tamaño (px):</label>
+                <input type="range" id="size_${img.id}" min="20" max="500" value="${conf.size || configImagenesPorDefecto[img.id].size}">
+                <span class="range-value">${conf.size || configImagenesPorDefecto[img.id].size} px</span>
+            </div>`;
+        }
+
+        if (img.propiedades.includes('height')) {
+            html += `
+            <div class="control-range">
+                <label for="height_${img.id}">Altura Máx. (px):</label>
+                <input type="range" id="height_${img.id}" min="30" max="400" value="${conf.height || configImagenesPorDefecto[img.id].height}">
+                <span class="range-value">${conf.height || configImagenesPorDefecto[img.id].height} px</span>
+            </div>`;
+        }
+
+        if (img.propiedades.includes('positionX')) {
+            html += `
+            <div class="control-range">
+                <label for="posX_${img.id}">Posición Horizontal (%):</label>
+                <input type="range" id="posX_${img.id}" min="0" max="100" value="${conf.positionX || configImagenesPorDefecto[img.id].positionX}">
+                <span class="range-value">${conf.positionX || configImagenesPorDefecto[img.id].positionX} %</span>
+            </div>`;
+        }
+
+        if (img.propiedades.includes('positionY')) {
+            html += `
+            <div class="control-range">
+                <label for="posY_${img.id}">Posición Vertical (%):</label>
+                <input type="range" id="posY_${img.id}" min="0" max="100" value="${conf.positionY || configImagenesPorDefecto[img.id].positionY}">
+                <span class="range-value">${conf.positionY || configImagenesPorDefecto[img.id].positionY} %</span>
+            </div>`;
+        }
+
+        if (img.propiedades.includes('opacity')) {
+            html += `
+            <div class="control-range">
+                <label for="opacity_${img.id}">Transparencia (%):</label>
+                <input type="range" id="opacity_${img.id}" min="1" max="100" value="${conf.opacity || configImagenesPorDefecto[img.id].opacity}">
+                <span class="range-value">${conf.opacity || configImagenesPorDefecto[img.id].opacity} %</span>
+            </div>`;
+        }
+
+        html += `</div></div>`; // Cierre de controles-propiedades y imagen-control-grupo
+    });
+
+    html += `
+        <div class="botones-accion-imagenes">
+            <button class="btn btn-secondary" id="btnPrevisualizarImagenes">
+                <i class="fas fa-eye"></i> Previsualizar Cambios
+            </button>
+            <button class="btn btn-success" id="btnGuardarConfigImagenes">
+                <i class="fas fa-save"></i> Guardar Configuración de Imágenes
+            </button>
+            <button class="btn btn-gris" id="btnRestablecerImagenes">
+                <i class="fas fa-undo"></i> Restablecer Valores
+            </button>
+        </div>
+        <div class="mensaje" id="mensajeImagenes"></div>
+    </div>`;
+
+    contenedor.innerHTML = html;
+
+    // Asignar eventos a los controles dinámicos
+    asignarEventosControlesImagenes();
+}
+
+// 🎛️ Asignar eventos a los controles de imágenes recién generados
+function asignarEventosControlesImagenes() {
+    const config = cargarConfigImagenes();
+
+    // Evento para actualizar la previsualización de URL al escribir un nombre de archivo
+    imagenesConfigurables.forEach(img => {
+        const inputArchivo = document.getElementById(`select_${img.id}`);
+        const spanUrlPreview = document.getElementById(`url_preview_${img.id}`);
+
+        if (inputArchivo && spanUrlPreview) {
+            inputArchivo.addEventListener('input', function() {
+                spanUrlPreview.textContent = `${img.urlBase}${this.value || img.archivoPorDefecto}`;
+            });
+        }
+
+        // Evento para actualizar los valores numéricos de los rangos
+        img.propiedades.forEach(prop => {
+            if (prop === 'size' || prop === 'height' || prop === 'positionX' || prop === 'positionY' || prop === 'opacity') {
+                const inputRange = document.getElementById(`${prop}_${img.id}`);
+                const spanValue = inputRange ? inputRange.nextElementSibling : null;
+                
+                if (inputRange && spanValue) {
+                    inputRange.addEventListener('input', function() {
+                        const suffix = this.id.includes('size') || this.id.includes('height') ? ' px' : ' %';
+                        spanValue.textContent = `${this.value}${suffix}`;
+                    });
+                }
+            }
+        });
+    });
+
+    // Botón de Previsualizar
+    document.getElementById('btnPrevisualizarImagenes')?.addEventListener('click', function() {
+        const nuevaConfig = obtenerConfiguracionActualImagenes();
+        aplicarConfiguracionTemporalImagenes(nuevaConfig);
+        mostrarMensajeImagenes('👁️ Cambios previsualizados. ¡No olvides guardar!', 'warning');
+    });
+
+    // Botón de Guardar
+    document.getElementById('btnGuardarConfigImagenes')?.addEventListener('click', function() {
+        const nuevaConfig = obtenerConfiguracionActualImagenes();
+        guardarConfigImagenes(nuevaConfig);
+        aplicarConfiguracionImagenes(); // Aplica la configuración guardada
+        mostrarMensajeImagenes('✅ Configuración de imágenes guardada permanentemente', 'success');
+    });
+
+    // Botón de Restablecer
+    document.getElementById('btnRestablecerImagenes')?.addEventListener('click', function() {
+        if (confirm('¿Restablecer todas las imágenes a sus valores por defecto?')) {
+            guardarConfigImagenes({ ...configImagenesPorDefecto });
+            aplicarConfiguracionImagenes();
+            generarInterfazControlesImagenes(); // Regenera la interfaz con valores por defecto
+            mostrarMensajeImagenes('🔄 Imágenes restablecidas a valores por defecto', 'info');
+        }
+    });
+}
+
+// 📋 Obtener la configuración actual desde los controles de la interfaz
+function obtenerConfiguracionActualImagenes() {
+    const nuevaConfig = {};
+
+    imagenesConfigurables.forEach(img => {
+        const configImg = {};
+
+        if (img.propiedades.includes('archivo')) {
+            const inputArchivo = document.getElementById(`select_${img.id}`);
+            if (inputArchivo && inputArchivo.value.trim() !== '') {
+                configImg.archivo = inputArchivo.value.trim();
+            }
+        }
+
+        ['size', 'height', 'positionX', 'positionY', 'opacity'].forEach(prop => {
+            if (img.propiedades.includes(prop)) {
+                const input = document.getElementById(`${prop}_${img.id}`);
+                if (input) configImg[prop] = parseInt(input.value);
+            }
+        });
+
+        if (Object.keys(configImg).length > 0) {
+            nuevaConfig[img.id] = configImg;
+        }
+    });
+
+    return nuevaConfig;
+}
+
+// 👁️ Aplicar configuración temporal (solo para previsualizar)
+function aplicarConfiguracionTemporalImagenes(configTemp) {
+    const configCompleta = { ...cargarConfigImagenes(), ...configTemp };
+    imagenesConfigurables.forEach(img => {
+        const elemento = document.getElementById(img.elementoDOM);
+        if (!elemento) return;
+
+        const conf = configCompleta[img.id] || {};
+        const archivoFinal = conf.archivo || img.archivoPorDefecto;
+        const urlCompleta = `${img.urlBase}${archivoFinal}`;
+
+        if (img.tipo === 'background') {
+            elemento.style.backgroundImage = `url('${urlCompleta}')`;
+        } else {
+            // Para previsualizar imágenes que no son de fondo, creamos una nueva imagen
+            // para no romper la original hasta que se guarde
+            const tempImg = new Image();
+            tempImg.onload = function() {
+                elemento.src = urlCompleta;
+            };
+            tempImg.src = urlCompleta;
+        }
+
+        // Aplicar propiedades temporales
+        if (conf.size !== undefined) elemento.style.width = elemento.style.height = `${conf.size}px`;
+        if (conf.height !== undefined) elemento.style.maxHeight = `${conf.height}px`;
+        if (conf.positionX !== undefined) elemento.style.left = `${conf.positionX}%`;
+        if (conf.positionY !== undefined) elemento.style.top = `${conf.positionY}%`;
+        if (conf.opacity !== undefined) elemento.style.opacity = `${conf.opacity / 100}`;
+    });
+}
+
+// 💬 Mostrar mensajes en la sección de imágenes
+function mostrarMensajeImagenes(texto, tipo = 'info') {
+    const mensajeDiv = document.getElementById('mensajeImagenes');
+    if (!mensajeDiv) return;
+
+    const colores = { success: '#4CAF50', error: '#FF5252', warning: '#FFC72C', info: '#2196F3' };
+    mensajeDiv.textContent = texto;
+    mensajeDiv.style.borderLeftColor = colores[tipo] || colores.info;
+    mensajeDiv.style.display = 'block';
+
+    setTimeout(() => {
+        mensajeDiv.textContent = '';
+        mensajeDiv.style.display = 'none';
+    }, 5000);
+}
+
+// Inicializar la configuración de imágenes al cargar la página
+function inicializarConfigImagenes() {
+    // Asegurarse de que existe una configuración guardada
+    if (!localStorage.getItem('telepizza_config_imagenes')) {
+        guardarConfigImagenes(configImagenesPorDefecto);
+    }
+    aplicarConfiguracionImagenes();
+}
+
+// Modificar la función inicializarControlesPersonalizacion para incluir imágenes
+function inicializarControlesPersonalizacion() {
+    // ... (código existente de personalización) ...
+
+    // Insertar el contenedor para los controles de imágenes
+    const seccionPersonalizacion = document.querySelector('.personalizacion-container');
+    if (seccionPersonalizacion) {
+        const contenedorImagenes = document.createElement('div');
+        contenedorImagenes.id = 'interfazControlesImagenes';
+        seccionPersonalizacion.insertBefore(contenedorImagenes, seccionPersonalizacion.firstChild);
+        
+        // Generar la interfaz de controles de imágenes
+        generarInterfazControlesImagenes();
+    }
+}
 // Inicializar cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', init);
