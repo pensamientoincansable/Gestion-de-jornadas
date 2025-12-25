@@ -505,16 +505,110 @@
                         </div>
                     </div>
                     
-                    <!-- Pestaña de Personalización MEJORADA -->
-                    <div class="tab-content" id="personalizacion-tab">
-                        <div class="personalizacion-container">
-                            <div class="personalizacion-header">
-                                <h3><i class="fas fa-palette"></i> Personalización Completa</h3>
-                                <div class="personalizacion-info">
-                                    <p><i class="fas fa-info-circle"></i> Configura todos los aspectos visuales de la página. Los cambios se aplican en tiempo real.</p>
-                                </div>
-                            </div>
-                            
+                            <!-- Pestaña de Personalización MEJORADA -->
+<div class="tab-content" id="personalizacion-tab">
+    <div class="personalizacion-container">
+        <div class="personalizacion-header">
+            <h3><i class="fas fa-palette"></i> Personalización Completa</h3>
+            <div class="personalizacion-info">
+                <p><i class="fas fa-info-circle"></i> Configura todos los aspectos visuales de la página. Los cambios se aplican en tiempo real.</p>
+            </div>
+        </div>
+        
+        <!-- NUEVA SECCIÓN: Configuración de Imágenes -->
+        <div class="config-seccion">
+            <h4><i class="fas fa-images"></i> Configuración de Imágenes</h4>
+            <div class="image-grid">
+                <div class="image-item">
+                    <label for="logoFondoURL">Logo de Fondo:</label>
+                    <div class="image-preview-container">
+                        <div class="image-preview" id="previewLogoFondo">
+                            <img src="https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/telepizza_logo.png" alt="Logo de fondo">
+                        </div>
+                        <input type="text" id="logoFondoURL" value="https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/telepizza_logo.png" placeholder="URL del logo de fondo">
+                        <div class="image-controls">
+                            <button class="btn btn-small btn-secondary" onclick="probarImagen('logoFondoURL', 'previewLogoFondo')">
+                                <i class="fas fa-sync"></i> Probar
+                            </button>
+                            <button class="btn btn-small btn-gris" onclick="restaurarImagen('logoFondoURL', 'https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/telepizza_logo.png')">
+                                <i class="fas fa-undo"></i> Restaurar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="image-item">
+                    <label for="headerImageURL">Imagen de Encabezado:</label>
+                    <div class="image-preview-container">
+                        <div class="image-preview" id="previewHeaderImage">
+                            <img src="https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/fichaje.png" alt="Encabezado">
+                        </div>
+                        <input type="text" id="headerImageURL" value="https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/fichaje.png" placeholder="URL de la imagen de encabezado">
+                        <div class="image-controls">
+                            <button class="btn btn-small btn-secondary" onclick="probarImagen('headerImageURL', 'previewHeaderImage')">
+                                <i class="fas fa-sync"></i> Probar
+                            </button>
+                            <button class="btn btn-small btn-gris" onclick="restaurarImagen('headerImageURL', 'https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/fichaje.png')">
+                                <i class="fas fa-undo"></i> Restaurar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="image-item">
+                    <label for="footerLogoURL">Logo del Pie:</label>
+                    <div class="image-preview-container">
+                        <div class="image-preview" id="previewFooterLogo">
+                            <img src="https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/telepizza_logo.png" alt="Logo del pie">
+                        </div>
+                        <input type="text" id="footerLogoURL" value="https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/telepizza_logo.png" placeholder="URL del logo del pie">
+                        <div class="image-controls">
+                            <button class="btn btn-small btn-secondary" onclick="probarImagen('footerLogoURL', 'previewFooterLogo')">
+                                <i class="fas fa-sync"></i> Probar
+                            </button>
+                            <button class="btn btn-small btn-gris" onclick="restaurarImagen('footerLogoURL', 'https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/telepizza_logo.png')">
+                                <i class="fas fa-undo"></i> Restaurar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="image-notes" style="margin-top: 15px; padding: 10px; background: rgba(255,199,44,0.1); border-radius: 8px;">
+                <p><strong><i class="fas fa-info-circle"></i> Notas sobre las imágenes:</strong></p>
+                <ul style="margin-left: 20px; font-size: 0.9rem;">
+                    <li>Las imágenes deben ser accesibles públicamente en internet</li>
+                    <li>Formatos recomendados: PNG, JPG, SVG</li>
+                    <li>Tamaño máximo recomendado: 500KB por imagen</li>
+                    <li>Las imágenes se almacenarán localmente en tu dispositivo</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Colores principales -->
+        <div class="config-seccion">
+            <h4><i class="fas fa-fill-drip"></i> Colores Principales</h4>
+            <!-- ... contenido existente ... -->
+        </div>
+        
+        <!-- ... resto del contenido existente ... -->
+        
+        <!-- Botones de acción -->
+        <div class="personalizacion-acciones">
+            <button class="btn btn-success" id="btnAplicarPersonalizacion">
+                <i class="fas fa-check"></i> Aplicar Cambios
+            </button>
+            <button class="btn btn-gris" id="btnResetPersonalizacion">
+                <i class="fas fa-undo"></i> Restablecer Valores
+            </button>
+            <button class="btn btn-secondary" id="btnGuardarPersonalizacion">
+                <i class="fas fa-save"></i> Guardar Configuración
+            </button>
+        </div>
+        
+        <div class="mensaje" id="mensajePersonalizacion"></div>
+    </div>
+</div>
                             <!-- Colores principales -->
                             <div class="config-seccion">
                                 <h4><i class="fas fa-fill-drip"></i> Colores Principales</h4>
