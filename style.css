@@ -1524,3 +1524,161 @@ input[type="date"], input[type="week"] {
         gap: 8px;
     }
 }m
+/* ============================================
+   ESTILOS PARA LA GESTIÓN DE IMÁGENES
+   ============================================ */
+
+/* Grupo de control para cada imagen */
+.imagen-control-grupo {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 25px;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.imagen-control-grupo h5 {
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.imagen-control-grupo h5 small {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    margin-left: 8px;
+}
+
+/* Control de archivo con vista previa de URL */
+.form-control-compact {
+    margin-bottom: 15px;
+}
+
+.form-control-compact label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.input-with-hint {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.input-with-hint input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-family: monospace;
+    font-size: 0.95rem;
+}
+
+.input-hint {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.url-preview {
+    margin-top: 5px;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    font-size: 0.8rem;
+    word-break: break-all;
+    color: #90CAF9;
+}
+
+/* Contenedor para controles de rango */
+.controles-propiedades {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.control-range {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.control-range label {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+.control-range input[type="range"] {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.control-range input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--secondary-color);
+    cursor: pointer;
+    border: 2px solid white;
+}
+
+.range-value {
+    font-weight: 600;
+    color: white;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 4px 8px;
+    background: rgba(255, 199, 44, 0.2);
+    border-radius: 4px;
+    align-self: flex-start;
+}
+
+/* Botones de acción para imágenes */
+.botones-accion-imagenes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.botones-accion-imagenes .btn {
+    flex: 1;
+    min-width: 200px;
+    justify-content: center;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    .controles-propiedades {
+        grid-template-columns: 1fr;
+    }
+    
+    .input-with-hint {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .input-hint {
+        align-self: flex-start;
+    }
+    
+    .botones-accion-imagenes .btn {
+        min-width: 100%;
+    }
+}
