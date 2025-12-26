@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Telepizza - Gestión de Jornadas</title>
+    <!-- Favicon corregido -->
+    <link rel="icon" href="https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/telepizza_logo.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Color Picker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.1/spectrum.min.css">
+</head>
+<body>
+    <!-- Logo de fondo (entre capas) -->
+    <div class="background-logo" id="backgroundLogo"></div>
+    
+    <div class="container">
+        <!-- Encabezado con imagen de fichaje CORREGIDA -->
+        <div class="header-fichaje" id="headerFichaje">
+            <img src="https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/fichaje.png" alt="Sistema de Fichaje" id="headerImage">
+        </div>
+        
+        <!-- Selección de rol -->
+        <div class="selector active">
+            <h2>Selecciona tu rol</h2>
+            <button class="btn btn-acceso" id="btnTelepizzero">
+                <i class="fas fa-user-clock"></i> Fichar
+            </button>
+            <button class="btn btn-acceso" id="btnGerencia">
+                <i class="fas fa-chart-line"></i> Gerencia
+            </button>
+            
+            <!-- Información legal sobre almacenamiento -->
+            <div class="info-almacenamiento">
+                <h3><i class="fas fa-shield-alt"></i> Información Legal</h3>
+                <p>Este sistema almacena todos los registros de fichaje en su dispositivo en cumplimiento del <strong>Real Decreto-ley 2025 (BOE-A-2025-18078)</strong>.</p>
+                <p>Garantizamos:</p>
+                <ul>
+                    <li>✅ Digitalización completa del registro</li>
+                    <li>✅ Trazabilidad inalterable de los datos</li>
+                    <li>✅ Acceso remoto para la Inspección de Trabajo</li>
+                    <li>✅ Prohibición de fichajes en papel o Excel</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Sección para fichar CON PESTAÑAS -->
+        <div class="telepizzero-section">
+            <!-- Navegación de pestañas -->
+            <div class="tabs-telepizzero">
+                <div class="tab-telepizzero active" data-tab="fichar">
+                    <i class="fas fa-fingerprint"></i> Fichar
+                </div>
+                <div class="tab-telepizzero" data-tab="consultar">
+                    <i class="fas fa-history"></i> Mis Registros
+                </div>
+            </div>
+            
+            <!-- Pestaña de Fichar -->
+            <div class="tab-content-telepizzero active" id="fichar-tab">
+                <h2><i class="fas fa-user-clock"></i> Registro de Jornada</h2>
+                
+                <div id="contenidoFichaje">
+                    <!-- Contenedor principal para disposición horizontal -->
+                    <div class="fichaje-container">
+                        <!-- Columna izquierda: DNI y botón -->
+                        <div class="fichaje-columna izquierda">
+                            <div class="form-group">
+                                <label for="dniInput"><i class="fas fa-id-card"></i> Introduce tu DNI/NIE</label>
+                                <input type="text" id="dniInput" placeholder="Ej: 00000000 o X0000000X" inputmode="numeric" class="dni-input-large">
+                                <small style="color: var(--secondary-color); font-size: 0.9rem;">DNI (8 dígitos) o NIE (1 letra + 7 dígitos + 1 letra)</small>
+                            </div>
+                            
+                            <!-- Botón de fichar estilo "hoja de orégano" -->
+                            <button class="btn btn-fichar" id="btnFichar">
+                                <i class="fas fa-fingerprint"></i> Fichar Entrada/Salida
+                            </button>
+                            
+                            <div class="mensaje" id="mensajeTelepizzero"></div>
+                        </div>
+                        
+                        <!-- Columna derecha: Teclado numérico -->
+                        <div class="fichaje-columna derecha">
+                            <!-- Teclado numérico -->
+                            <div class="teclado-numerico">
+                                <div class="teclado-fila">
+                                    <button type="button" class="tecla-numero" data-numero="1">1</button>
+                                    <button type="button" class="tecla-numero" data-numero="2">2</button>
+                                    <button type="button" class="tecla-numero" data-numero="3">3</button>
+                                </div>
+                                <div class="teclado-fila">
+                                    <button type="button" class="tecla-numero" data-numero="4">4</button>
+                                    <button type="button" class="tecla-numero" data-numero="5">5</button>
+                                    <button type="button" class="tecla-numero" data-numero="6">6</button>
+                                </div>
+                                <div class="teclado-fila">
+                                    <button type="button" class="tecla-numero" data-numero="7">7</button>
+                                    <button type="button" class="tecla-numero" data-numero="8">8</button>
+                                    <button type="button" class="tecla-numero" data-numero="9">9</button>
+                                </div>
+                                <div class="teclado-fila">
+                                    <button type="button" class="tecla-numero tecla-borrar" id="teclaBorrar"><i class="fas fa-backspace"></i></button>
+                                    <button type="button" class="tecla-numero" data-numero="0">0</button>
+                                    <button type="button" class="tecla-numero tecla-limpiar" id="teclaLimpiar"><i class="fas fa-times"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-almacenamiento" style="margin-top: 20px;">
+                        <h3><i class="fas fa-database"></i> Almacenamiento de Datos</h3>
+                        <p>Los datos se almacenan localmente en tu dispositivo cumpliendo con la normativa vigente. Para exportar registros completos accede al panel de Gerencia.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pestaña de Consultar Registros -->
+            <div class="tab-content-telepizzero" id="consultar-tab">
+                <h2><i class="fas fa-history"></i> Consulta de Mis Registros</h2>
+                
+                <div class="form-consulta">
+                    <div class="form-group">
+                        <label for="dniConsulta"><i class="fas fa-id-card"></i> Introduce tu DNI/NIE</label>
+                        <input type="text" id="dniConsulta" placeholder="Ej: 00000000 o X0000000X" class="dni-input-medium">
+                    </div>
+                    
+                    <div class="filtro-rango">
+                        <div class="form-group-compact">
+                            <label for="fechaDesdeConsulta"><i class="fas fa-calendar-day"></i> Desde:</label>
+                            <input type="date" id="fechaDesdeConsulta">
+                        </div>
+                        <div class="form-group-compact">
+                            <label for="fechaHastaConsulta"><i class="fas fa-calendar-day"></i> Hasta:</label>
+                            <input type="date" id="fechaHastaConsulta">
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-secondary" id="btnConsultarRegistros">
+                        <i class="fas fa-search"></i> Buscar Mis Registros
+                    </button>
+                </div>
+                
+                <div class="resultados-consulta" id="resultadosConsulta" style="display: none;">
+                    <h3><i class="fas fa-clipboard-list"></i> Mis Registros de Jornada</h3>
+                    <div class="table-responsive">
+                        <table id="tablaConsultaRegistros">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-calendar-day"></i> Fecha</th>
+                                    <th><i class="fas fa-sign-in-alt"></i> Entrada</th>
+                                    <th><i class="fas fa-sign-out-alt"></i> Salida</th>
+                                    <th><i class="fas fa-clock"></i> Horas</th>
+                                    <th><i class="fas fa-briefcase"></i> Puesto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Los registros se llenarán con JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="total-consulta" id="totalConsulta"></div>
+                </div>
+                
+                <div class="mensaje" id="mensajeConsulta"></div>
+            </div>
+            
+            <!-- Botón volver -->
+            <button class="btn volver-btn" id="volverTelepizzero">
+                <i class="fas fa-arrow-left"></i> Volver al Menú
+            </button>
+        </div>
+        
+        <!-- Sección para gerencia -->
+        <div class="gerencia-section">
+            <h2><i class="fas fa-chart-line"></i> Acceso Gerencia</h2>
+            <div class="form-group">
+                <label for="passwordInput"><i class="fas fa-key"></i> Contraseña</label>
+                <input type="password" id="passwordInput" placeholder="Introduce la contraseña" inputmode="numeric">
+            </div>
+            <button class="btn" id="btnAcceder">
+                <i class="fas fa-sign-in-alt"></i> Acceder
+            </button>
+            <div class="mensaje" id="mensajeGerencia"></div>
+            <!-- Botón volver -->
+            <button class="btn volver-btn" id="volverGerencia">
+                <i class="fas fa-arrow-left"></i> Volver
+            </button>
+        </div>
+        
+        <!-- Sección de gestión para gerencia -->
+        <div class="registro-section">
+            <h2><i class="fas fa-tachometer-alt"></i> Panel de Gerencia <span class="badge">En línea</span></h2>
+            
+            <div class="gerencia-container">
+                <!-- Navegación lateral vertical -->
+                <div class="navegacion-vertical">
+                    <div class="nav-item active" data-tab="registros">
+                        <i class="fas fa-clipboard-list"></i>
+                        <span>Registros</span>
+                    </div>
+                    <div class="nav-item" data-tab="usuarios">
+                        <i class="fas fa-users"></i>
+                        <span>Usuarios</span>
+                    </div>
+                    <div class="nav-item" data-tab="ausencias">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Ausencias</span>
+                    </div>
+                    <div class="nav-item" data-tab="correo">
+                        <i class="fas fa-envelope"></i>
+                        <span>Correo</span>
+                    </div>
+                    <div class="nav-item" data-tab="exportar">
+                        <i class="fas fa-file-export"></i>
+                        <span>Exportar</span>
+                    </div>
+                    <!-- Pestaña de personalización -->
+                    <div class="nav-item" data-tab="personalizacion">
+                        <i class="fas fa-palette"></i>
+                        <span>Personalización</span>
+                    </div>
+                </div>
+                
+                <!-- Contenido principal -->
+                <div class="contenido-principal">
+                    <!-- Pestaña de Registros -->
+                    <div class="tab-content active" id="registros-tab">
+                        <h3><i class="fas fa-clipboard-list"></i> Registro de Jornadas</h3>
+                        
+                        <div class="filtros">
+                            <div class="filtro-group">
+                                <label for="filtroPuesto">Puesto:</label>
+                                <select id="filtroPuesto">
+                                    <option value="">Todos</option>
+                                    <option value="auxiliar">Auxiliar</option>
+                                    <option value="repartidor">Repartidor</option>
+                                    <option value="encargado">Encargado</option>
+                                    <option value="limpieza">Limpieza</option>
+                                </select>
+                            </div>
+                            
+                            <div class="filtro-group">
+                                <label for="filtroVista">Vista:</label>
+                                <select id="filtroVista">
+                                    <option value="semana">Semana actual</option>
+                                    <option value="dia">Día específico</option>
+                                    <option value="rango">Rango fechas</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Selector de semana -->
+                            <div id="selectorSemana" class="filtro-group selector-fecha">
+                                <label for="filtroSemana">Semana:</label>
+                                <input type="week" id="filtroSemana">
+                            </div>
+                            
+                            <!-- Selector de día -->
+                            <div id="selectorDia" class="filtro-group selector-fecha" style="display: none;">
+                                <label for="filtroDia">Día:</label>
+                                <input type="date" id="filtroDia">
+                            </div>
+                            
+                            <!-- Selector de rango -->
+                            <div id="selectorRango" class="filtro-group selector-fecha" style="display: none;">
+                                <label for="filtroDesde">Desde:</label>
+                                <input type="date" id="filtroDesde">
+                                <label for="filtroHasta">Hasta:</label>
+                                <input type="date" id="filtroHasta">
+                            </div>
+                            
+                            <div class="botones-filtro">
+                                <button class="btn btn-secondary btn-small" id="btnFiltrar">
+                                    <i class="fas fa-filter"></i> Filtrar
+                                </button>
+                                <button class="btn btn-gris btn-small" id="btnResetFiltros">
+                                    <i class="fas fa-redo"></i> Reset
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table id="tablaRegistros">
+                                <thead>
+                                    <tr>
+                                        <th><i class="fas fa-user"></i> Nombre</th>
+                                        <th><i class="fas fa-id-card"></i> DNI</th>
+                                        <th><i class="fas fa-briefcase"></i> Puesto</th>
+                                        <th><i class="fas fa-calendar-day"></i> Fecha</th>
+                                        <th><i class="fas fa-sign-in-alt"></i> Entrada</th>
+                                        <th><i class="fas fa-sign-out-alt"></i> Salida</th>
+                                        <th><i class="fas fa-clock"></i> Horas</th>
+                                        <th><i class="fas fa-info-circle"></i> Info</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Los registros se llenarán con JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="total-horas" id="totalHoras"></div>
+                    </div>
+                    
+                    <!-- Pestaña de Gestión de Usuarios -->
+                    <div class="tab-content" id="usuarios-tab">
+                        <div class="usuarios-header">
+                            <h3><i class="fas fa-users"></i> Gestión de Telepizzeros</h3>
+                            <div class="form-agregar-usuario">
+                                <input type="text" id="nuevoDni" placeholder="DNI o NIE" inputmode="numeric" class="dni-input-medium">
+                                <input type="text" id="nuevoNombre" placeholder="Nombre completo">
+                                <select id="nuevoPuesto">
+                                    <option value="auxiliar">Auxiliar</option>
+                                    <option value="repartidor">Repartidor</option>
+                                    <option value="encargado">Encargado</option>
+                                    <option value="limpieza">Limpieza</option>
+                                </select>
+                                <button class="btn btn-secondary btn-small" id="btnAgregarUsuario">
+                                    <i class="fas fa-plus"></i> Agregar
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="usuarios-container">
+                            <h4><i class="fas fa-list"></i> Lista de Telepizzeros</h4>
+                            <div class="usuarios-scroll" id="listaUsuarios">
+                                <!-- Lista de usuarios se llenará con JavaScript -->
+                                <div class="usuario-vacio">
+                                    <i class="fas fa-user-plus fa-2x"></i>
+                                    <p>No hay usuarios registrados</p>
+                                    <p class="texto-pequeno">Agrega el primer telepizzero</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pestaña de Control de Ausencias -->
+                    <div class="tab-content" id="ausencias-tab">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Control de Ausencias</h3>
+                        
+                        <div class="form-ausencia">
+                            <div class="form-group-compact">
+                                <label for="selectUsuarioAusencia"><i class="fas fa-user"></i> Telepizzero</label>
+                                <select id="selectUsuarioAusencia">
+                                    <!-- Opciones se llenarán con JavaScript -->
+                                </select>
+                            </div>
+                            
+                            <div class="form-group-compact">
+                                <label for="fechaAusencia"><i class="fas fa-calendar-day"></i> Fecha</label>
+                                <input type="date" id="fechaAusencia">
+                            </div>
+                            
+                            <div class="form-group-compact">
+                                <label for="tipoAusencia"><i class="fas fa-exclamation-circle"></i> Tipo</label>
+                                <select id="tipoAusencia">
+                                    <option value="falta">❌ Falta</option>
+                                    <option value="ausencia_justificada">⚠️ Justificada</option>
+                                    <option value="retraso">⏰ Retraso</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group-compact">
+                                <label for="motivoAusencia"><i class="fas fa-comment"></i> Motivo</label>
+                                <input type="text" id="motivoAusencia" placeholder="Motivo (opcional)">
+                            </div>
+                            
+                            <button class="btn btn-secondary" id="btnRegistrarAusencia">
+                                <i class="fas fa-clipboard-check"></i> Registrar Ausencia
+                            </button>
+                        </div>
+                        
+                        <h4><i class="fas fa-clipboard-list"></i> Historial de Incidencias</h4>
+                        <div class="ausencias-container">
+                            <div id="listaAusencias">
+                                <!-- Lista de ausencias se llenará con JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pestaña de Configuración de Correo -->
+                    <div class="tab-content" id="correo-tab">
+                        <div class="correo-header">
+                            <h3><i class="fas fa-envelope"></i> Configuración de Correo</h3>
+                            <div class="correo-info">
+                                <p><i class="fas fa-info-circle"></i> Los reportes se enviarán en formato PDF al correo configurado</p>
+                                <p><strong>Correo por defecto:</strong> fichajetelepizza@outlook.es</p>
+                            </div>
+                        </div>
+                        
+                        <div class="correo-config">
+                            <div class="form-group">
+                                <label for="correoElectronico"><i class="fas fa-at"></i> Correo Electrónico</label>
+                                <div class="input-with-button">
+                                    <input type="email" id="correoElectronico" placeholder="fichajetelepizza@outlook.es" value="fichajetelepizza@outlook.es">
+                                    <button class="btn btn-success" id="btnGuardarCorreo">
+                                        <i class="fas fa-save"></i> Guardar
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="correo-guardado" id="infoCorreoGuardado">
+                                <!-- Información del correo guardado se mostrará aquí -->
+                            </div>
+                            
+                            <!-- Gestión de correos destinatarios -->
+                            <div class="correo-destinatarios">
+                                <h4><i class="fas fa-users"></i> Correos Destinatarios</h4>
+                                <div class="input-with-button">
+                                    <input type="email" id="nuevoCorreoDestinatario" placeholder="correo@ejemplo.com">
+                                    <button class="btn btn-secondary btn-small" id="btnAgregarDestinatario">
+                                        <i class="fas fa-plus"></i> Agregar
+                                    </button>
+                                </div>
+                                <div id="listaDestinatarios" style="margin-top: 15px;">
+                                    <!-- Lista de correos destinatarios se llenará con JavaScript -->
+                                </div>
+                            </div>
+                            
+                            <div class="correo-acciones">
+                                <h4><i class="fas fa-paper-plane"></i> Enviar Reportes Manualmente</h4>
+                                <p class="info-ayuda">Selecciona el tipo de informe y se enviará a todos los correos destinatarios</p>
+                                
+                                <div class="form-group-compact" style="margin: 15px 0;">
+                                    <label for="tipoReporteEnvio"><i class="fas fa-file-pdf"></i> Tipo de Reporte</label>
+                                    <select id="tipoReporteEnvio">
+                                        <option value="diario">Diario (hoy)</option>
+                                        <option value="rango">Rango de Fechas</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Selector de rango de fechas -->
+                                <div id="selectorRangoEnvio" class="form-group-compact" style="display: none; margin: 15px 0;">
+                                    <label for="fechaDesdeEnvio">Desde:</label>
+                                    <input type="date" id="fechaDesdeEnvio">
+                                    <label for="fechaHastaEnvio" style="margin-left: 10px;">Hasta:</label>
+                                    <input type="date" id="fechaHastaEnvio">
+                                </div>
+                                
+                                <div class="botones-envio">
+                                    <button class="btn btn-reporte" id="btnEnviarReporteManual">
+                                        <i class="fas fa-paper-plane"></i> Enviar Reporte
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="mensaje" id="mensajeCorreo"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pestaña de Exportar -->
+                    <div class="tab-content" id="exportar-tab">
+                        <h3><i class="fas fa-file-export"></i> Exportar Informes PDF</h3>
+                        
+                        <div class="exportar-filtros">
+                            <div class="form-group-compact">
+                                <label for="filtroPuestoExportar"><i class="fas fa-filter"></i> Filtrar por Puesto</label>
+                                <select id="filtroPuestoExportar">
+                                    <option value="">Todos los puestos</option>
+                                    <option value="auxiliar">Auxiliar</option>
+                                    <option value="repartidor">Repartidor</option>
+                                    <option value="encargado">Encargado</option>
+                                    <option value="limpieza">Limpieza</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group-compact">
+                                <label for="tipoReporteExportar"><i class="fas fa-file-pdf"></i> Tipo de Reporte</label>
+                                <select id="tipoReporteExportar">
+                                    <option value="diario">Diario (hoy)</option>
+                                    <option value="semanal">Semanal (esta semana)</option>
+                                    <option value="mensual">Mensual (este mes)</option>
+                                    <option value="rango">Rango de Fechas</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Selector de rango de fechas -->
+                            <div id="selectorRangoExportar" class="form-group-compact" style="display: none;">
+                                <label for="fechaDesdeExportar">Desde:</label>
+                                <input type="date" id="fechaDesdeExportar">
+                                <label for="fechaHastaExportar" style="margin-left: 10px;">Hasta:</label>
+                                <input type="date" id="fechaHastaExportar">
+                            </div>
+                        </div>
+                        
+                        <div class="botones-exportar" style="margin-top: 30px;">
+                            <button class="btn btn-success" id="btnExportarPDF">
+                                <i class="fas fa-download"></i> Descargar PDF
+                            </button>
+                        </div>
+                        
+                        <div class="info-exportar" style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                            <h4><i class="fas fa-info-circle"></i> Información</h4>
+                            <p>Los informes PDF incluirán:</p>
+                            <ul style="margin-left: 20px; color: var(--secondary-color);">
+                                <li>Nombre y DNI de empleados</li>
+                                <li>Puesto y horas trabajadas</li>
+                                <li>Fechas y horarios de entrada/salida</li>
+                                <li>Total de horas por empleado</li>
+                                <li>Resumen general</li>
+                            </ul>
+                            <p style="font-size: 0.9rem; margin-top: 10px;">
+                                <i class="fas fa-exclamation-triangle"></i> Nota: Los informes NO incluyen información de geolocalización por privacidad.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Pestaña de Personalización MEJORADA -->
+                    <div class="tab-content" id="personalizacion-tab">
+                        <div class="personalizacion-container">
+                            <div class="personalizacion-header">
+                                <h3><i class="fas fa-palette"></i> Personalización Completa</h3>
+                                <div class="personalizacion-info">
+                                    <p><i class="fas fa-info-circle"></i> Configura todos los aspectos visuales de la página. Los cambios se aplican en tiempo real.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- NUEVA SECCIÓN: Configuración de Imágenes -->
+                            <div class="config-seccion">
+                                <h4><i class="fas fa-images"></i> Configuración de Imágenes</h4>
+                                <div class="image-grid">
+                                    <div class="image-item">
+                                        <label for="logoFondoURL">Logo de Fondo:</label>
+                                        <div class="image-preview-container">
+                                            <div class="image-preview" id="previewLogoFondo">
+                                                <img src="https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/telepizza_logo.png" alt="Logo de fondo">
+                                            </div>
+                                            <input type="text" id="logoFondoURL" value="https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/telepizza_logo.png" placeholder="URL del logo de fondo">
+                                            <div class="image-controls">
+                                                <button class="btn btn-small btn-secondary" onclick="probarImagen('logoFondoURL', 'previewLogoFondo')">
+                                                    <i class="fas fa-sync"></i> Probar
+                                                </button>
+                                                <button class="btn btn-small btn-gris" onclick="restaurarImagen('logoFondoURL', 'https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/telepizza_logo.png')">
+                                                    <i class="fas fa-undo"></i> Restaurar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="image-item">
+                                        <label for="headerImageURL">Imagen de Encabezado:</label>
+                                        <div class="image-preview-container">
+                                            <div class="image-preview" id="previewHeaderImage">
+                                                <img src="https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/fichaje.png" alt="Encabezado">
+                                            </div>
+                                            <input type="text" id="headerImageURL" value="https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/fichaje.png" placeholder="URL de la imagen de encabezado">
+                                            <div class="image-controls">
+                                                <button class="btn btn-small btn-secondary" onclick="probarImagen('headerImageURL', 'previewHeaderImage')">
+                                                    <i class="fas fa-sync"></i> Probar
+                                                </button>
+                                                <button class="btn btn-small btn-gris" onclick="restaurarImagen('headerImageURL', 'https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/fichaje.png')">
+                                                    <i class="fas fa-undo"></i> Restaurar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="image-item">
+                                        <label for="footerLogoURL">Logo del Pie:</label>
+                                        <div class="image-preview-container">
+                                            <div class="image-preview" id="previewFooterLogo">
+                                                <img src="https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/telepizza_logo.png" alt="Logo del pie">
+                                            </div>
+                                            <input type="text" id="footerLogoURL" value="https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/telepizza_logo.png" placeholder="URL del logo del pie">
+                                            <div class="image-controls">
+                                                <button class="btn btn-small btn-secondary" onclick="probarImagen('footerLogoURL', 'previewFooterLogo')">
+                                                    <i class="fas fa-sync"></i> Probar
+                                                </button>
+                                                <button class="btn btn-small btn-gris" onclick="restaurarImagen('footerLogoURL', 'https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/telepizza_logo.png')">
+                                                    <i class="fas fa-undo"></i> Restaurar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="image-notes" style="margin-top: 15px; padding: 10px; background: rgba(255,199,44,0.1); border-radius: 8px;">
+                                    <p><strong><i class="fas fa-info-circle"></i> Notas sobre las imágenes:</strong></p>
+                                    <ul style="margin-left: 20px; font-size: 0.9rem;">
+                                        <li>Las imágenes deben ser accesibles públicamente en internet</li>
+                                        <li>Formatos recomendados: PNG, JPG, SVG</li>
+                                        <li>Tamaño máximo recomendado: 500KB por imagen</li>
+                                        <li>Las imágenes se almacenarán localmente en tu dispositivo</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <!-- Colores principales -->
+                            <div class="config-seccion">
+                                <h4><i class="fas fa-fill-drip"></i> Colores Principales</h4>
+                                <div class="color-grid">
+                                    <div class="color-item">
+                                        <label for="colorFondo">Fondo Principal:</label>
+                                        <input type="color" id="colorFondo" value="#D4001C">
+                                        <input type="text" id="colorFondoTexto" value="#D4001C" maxlength="7">
+                                    </div>
+                                    
+                                    <div class="color-item">
+                                        <label for="colorSecundario">Color Secundario:</label>
+                                        <input type="color" id="colorSecundario" value="#FFC72C">
+                                        <input type="text" id="colorSecundarioTexto" value="#FFC72C" maxlength="7">
+                                    </div>
+                                    
+                                    <div class="color-item">
+                                        <label for="colorTexto">Texto Principal:</label>
+                                        <input type="color" id="colorTexto" value="#FFFFFF">
+                                        <input type="text" id="colorTextoTexto" value="#FFFFFF" maxlength="7">
+                                    </div>
+                                    
+                                    <div class="color-item">
+                                        <label for="colorContenedor">Fondo Contenedor:</label>
+                                        <input type="color" id="colorContenedor" value="#000000">
+                                        <input type="text" id="colorContenedorTexto" value="#000000" maxlength="7">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Botones -->
+                            <div class="config-seccion">
+                                <h4><i class="fas fa-toggle-on"></i> Botones</h4>
+                                <div class="color-grid">
+                                    <div class="color-item">
+                                        <label for="colorBotonesAcceso">Botones de Acceso:</label>
+                                        <input type="color" id="colorBotonesAcceso" value="#FFFFFF">
+                                        <input type="text" id="colorBotonesAccesoTexto" value="#FFFFFF" maxlength="7">
+                                    </div>
+                                    
+                                    <div class="color-item">
+                                        <label for="colorTextoBotonesAcceso">Texto Botones Acceso:</label>
+                                        <input type="color" id="colorTextoBotonesAcceso" value="#D4001C">
+                                        <input type="text" id="colorTextoBotonesAccesoTexto" value="#D4001C" maxlength="7">
+                                    </div>
+                                    
+                                    <div class="color-item">
+                                        <label for="colorBotonFichar">Botón Fichar:</label>
+                                        <input type="color" id="colorBotonFichar" value="#4CAF50">
+                                        <input type="text" id="colorBotonFicharTexto" value="#4CAF50" maxlength="7">
+                                    </div>
+                                    
+                                    <div class="color-item">
+                                        <label for="colorBotonVolver">Botones Volver:</label>
+                                        <input type="color" id="colorBotonVolver" value="#D4001C">
+                                        <input type="text" id="colorBotonVolverTexto" value="#D4001C" maxlength="7">
+                                    </div>
+                                    
+                                    <div class="color-item">
+                                        <label for="colorTextoBotonVolver">Texto Botones Volver:</label>
+                                        <input type="color" id="colorTextoBotonVolver" value="#FFFFFF">
+                                        <input type="text" id="colorTextoBotonVolverTexto" value="#FFFFFF" maxlength="7">
+                                    </div>
+                                    
+                                    <div class="color-item">
+                                        <label for="colorBotonSecundario">Botones Secundarios:</label>
+                                        <input type="color" id="colorBotonSecundario" value="#FFC72C">
+                                        <input type="text" id="colorBotonSecundarioTexto" value="#FFC72C" maxlength="7">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Posiciones y tamaños -->
+                            <div class="config-seccion">
+                                <h4><i class="fas fa-arrows-alt"></i> Posiciones y Tamaños</h4>
+                                <div class="position-grid">
+                                    <div class="position-item">
+                                        <label for="logoSize">Tamaño Logo Fondo:</label>
+                                        <input type="range" id="logoSize" min="50" max="500" value="150">
+                                        <span id="logoSizeValue">150px</span>
+                                    </div>
+                                    
+                                    <div class="position-item">
+                                        <label for="logoOpacity">Opacidad Logo:</label>
+                                        <input type="range" id="logoOpacity" min="1" max="100" value="15">
+                                        <span id="logoOpacityValue">15%</span>
+                                    </div>
+                                    
+                                    <div class="position-item">
+                                        <label for="logoPositionX">Posición X Logo:</label>
+                                        <input type="range" id="logoPositionX" min="0" max="100" value="50">
+                                        <span id="logoPositionXValue">50%</span>
+                                    </div>
+                                    
+                                    <div class="position-item">
+                                        <label for="logoPositionY">Posición Y Logo:</label>
+                                        <input type="range" id="logoPositionY" min="0" max="100" value="50">
+                                        <span id="logoPositionYValue">50%</span>
+                                    </div>
+                                    
+                                    <div class="position-item">
+                                        <label for="headerHeight">Altura Encabezado:</label>
+                                        <input type="range" id="headerHeight" min="50" max="300" value="120">
+                                        <span id="headerHeightValue">120px</span>
+                                    </div>
+                                    
+                                    <div class="position-item">
+                                        <label for="headerOpacity">Opacidad Encabezado:</label>
+                                        <input type="range" id="headerOpacity" min="1" max="100" value="100">
+                                        <span id="headerOpacityValue">100%</span>
+                                    </div>
+                                    
+                                    <div class="position-item">
+                                        <label for="containerPadding">Espaciado Contenedor:</label>
+                                        <input type="range" id="containerPadding" min="10" max="50" value="20">
+                                        <span id="containerPaddingValue">20px</span>
+                                    </div>
+                                    
+                                    <div class="position-item">
+                                        <label for="containerWidth">Ancho Contenedor:</label>
+                                        <input type="range" id="containerWidth" min="80" max="100" value="100">
+                                        <span id="containerWidthValue">100%</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="preview-container">
+                                    <h5><i class="fas fa-eye"></i> Vista Previa:</h5>
+                                    <div class="preview-area" id="previewArea">
+                                        <div class="preview-logo" id="previewLogo"></div>
+                                        <div class="preview-header" id="previewHeader"></div>
+                                        <div class="preview-buttons">
+                                            <div class="preview-btn acceso" id="previewBtnAcceso"></div>
+                                            <div class="preview-btn fichar" id="previewBtnFichar"></div>
+                                            <div class="preview-btn volver" id="previewBtnVolver"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Fuentes -->
+                            <div class="config-seccion">
+                                <h4><i class="fas fa-font"></i> Fuentes</h4>
+                                <div class="font-grid">
+                                    <div class="font-item">
+                                        <label for="fontFamily">Familia de Fuente:</label>
+                                        <select id="fontFamily">
+                                            <option value="Montserrat, sans-serif">Montserrat</option>
+                                            <option value="Arial, sans-serif">Arial</option>
+                                            <option value="Helvetica, sans-serif">Helvetica</option>
+                                            <option value="'Segoe UI', sans-serif">Segoe UI</option>
+                                            <option value="Roboto, sans-serif">Roboto</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="font-item">
+                                        <label for="fontWeight">Grosor de Fuente:</label>
+                                        <select id="fontWeight">
+                                            <option value="300">Ligero (300)</option>
+                                            <option value="400" selected>Normal (400)</option>
+                                            <option value="600">Seminegrita (600)</option>
+                                            <option value="700">Negrita (700)</option>
+                                            <option value="800">Extranegrita (800)</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="font-item">
+                                        <label for="fontSize">Tamaño Base:</label>
+                                        <input type="range" id="fontSize" min="12" max="20" value="16">
+                                        <span id="fontSizeValue">16px</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Botones de acción -->
+                            <div class="personalizacion-acciones">
+                                <button class="btn btn-success" id="btnAplicarPersonalizacion">
+                                    <i class="fas fa-check"></i> Aplicar Cambios
+                                </button>
+                                <button class="btn btn-gris" id="btnResetPersonalizacion">
+                                    <i class="fas fa-undo"></i> Restablecer Valores
+                                </button>
+                                <button class="btn btn-secondary" id="btnGuardarPersonalizacion">
+                                    <i class="fas fa-save"></i> Guardar Configuración
+                                </button>
+                            </div>
+                            
+                            <div class="mensaje" id="mensajePersonalizacion"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Botón volver -->
+            <button class="btn volver-btn" id="volverRegistro">
+                <i class="fas fa-arrow-left"></i> Volver al Menú
+            </button>
+        </div>
+        
+        <!-- Logo en la parte inferior -->
+        <div class="logo-footer" id="logoFooter">
+            <img src="https://raw.githubusercontent.com/Telepi-0122/fichaje/main/images/telepizza_logo.png" alt="Telepizza Logo" id="footerLogo">
+            <span id="footerText">Gestión de Jornadas</span>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="data.js"></script>
+    <script src="email.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
