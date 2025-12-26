@@ -1677,3 +1677,20 @@ input[type="date"], input[type="week"] {
         min-height: 70px !important;
     }
 }
+
+/* Agregar al final del archivo style.css si no existe */
+.tecla-numero {
+    touch-action: manipulation; /* Mejora la respuesta táctil */
+    user-select: none; /* Evita selección de texto */
+}
+
+/* Prevenir el zoom en inputs en iOS */
+input[type="text"], input[type="password"], input[type="number"] {
+    font-size: 16px !important; /* Previene el zoom en iOS */
+}
+
+/* Mejorar la respuesta táctil */
+.tecla-numero:active {
+    transform: scale(0.95);
+    transition: transform 0.1s;
+}
